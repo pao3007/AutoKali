@@ -1,0 +1,11 @@
+device:
+  name: cDAQ1Mod1
+  channel: ai2
+
+measurement:
+  sample_rate: 1000
+  number_of_samples_per_channel: 10000
+
+save_data:
+  ref_name: 'testData.txt'
+  destination_folder: 'C:/Users/lukac/Desktop/Sylex/TEST_DATA/REF'

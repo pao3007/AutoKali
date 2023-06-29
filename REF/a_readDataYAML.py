@@ -4,11 +4,19 @@ import numpy as np
 from nidaqmx.constants import AcquisitionType
 import time
 import matplotlib.pyplot as plt
+import yaml
 
-sample_rate = 1000
-number_of_samples_per_channel = 10000
-ref_name = "testData.txt"
-destination_folder = "C:/Users/lukac/Desktop/Sylex/TEST_DATA/REF"
+#otovríme config file
+with open('a_ref_config.yaml', 'r') as file:
+    config = yaml.safe_load(file)
+
+sample_rate = config['measurement']['sample_rate']
+number_of_samples_per_channel = config['measurement']['number_of_samples_per_channel']
+
+deviceName_channel = config['device']['name'] + '/' + config['device']['channel']
+
+ref_name = config['save_data']['ref_name']
+destination_folder = config['save_data']['destination_folder']
 
 def plot_data():
     sample_rate_sec = 1 / sample_rate
@@ -46,7 +54,7 @@ def save_data():
 
 with nidaqmx.Task() as task:
     #nazov zariadenia/channel, min/max value -> očakávané hodnoty v tomto rozmedzí
-    task.ai_channels.add_ai_voltage_chan("cDAQ1Mod1/ai2", terminal_config=nidaqmx.constants.TerminalConfiguration.DEFAULT, min_val=-1.0, max_val=1.0)
+    task.ai_channels.add_ai_voltage_chan(deviceName_channel, terminal_config=nidaqmx.constants.TerminalConfiguration.DEFAULT, min_val=-1.0, max_val=1.0)
 
     #časovanie resp. vzorkovacia freqvencia, pocet vzoriek
     task.timing.cfg_samp_clk_timing(sample_rate, sample_mode=nidaqmx.constants.AcquisitionType.FINITE, samps_per_chan=number_of_samples_per_channel)
@@ -65,7 +73,7 @@ with nidaqmx.Task() as task:
 
     #dĺžka merania
     elapsed_time = (end_time - start_time) * 1000
-    print(f"Elapsed time: {elapsed_time:.2f} milliseconds")
+    print(f"Cas trvania merania: {elapsed_time:.2f} ms")
 
     #ulozenie dát do txt súboru
     save_data()
