@@ -3,8 +3,8 @@ device:
   channel: ai2
 
 measurement:
-  sample_rate: 1000
-  number_of_samples_per_channel: 10000
+  sample_rate: 12800
+  number_of_samples_per_channel: 80000
 
 save_data:
   ref_name: 'testData.txt'
