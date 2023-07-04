@@ -4,7 +4,7 @@ device:
 
 measurement:
   sample_rate: 12800
-  number_of_samples_per_channel: 80000
+  number_of_samples_per_channel: 128000
 
 save_data:
   ref_name: 'testData.txt'

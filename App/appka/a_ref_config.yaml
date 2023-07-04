@@ -5,5 +5,5 @@ measurement:
   number_of_samples_per_channel: 320000
   sample_rate: 12800
 save_data:
-  destination_folder: C:/Users/lukac/Desktop/Sylex/AutoKali/App/appka
-  ref_name: samples.txt
+  destination_folder: C:/Users/lukac/Desktop/Sylex/TEST_DATA/REF
+  ref_name: test.txt

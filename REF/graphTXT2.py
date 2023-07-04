@@ -3,13 +3,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 import yaml
 
-data_file = 'Test_001.txt'
+data_file = 'test_meranie2.txt'
 
 with open('a_ref_config.yaml', 'r') as file:
     config = yaml.safe_load(file)
 
 sample_rate = config['measurement']['sample_rate']
-destination_folder = "C:/Users/lukac/Desktop/Sylex/TEST_DATA/REF/data_program"
+destination_folder = r"C:\Users\lukac\Desktop\Sylex\TEST_DATA\REF\test\REF"
 
 file_path = os.path.join(destination_folder, data_file)
 
@@ -20,7 +20,7 @@ with open(file_path, 'r') as file:
     for line in file:
         columns = line.split()
         if len(columns) >= 3:
-            value = columns[2].replace(',', '.')
+            value = columns[1].replace(',', '.')
             third_columns.append(float(value))
 
 

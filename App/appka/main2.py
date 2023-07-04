@@ -42,9 +42,7 @@ def start_ref_sens_data_collection():
 
     with nidaqmx.Task() as task:
         # nazov zariadenia/channel, min/max value -> očakávané hodnoty v tomto rozmedzí
-        task.ai_channels.add_ai_voltage_chan(deviceName_channel,
-                                             terminal_config=nidaqmx.constants.TerminalConfiguration.DEFAULT,
-                                             min_val=-1.0, max_val=1.0)
+        task.ai_channels.add_ai_accel_chan(deviceName_channel, sensitivity=1.079511)
 
         # časovanie resp. vzorkovacia freqvencia, pocet vzoriek
         task.timing.cfg_samp_clk_timing(sample_rate, sample_mode=nidaqmx.constants.AcquisitionType.FINITE,
@@ -52,7 +50,7 @@ def start_ref_sens_data_collection():
 
         print("Start merania")
         current_time = datetime.now().time()
-        time_string = current_time.strftime("%H:%M:%S.%f")[:-2]
+        time_string = current_time.strftime("%H:%M:%S.%f") # [:-2]
         start_time = time.time()
         # spustenie získavania vzoriek
         task.start()

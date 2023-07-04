@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import yaml
 
-data_file = 'ready.txt'
+data_file = '0407test.txt'
 
 with open('a_ref_config.yaml', 'r') as file:
     config = yaml.safe_load(file)
