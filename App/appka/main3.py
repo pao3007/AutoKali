@@ -20,6 +20,19 @@ deviceName_channel = config['device']['name'] + '/' + config['device']['channel'
 ref_name = config['save_data']['ref_name']
 save_folder = config['save_data']['destination_folder']
 
+documents_path = os.path.expanduser('~/Documents')
+main_folder_name = 'Sylex_sensors_export'
+subfolder1a_name = 'reference'
+subfolder2a_name = 'optical'
+subfolder1b_name = 'reference_raw'
+subfolder2b_name = 'optical_raw'
+
+main_folder_path = os.path.join(documents_path, main_folder_name)
+subfolder1a_path = os.path.join(main_folder_path, subfolder1a_name)
+subfolder2a_path = os.path.join(main_folder_path, subfolder2a_name)
+subfolder1b_path = os.path.join(main_folder_path, subfolder1b_name)
+subfolder2b_path = os.path.join(main_folder_path, subfolder2b_name)
+
 measure_time = number_of_samples_per_channel / sample_rate
 progress_sec = 0
 refData = None
@@ -209,6 +222,28 @@ def on_lineEdit_fileName_finished():
     print("Text changed: ", text)
     global ref_name
     ref_name = text
+
+def create_folders():
+    documents_path = os.path.expanduser('~/Documents')
+    main_folder_name = 'Sylex_sensors_export'
+    subfolder1_name = 'reference'
+    subfolder2_name = 'optical'
+
+
+
+    # Check if the main folder already exists
+    if not os.path.exists(main_folder_path):
+        # Create the main folder
+        os.makedirs(main_folder_path)
+        print(f"Main folder created: {main_folder_path}")
+    else:
+        print(f"Main folder already exists: {main_folder_path}")
+
+    # Create the subfolders inside the main folder
+    os.makedirs(subfolder1_path, exist_ok=True)
+    os.makedirs(subfolder2_path, exist_ok=True)
+    print(f"Subfolder 1 created: {subfolder1_path}")
+    print(f"Subfolder 2 created: {subfolder2_path}")
 
 
 

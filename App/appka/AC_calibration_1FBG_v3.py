@@ -62,7 +62,7 @@ Make_plots = 1
 
 # X axis limits
 xScale = [10, 400]  # Frequency spectrum x axis limit
-xScaleTransfer = [0, 400]  # Power spectrum and Bode analysis x axis limit
+xScaleTransfer = [0, 400]  # Power spectrum and Bode analysis x-axis limit
 
 # 1 to filter signal, 0 to not filter
 Filter_on = 1
@@ -178,7 +178,7 @@ display(['Center wavelength = ' + str(round(np.mean(DataOptRel[0:100]), 5)) + ' 
 # Calculate acceleration from optical data and previously determined sensitivity
 optical_sensor_data = fun.calculateAC((DataOptRel - DataOptRel[0]), Sensitivity_opt)
 # Calculate acceleration from reference data and corresponsing sensitivity for reference sensor
-reference_sensor_data = DataRefRel[:, 1] / Ref_sensitivity
+reference_sensor_data = DataRefRel / Ref_sensitivity # DataRefRel[:, 1] / Ref_sensitivity
 # %% Time Syncing
 # Creating time arrays for optical and reference signal according to sampling frequency
 TimeOpt = np.linspace(1 / Opt_samp_freq, len(optical_sensor_data) / Opt_samp_freq, num=len(optical_sensor_data))
@@ -256,7 +256,7 @@ if Do_spectrum == 1:
     FreqOptPSD, OptPSD = signal.periodogram(OptSensResized, BodeSampFreq)
     FreqRefPSD, RefPSD = signal.periodogram(RefSensResized, BodeSampFreq)
 
-# Creating a low pass filter for smoothening graphs. The '10' below is the frequency
+# Creating a low pass filter for smoothening graphs. The "10" below is the frequency
 Smooth_freq = [1 / (0.5 * Opt_samp_freq)]
 B, A = signal.butter(3, Smooth_freq, 'lowpass')
 

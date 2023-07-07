@@ -117,7 +117,7 @@ def read_Enlight_Data(txt_file):
     Reads in the data of the Enlight.
 
     Returns an array of data saved with the Enlight software. Optionally, the
-    header can also be returned. If the header is enabled, returned value is an
+    header can also be returned. If the header is enabled, returned value is a
     tuple with size 2.
 
     Parameters
@@ -319,6 +319,7 @@ def read_txt_file_AC(txt_file, skiprows):
         Data1 = []
         for line in File[skiprows:]:
             l = line.strip().split('\t')
+            print(l[-1])
             Data1.append(float(l[-1].replace(',', '.')))
 
         Data = np.array(Data1)
