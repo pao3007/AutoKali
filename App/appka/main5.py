@@ -1,6 +1,5 @@
-import threading
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
-from PyQt5 import QtTest
+import PyQt5.QtCore
 from mainwindow import Ui_MainWindow
 import yaml
 import nidaqmx
@@ -10,52 +9,54 @@ import numpy as np
 import matplotlib.pyplot as plt
 from nidaqmx.constants import AcquisitionType
 
-# otovríme config file
-with open('a_ref_config.yaml', 'r') as file:
-    config = yaml.safe_load(file)
+class start_timer_worker(PyQt5.QtCore.QObject):
+    progress_signal = PyQt5.QtCore.pyqtSignal(int)
+    finished = PyQt5.QtCore.pyqtSignal()
+    def __init__(self, argument):
+        super().__init__()
+        self.duration = argument
 
-sample_rate = config['ref_measurement']['sample_rate']
-number_of_samples_per_channel = config['ref_measurement']['number_of_samples_per_channel']
-deviceName_channel = config['device']['name'] + '/' + config['device']['channel']
-ref_opt_name = config['save_data']['ref_name']
-save_folder = config['save_data']['destination_folder']
+    def run(self):
+        ui.label_progress.setText("Starting data collection")
+        i = 1
+        while i < self.duration:
+            PyQt5.QtCore.QThread.msleep(1000)
+            # progress_signal.emit((i*100)/duration)
+            self.progress_signal.emit(i)
+            i = i + 1
 
-documents_path = os.path.expanduser('~/Documents')
-main_folder_name = 'Sylex_sensors_export'
-subfolder1a_name = 'reference'
-subfolder2a_name = 'optical'
-subfolder1b_name = 'reference_raw'
-subfolder2b_name = 'optical_raw'
-
-main_folder_path = os.path.join(documents_path, main_folder_name)
-subfolder1a_path = os.path.join(main_folder_path, subfolder1a_name)
-subfolder2a_path = os.path.join(main_folder_path, subfolder2a_name)
-subfolder1raw_path = os.path.join(main_folder_path, subfolder1b_name)
-subfolder2raw_path = os.path.join(main_folder_path, subfolder2b_name)
-
-measure_time = number_of_samples_per_channel / sample_rate
-progress_sec = 0
-refData = None
-opt_sentinel_file_name = None
+class start_ref_sens_data_collection_worker(PyQt5.QtCore.QObject):
+    finished = PyQt5.QtCore.pyqtSignal()
+    def run(self):
+        start_ref_sens_data_collection()
 
 def on_btn_start_clicked():  # start merania
     ui.btn_start.setEnabled(False)
     print("on_btn_start_clicked")
-    global progress_sec
     global measure_time
-    progress_sec = 1
 
-    timer_thread = threading.Thread(target=start_timer, args=((measure_time+3),))
-    ref_data_thread = threading.Thread(target=start_ref_sens_data_collection)
+    if __name__ == "__main__":
 
-    start_sentinel()
-    check_new_files()
+        thread_prog_bar = PyQt5.QtCore.QThread()
+        thread_ref_sens = PyQt5.QtCore.QThread()
 
-    ref_data_thread.start()
-    timer_thread.start()
+        worker_start_prog_bar = start_timer_worker((measure_time+3))
+        worker_start_ref_sens_data_collection = start_ref_sens_data_collection_worker()
 
-    timer_thread.join()
-    ref_data_thread.join()
+        worker_start_prog_bar.moveToThread(thread_prog_bar)
+        worker_start_ref_sens_data_collection.moveToThread(thread_ref_sens)
+
+        thread_prog_bar.started.connect(worker_start_prog_bar.run)
+        worker_start_prog_bar.progress_signal.connect(update_progressBar)
+        worker_start_prog_bar.finished.connect(thread_prog_bar.quit)
+        thread_prog_bar.finished.connect(thread_prog_bar.deleteLater)
+
+        thread_ref_sens.started.connect(worker_start_ref_sens_data_collection.run)
+        worker_start_ref_sens_data_collection.finished.connect(thread_ref_sens.quit)
+        thread_ref_sens.finished.connect(thread_ref_sens.deleteLater)
+
+        thread_ref_sens.start()
+        thread_prog_bar.start()
 
     print("Start raw")
     make_opt_raw(4)
@@ -135,13 +136,46 @@ def start_ref_sens_data_collection():
         global refData
         refData = data
 
-def start_timer(duration):
-    end_time = time.time() + duration
-    ui.label_progress.setText("Starting data collection")
-    while time.time() < end_time:
-        time.sleep(1)
-        #QtTest.QTest.qWait(1000)
-        update_progressBar()
+def update_progressBar(value):
+
+    # global progress_sec
+    # if progress_sec < measure_time:
+    #     ui.label_progress.setText("Data collection")
+    #     ui.progressBar.setValue(int(100 * progress_sec/measure_time))
+    # else:
+    #     prog_finish = int(100 * progress_sec / measure_time)
+    #     if prog_finish < 100:
+    #         ui.progressBar.setValue(int(100 * progress_sec / measure_time))
+    #     else :
+    #         ui.progressBar.setValue(100)
+    #         ui.label_progress.setText("Data collection FINISHED")
+    #         if progress_sec > (measure_time+2):
+    #             # timer.stop()
+    #             ui.btn_start.setEnabled(True)
+    #             text = ref_opt_name + " saved"
+    #             ui.label_progress.setText(text)
+    #             ui.progressBar.setValue(0)
+    #
+    # progress_sec += 1
+    progress_sec = value
+    if progress_sec < measure_time:
+        ui.label_progress.setText("Data collection")
+        ui.progressBar.setValue(int(100 * progress_sec/measure_time))
+    else:
+        prog_finish = int(100 * progress_sec / measure_time)
+        if prog_finish < 100:
+            ui.progressBar.setValue(int(100 * progress_sec / measure_time))
+        else :
+            ui.progressBar.setValue(100)
+            ui.label_progress.setText("Data collection FINISHED")
+            if progress_sec > (measure_time+2):
+                ui.btn_start.setEnabled(True)
+                text = ref_opt_name + " saved"
+                ui.label_progress.setText(text)
+                ui.progressBar.setValue(0)
+
+
+
 
 def save_data(data, time_string, elapsed_time):
     from datetime import date
@@ -213,28 +247,6 @@ def plot_data(data):
     plt.grid(True)
 
     plt.show()
-
-def update_progressBar():
-
-    global progress_sec
-    if progress_sec < measure_time:
-        ui.label_progress.setText("Data collection")
-        ui.progressBar.setValue(int(100 * progress_sec/measure_time))
-    else:
-        prog_finish = int(100 * progress_sec / measure_time)
-        if prog_finish < 100:
-            ui.progressBar.setValue(int(100 * progress_sec / measure_time))
-        else :
-            ui.progressBar.setValue(100)
-            ui.label_progress.setText("Data collection FINISHED")
-            if progress_sec > (measure_time+2):
-                # timer.stop()
-                ui.btn_start.setEnabled(True)
-                text = ref_opt_name + " saved"
-                ui.label_progress.setText(text)
-                ui.progressBar.setValue(0)
-
-    progress_sec += 1
 
 def on_btn_saveConfig_clicked():  # ulozenie configu
     print("on_btn_saveConfig_clicked")
@@ -312,35 +324,65 @@ def create_folders():
     print(f"Subfolder 1b created: {subfolder1raw_path}")
     print(f"Subfolder 2b created: {subfolder2raw_path}")
 
-create_folders()
+if __name__ == "__main__":
+    documents_path = os.path.expanduser('~/Documents')
+    main_folder_name = 'Sylex_sensors_export'
+    subfolder1a_name = 'reference'
+    subfolder2a_name = 'optical'
+    subfolder1b_name = 'reference_raw'
+    subfolder2b_name = 'optical_raw'
 
-# vytvorenie class s ui elementmi
-app = QApplication([])
-window = QMainWindow()
-ui = Ui_MainWindow()
-ui.setupUi(window)
-##
+    main_folder_path = os.path.join(documents_path, main_folder_name)
+    subfolder1a_path = os.path.join(main_folder_path, subfolder1a_name)
+    subfolder2a_path = os.path.join(main_folder_path, subfolder2a_name)
+    subfolder1raw_path = os.path.join(main_folder_path, subfolder1b_name)
+    subfolder2raw_path = os.path.join(main_folder_path, subfolder2b_name)
 
-# pociatocna init lineEditov
-ui.lineEdit_SampleRate.setText(str(sample_rate))
-ui.lineEdit_saveFolder.setText(save_folder)
-ui.lineEdit_measure.setText(str(measure_time))
-##
+    # otovríme config file
+    config_file_path = os.path.join(main_folder_path, 'a_ref_config.yaml')
+    with open(config_file_path, 'r') as file:
+        config = yaml.safe_load(file)
 
-ui.progressBar.setValue(0)
+    sample_rate = config['ref_measurement']['sample_rate']
+    number_of_samples_per_channel = config['ref_measurement']['number_of_samples_per_channel']
+    deviceName_channel = config['device']['name'] + '/' + config['device']['channel']
+    ref_opt_name = config['save_data']['ref_name']
+    save_folder = config['save_data']['destination_folder']
 
-# priradenie buttonom funkciu
-ui.btn_start.clicked.connect(on_btn_start_clicked)
-ui.btn_saveConfig.clicked.connect(on_btn_saveConfig_clicked)
-ui.toolBtn_selectFolder.clicked.connect(on_toolBtn_selectFolder_clicked)
-##
+    measure_time = number_of_samples_per_channel / sample_rate
+    # progress_sec = 0
+    refData = None
+    opt_sentinel_file_name = None
 
-# priradenie lineEditom funkciu
-ui.lineEdit_measure.editingFinished.connect(on_lineEdit_measure_finished)
-ui.lineEdit_SampleRate.editingFinished.connect(on_lineEdit_SampleRate_finished)
-ui.lineEdit_file_name.editingFinished.connect(on_lineEdit_fileName_finished)
-ui.lineEdit_saveFolder.editingFinished.connect(on_lineEdit_saveFolder_finished)
-##
+    create_folders()
 
-window.show()
-app.exec_()
+    # vytvorenie class s ui elementmi
+    app = QApplication([])
+    window = QMainWindow()
+    ui = Ui_MainWindow()
+    ui.setupUi(window)
+    ##
+
+    # pociatocna init lineEditov
+    ui.lineEdit_SampleRate.setText(str(sample_rate))
+    ui.lineEdit_saveFolder.setText(save_folder)
+    ui.lineEdit_measure.setText(str(measure_time))
+    ##
+
+    ui.progressBar.setValue(0)
+
+    # priradenie buttonom funkciu
+    ui.btn_start.clicked.connect(on_btn_start_clicked)
+    ui.btn_saveConfig.clicked.connect(on_btn_saveConfig_clicked)
+    ui.toolBtn_selectFolder.clicked.connect(on_toolBtn_selectFolder_clicked)
+    ##
+
+    # priradenie lineEditom funkciu
+    ui.lineEdit_measure.editingFinished.connect(on_lineEdit_measure_finished)
+    ui.lineEdit_SampleRate.editingFinished.connect(on_lineEdit_SampleRate_finished)
+    ui.lineEdit_file_name.editingFinished.connect(on_lineEdit_fileName_finished)
+    ui.lineEdit_saveFolder.editingFinished.connect(on_lineEdit_saveFolder_finished)
+    ##
+
+    window.show()
+    app.exec_()

@@ -82,7 +82,7 @@ def save_data(data, time_string, elapsed_time):
     date = today.strftime("%b-%d-%Y")
     os.makedirs(save_folder, exist_ok=True)
 
-    file_path = os.path.join(save_folder, ref_name)
+    file_path = os.path.join(save_folder, ref_opt_name)
 
     with open(file_path, 'w') as file:
         file.write("# " + date + '\n')
@@ -97,7 +97,7 @@ def save_data(data, time_string, elapsed_time):
     print("Zapisane do txt")
 
 def plot_data():
-    file_path = os.path.join(save_folder, ref_name)
+    file_path = os.path.join(save_folder, ref_opt_name)
     with open(file_path) as f:
         lines = (line for line in f if not line.startswith('#'))
         data = np.loadtxt(lines)
@@ -131,7 +131,7 @@ def update_progressBar():
             if progress_sec > (measure_time+2):
                 # timer.stop()
                 ui.btn_start.setEnabled(True)
-                text = ref_name + " saved"
+                text = ref_opt_name + " saved"
                 ui.label_progress.setText(text)
                 ui.progressBar.setValue(0)
 
@@ -141,11 +141,11 @@ def on_btn_saveConfig_clicked():  # ulozenie configu
     print("on_btn_saveConfig_clicked")
     print(sample_rate)
     print(number_of_samples_per_channel)
-    print(ref_name)
+    print(ref_opt_name)
     print(save_folder)
     config['measurement']['sample_rate'] = sample_rate
     config['measurement']['number_of_samples_per_channel'] = number_of_samples_per_channel
-    config['save_data']['ref_name'] = ref_name
+    config['save_data']['ref_name'] = ref_opt_name
     config['save_data']['destination_folder'] = save_folder
 
     with open('a_ref_config.yaml', 'w') as file:
@@ -189,7 +189,7 @@ def on_lineEdit_saveFolder_finished():
 def on_lineEdit_fileName_finished():
     text = ui.lineEdit_file_name.text() + ".txt"
     print("Text changed: ", text)
-    global ref_name
+    global ref_opt_name
     ref_name = text
 
 
@@ -202,7 +202,7 @@ number_of_samples_per_channel = config['measurement']['number_of_samples_per_cha
 
 deviceName_channel = config['device']['name'] + '/' + config['device']['channel']
 
-ref_name = config['save_data']['ref_name']
+ref_opt_name = config['save_data']['ref_name']
 save_folder = config['save_data']['destination_folder']
 measure_time = number_of_samples_per_channel / sample_rate
 progress_sec = 0
