@@ -9,35 +9,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from nidaqmx.constants import AcquisitionType
 
-documents_path = os.path.expanduser('~/Documents')
-main_folder_name = 'Sylex_sensors_export'
-subfolder1a_name = 'reference'
-subfolder2a_name = 'optical'
-subfolder1b_name = 'reference_raw'
-subfolder2b_name = 'optical_raw'
-
-main_folder_path = os.path.join(documents_path, main_folder_name)
-subfolder1a_path = os.path.join(main_folder_path, subfolder1a_name)
-subfolder2a_path = os.path.join(main_folder_path, subfolder2a_name)
-subfolder1raw_path = os.path.join(main_folder_path, subfolder1b_name)
-subfolder2raw_path = os.path.join(main_folder_path, subfolder2b_name)
-
-# otovríme config file
-config_file_path = os.path.join(main_folder_path, 'a_ref_config.yaml')
-with open(config_file_path, 'r') as file:
-    config = yaml.safe_load(file)
-
-sample_rate = config['ref_measurement']['sample_rate']
-number_of_samples_per_channel = config['ref_measurement']['number_of_samples_per_channel']
-deviceName_channel = config['device']['name'] + '/' + config['device']['channel']
-ref_opt_name = config['save_data']['ref_name']
-save_folder = config['save_data']['destination_folder']
-
-measure_time = number_of_samples_per_channel / sample_rate
-progress_sec = 0
-refData = None
-opt_sentinel_file_name = None
-
 def on_btn_start_clicked():  # start merania
     ui.btn_start.setEnabled(False)
     print("on_btn_start_clicked")
@@ -48,14 +19,14 @@ def on_btn_start_clicked():  # start merania
     start_sentinel()
     check_new_files()
 
-    if __name__ == '__main__':
-        mp.set_start_method('spawn')
-        pool = mp.Pool()
-        pool.map(start_ref_sens_data_collection)
-        pool.map(start_timer, (measure_time+3))
 
-        pool.close()
-        pool.join()
+    mp.set_start_method('spawn')
+    pool = mp.Pool()
+    pool.map(start_ref_sens_data_collection)
+    pool.map(start_timer, range((measure_time+3)))
+
+    pool.close()
+    pool.join()
 
     print("Start raw")
     make_opt_raw(4)
@@ -95,45 +66,51 @@ def check_new_files():
             break
 
 def start_ref_sens_data_collection():
-    from datetime import datetime
-    app_name = "ClientApp_Dyn"
-
-    with nidaqmx.Task() as task:
-        # nazov zariadenia/channel, min/max value -> očakávané hodnoty v tomto rozmedzí
-        task.ai_channels.add_ai_accel_chan(deviceName_channel, sensitivity=1000)
-
-
-        # časovanie resp. vzorkovacia freqvencia, pocet vzoriek
-        task.timing.cfg_samp_clk_timing(sample_rate, sample_mode=nidaqmx.constants.AcquisitionType.FINITE,
-                                        samps_per_chan=number_of_samples_per_channel)
-
-        # print("Start merania")
-        current_time = datetime.now().time()
-        time_string = current_time.strftime("%H:%M:%S.%f") # [:-2]
-        start_time = time.time()
-        # spustenie získavania vzoriek
-        task.start()
-
-        # čítam získane vzorky
-        data = task.read(number_of_samples_per_channel=number_of_samples_per_channel,
-                         timeout=nidaqmx.constants.WAIT_INFINITELY)
-
-        end_time = time.time()
-
-        os.system(f'taskkill /F /IM {app_name}.exe')
-
-        # stop
-        task.stop()
-        # print("Stop merania")
-
-        # dĺžka merania
-        elapsed_time = (end_time - start_time) * 1000
-        # print(f"Cas trvania merania: {elapsed_time:.2f} ms")
-
-        # ulozenie dát do txt súboru
-        save_data(data, time_string, elapsed_time)
-        global refData
-        refData = data
+    i = 0
+    while i < 5:
+        time.sleep(1)
+        print(i)
+        i = i + 1
+    ui.btn_start.setEnabled(True)
+    # from datetime import datetime
+    # app_name = "ClientApp_Dyn"
+    #
+    # with nidaqmx.Task() as task:
+    #     # nazov zariadenia/channel, min/max value -> očakávané hodnoty v tomto rozmedzí
+    #     task.ai_channels.add_ai_accel_chan(deviceName_channel, sensitivity=1000)
+    #
+    #
+    #     # časovanie resp. vzorkovacia freqvencia, pocet vzoriek
+    #     task.timing.cfg_samp_clk_timing(sample_rate, sample_mode=nidaqmx.constants.AcquisitionType.FINITE,
+    #                                     samps_per_chan=number_of_samples_per_channel)
+    #
+    #     # print("Start merania")
+    #     current_time = datetime.now().time()
+    #     time_string = current_time.strftime("%H:%M:%S.%f") # [:-2]
+    #     start_time = time.time()
+    #     # spustenie získavania vzoriek
+    #     task.start()
+    #
+    #     # čítam získane vzorky
+    #     data = task.read(number_of_samples_per_channel=number_of_samples_per_channel,
+    #                      timeout=nidaqmx.constants.WAIT_INFINITELY)
+    #
+    #     end_time = time.time()
+    #
+    #     os.system(f'taskkill /F /IM {app_name}.exe')
+    #
+    #     # stop
+    #     task.stop()
+    #     # print("Stop merania")
+    #
+    #     # dĺžka merania
+    #     elapsed_time = (end_time - start_time) * 1000
+    #     # print(f"Cas trvania merania: {elapsed_time:.2f} ms")
+    #
+    #     # ulozenie dát do txt súboru
+    #     save_data(data, time_string, elapsed_time)
+    #     global refData
+    #     refData = data
 
 def start_timer(duration):
     end_time = time.time() + duration
@@ -312,35 +289,66 @@ def create_folders():
     print(f"Subfolder 1b created: {subfolder1raw_path}")
     print(f"Subfolder 2b created: {subfolder2raw_path}")
 
-create_folders()
+if __name__ == '__main__':
 
-# vytvorenie class s ui elementmi
-app = QApplication([])
-window = QMainWindow()
-ui = Ui_MainWindow()
-ui.setupUi(window)
-##
+    documents_path = os.path.expanduser('~/Documents')
+    main_folder_name = 'Sylex_sensors_export'
+    subfolder1a_name = 'reference'
+    subfolder2a_name = 'optical'
+    subfolder1b_name = 'reference_raw'
+    subfolder2b_name = 'optical_raw'
 
-# pociatocna init lineEditov
-ui.lineEdit_SampleRate.setText(str(sample_rate))
-ui.lineEdit_saveFolder.setText(save_folder)
-ui.lineEdit_measure.setText(str(measure_time))
-##
+    main_folder_path = os.path.join(documents_path, main_folder_name)
+    subfolder1a_path = os.path.join(main_folder_path, subfolder1a_name)
+    subfolder2a_path = os.path.join(main_folder_path, subfolder2a_name)
+    subfolder1raw_path = os.path.join(main_folder_path, subfolder1b_name)
+    subfolder2raw_path = os.path.join(main_folder_path, subfolder2b_name)
 
-ui.progressBar.setValue(0)
+    # otovríme config file
+    config_file_path = os.path.join(main_folder_path, 'a_ref_config.yaml')
+    with open(config_file_path, 'r') as file:
+        config = yaml.safe_load(file)
 
-# priradenie buttonom funkciu
-ui.btn_start.clicked.connect(on_btn_start_clicked)
-ui.btn_saveConfig.clicked.connect(on_btn_saveConfig_clicked)
-ui.toolBtn_selectFolder.clicked.connect(on_toolBtn_selectFolder_clicked)
-##
+    sample_rate = config['ref_measurement']['sample_rate']
+    number_of_samples_per_channel = config['ref_measurement']['number_of_samples_per_channel']
+    deviceName_channel = config['device']['name'] + '/' + config['device']['channel']
+    ref_opt_name = config['save_data']['ref_name']
+    save_folder = config['save_data']['destination_folder']
 
-# priradenie lineEditom funkciu
-ui.lineEdit_measure.editingFinished.connect(on_lineEdit_measure_finished)
-ui.lineEdit_SampleRate.editingFinished.connect(on_lineEdit_SampleRate_finished)
-ui.lineEdit_file_name.editingFinished.connect(on_lineEdit_fileName_finished)
-ui.lineEdit_saveFolder.editingFinished.connect(on_lineEdit_saveFolder_finished)
-##
+    measure_time = number_of_samples_per_channel / sample_rate
+    progress_sec = 0
+    refData = None
+    opt_sentinel_file_name = None
 
-window.show()
-app.exec_()
+    create_folders()
+
+    # vytvorenie class s ui elementmi
+    app = QApplication([])
+    window = QMainWindow()
+    ui = Ui_MainWindow()
+    ui.setupUi(window)
+    ##
+
+    # pociatocna init lineEditov
+    ui.lineEdit_SampleRate.setText(str(sample_rate))
+    ui.lineEdit_saveFolder.setText(save_folder)
+    ui.lineEdit_measure.setText(str(measure_time))
+    ##
+
+    ui.progressBar.setValue(0)
+
+    # priradenie buttonom funkciu
+    ui.btn_start.clicked.connect(on_btn_start_clicked)
+    ui.btn_saveConfig.clicked.connect(on_btn_saveConfig_clicked)
+    ui.toolBtn_selectFolder.clicked.connect(on_toolBtn_selectFolder_clicked)
+    ##
+
+    # priradenie lineEditom funkciu
+    ui.lineEdit_measure.editingFinished.connect(on_lineEdit_measure_finished)
+    ui.lineEdit_SampleRate.editingFinished.connect(on_lineEdit_SampleRate_finished)
+    ui.lineEdit_file_name.editingFinished.connect(on_lineEdit_fileName_finished)
+    ui.lineEdit_saveFolder.editingFinished.connect(on_lineEdit_saveFolder_finished)
+    ##
+
+    window.show()
+    app.exec_()

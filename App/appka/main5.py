@@ -33,33 +33,31 @@ class start_ref_sens_data_collection_worker(PyQt5.QtCore.QObject):
 def on_btn_start_clicked():  # start merania
     ui.btn_start.setEnabled(False)
     print("on_btn_start_clicked")
-    global measure_time
+    global measure_time, thread_ref_sens, worker_start_ref_sens_data_collection, thread_prog_bar, worker_start_prog_bar
 
-    if __name__ == "__main__":
+    thread_prog_bar = PyQt5.QtCore.QThread()
+    thread_ref_sens = PyQt5.QtCore.QThread()
 
-        thread_prog_bar = PyQt5.QtCore.QThread()
-        thread_ref_sens = PyQt5.QtCore.QThread()
+    worker_start_prog_bar = start_timer_worker((measure_time+4))
+    worker_start_ref_sens_data_collection = start_ref_sens_data_collection_worker()
 
-        worker_start_prog_bar = start_timer_worker((measure_time+3))
-        worker_start_ref_sens_data_collection = start_ref_sens_data_collection_worker()
+    worker_start_prog_bar.moveToThread(thread_prog_bar)
+    worker_start_ref_sens_data_collection.moveToThread(thread_ref_sens)
 
-        worker_start_prog_bar.moveToThread(thread_prog_bar)
-        worker_start_ref_sens_data_collection.moveToThread(thread_ref_sens)
+    thread_prog_bar.started.connect(worker_start_prog_bar.run)
+    worker_start_prog_bar.progress_signal.connect(update_progressBar)
+    worker_start_prog_bar.finished.connect(thread_prog_bar.quit)
+    thread_prog_bar.finished.connect(thread_prog_bar.deleteLater)
 
-        thread_prog_bar.started.connect(worker_start_prog_bar.run)
-        worker_start_prog_bar.progress_signal.connect(update_progressBar)
-        worker_start_prog_bar.finished.connect(thread_prog_bar.quit)
-        thread_prog_bar.finished.connect(thread_prog_bar.deleteLater)
+    thread_ref_sens.started.connect(worker_start_ref_sens_data_collection.run)
+    worker_start_ref_sens_data_collection.finished.connect(thread_ref_sens.quit)
+    thread_ref_sens.finished.connect(thread_ref_sens.deleteLater)
 
-        thread_ref_sens.started.connect(worker_start_ref_sens_data_collection.run)
-        worker_start_ref_sens_data_collection.finished.connect(thread_ref_sens.quit)
-        thread_ref_sens.finished.connect(thread_ref_sens.deleteLater)
-
-        thread_ref_sens.start()
-        thread_prog_bar.start()
+    thread_ref_sens.start()
+    thread_prog_bar.start()
 
     print("Start raw")
-    make_opt_raw(4)
+    # make_opt_raw(4)
 
     # vytvorenie grafu
     # plot_data(refData)
@@ -96,45 +94,51 @@ def check_new_files():
             break
 
 def start_ref_sens_data_collection():
-    from datetime import datetime
-    app_name = "ClientApp_Dyn"
-
-    with nidaqmx.Task() as task:
-        # nazov zariadenia/channel, min/max value -> očakávané hodnoty v tomto rozmedzí
-        task.ai_channels.add_ai_accel_chan(deviceName_channel, sensitivity=1000)
-
-
-        # časovanie resp. vzorkovacia freqvencia, pocet vzoriek
-        task.timing.cfg_samp_clk_timing(sample_rate, sample_mode=nidaqmx.constants.AcquisitionType.FINITE,
-                                        samps_per_chan=number_of_samples_per_channel)
-
-        print("Start merania")
-        current_time = datetime.now().time()
-        time_string = current_time.strftime("%H:%M:%S.%f") # [:-2]
-        start_time = time.time()
-        # spustenie získavania vzoriek
-        task.start()
-
-        # čítam získane vzorky
-        data = task.read(number_of_samples_per_channel=number_of_samples_per_channel,
-                         timeout=nidaqmx.constants.WAIT_INFINITELY)
-
-        end_time = time.time()
-
-        os.system(f'taskkill /F /IM {app_name}.exe')
-
-        # stop
-        task.stop()
-        print("Stop merania")
-
-        # dĺžka merania
-        elapsed_time = (end_time - start_time) * 1000
-        print(f"Cas trvania merania: {elapsed_time:.2f} ms")
-
-        # ulozenie dát do txt súboru
-        save_data(data, time_string, elapsed_time)
-        global refData
-        refData = data
+    i = 0
+    while i < 5:
+        PyQt5.QtCore.QThread.msleep(1000)
+        print(i)
+        i = i + 1
+    ui.btn_start.setEnabled(True)
+    # from datetime import datetime
+    # app_name = "ClientApp_Dyn"
+    #
+    # with nidaqmx.Task() as task:
+    #     # nazov zariadenia/channel, min/max value -> očakávané hodnoty v tomto rozmedzí
+    #     task.ai_channels.add_ai_accel_chan(deviceName_channel, sensitivity=1000)
+    #
+    #
+    #     # časovanie resp. vzorkovacia freqvencia, pocet vzoriek
+    #     task.timing.cfg_samp_clk_timing(sample_rate, sample_mode=nidaqmx.constants.AcquisitionType.FINITE,
+    #                                     samps_per_chan=number_of_samples_per_channel)
+    #
+    #     print("Start merania")
+    #     current_time = datetime.now().time()
+    #     time_string = current_time.strftime("%H:%M:%S.%f") # [:-2]
+    #     start_time = time.time()
+    #     # spustenie získavania vzoriek
+    #     task.start()
+    #
+    #     # čítam získane vzorky
+    #     data = task.read(number_of_samples_per_channel=number_of_samples_per_channel,
+    #                      timeout=nidaqmx.constants.WAIT_INFINITELY)
+    #
+    #     end_time = time.time()
+    #
+    #     os.system(f'taskkill /F /IM {app_name}.exe')
+    #
+    #     # stop
+    #     task.stop()
+    #     print("Stop merania")
+    #
+    #     # dĺžka merania
+    #     elapsed_time = (end_time - start_time) * 1000
+    #     print(f"Cas trvania merania: {elapsed_time:.2f} ms")
+    #
+    #     # ulozenie dát do txt súboru
+    #     save_data(data, time_string, elapsed_time)
+    #     global refData
+    #     refData = data
 
 def update_progressBar(value):
 
@@ -157,6 +161,7 @@ def update_progressBar(value):
     #             ui.progressBar.setValue(0)
     #
     # progress_sec += 1
+    global measure_time
     progress_sec = value
     if progress_sec < measure_time:
         ui.label_progress.setText("Data collection")
@@ -325,6 +330,10 @@ def create_folders():
     print(f"Subfolder 2b created: {subfolder2raw_path}")
 
 if __name__ == "__main__":
+    thread_ref_sens = None
+    worker_start_ref_sens_data_collection = None
+    thread_prog_bar = None
+    worker_start_prog_bar = None
     documents_path = os.path.expanduser('~/Documents')
     main_folder_name = 'Sylex_sensors_export'
     subfolder1a_name = 'reference'
