@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
+ <class>Setup</class>
+ <widget class="QMainWindow" name="Setup">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>600</width>
-    <height>475</height>
+    <height>350</height>
    </rect>
   </property>
   <property name="palette">
@@ -483,53 +483,88 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLabel" name="S_N_label">
+   <widget class="QComboBox" name="ref_channel_comboBox">
     <property name="geometry">
      <rect>
-      <x>80</x>
-      <y>10</y>
-      <width>51</width>
-      <height>31</height>
+      <x>310</x>
+      <y>150</y>
+      <width>81</width>
+      <height>24</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="ref_device_comboBox">
+    <property name="geometry">
+     <rect>
+      <x>310</x>
+      <y>110</y>
+      <width>171</width>
+      <height>24</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="channel_label">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>150</y>
+      <width>151</width>
+      <height>21</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>24</pointsize>
+      <pointsize>14</pointsize>
+      <bold>true</bold>
      </font>
     </property>
     <property name="layoutDirection">
      <enum>Qt::LeftToRight</enum>
     </property>
     <property name="text">
-     <string>S/N</string>
+     <string>Channel</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
     </property>
    </widget>
-   <widget class="QLineEdit" name="S_N_line">
+   <widget class="QLabel" name="device_label">
     <property name="geometry">
      <rect>
-      <x>140</x>
-      <y>10</y>
-      <width>381</width>
-      <height>31</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="start_btn">
-    <property name="geometry">
-     <rect>
-      <x>80</x>
-      <y>80</y>
-      <width>141</width>
-      <height>71</height>
+      <x>60</x>
+      <y>110</y>
+      <width>231</width>
+      <height>21</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <family>Segoe UI</family>
-      <pointsize>24</pointsize>
+      <pointsize>14</pointsize>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::LeftToRight</enum>
+    </property>
+    <property name="text">
+     <string>Reference sensor device</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="start_app">
+    <property name="geometry">
+     <rect>
+      <x>230</x>
+      <y>250</y>
+      <width>141</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
       <bold>true</bold>
      </font>
     </property>
@@ -537,262 +572,171 @@
      <string>START</string>
     </property>
    </widget>
-   <widget class="QProgressBar" name="progressBar">
+   <widget class="QLabel" name="sens_type_label">
     <property name="geometry">
      <rect>
-      <x>80</x>
-      <y>160</y>
-      <width>441</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="value">
-     <number>24</number>
-    </property>
-   </widget>
-   <widget class="QTextBrowser" name="output_browser">
-    <property name="geometry">
-     <rect>
-      <x>80</x>
-      <y>190</y>
-      <width>441</width>
-      <height>161</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLabel" name="pass_status_label">
-    <property name="geometry">
-     <rect>
-      <x>80</x>
-      <y>350</y>
-      <width>221</width>
-      <height>51</height>
+      <x>60</x>
+      <y>60</y>
+      <width>231</width>
+      <height>41</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>36</pointsize>
+      <pointsize>14</pointsize>
       <bold>true</bold>
      </font>
-    </property>
-    <property name="text">
-     <string>PASS</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="fail_status_label">
-    <property name="geometry">
-     <rect>
-      <x>300</x>
-      <y>340</y>
-      <width>221</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>36</pointsize>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>FAIL</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="Line" name="line">
-    <property name="geometry">
-     <rect>
-      <x>300</x>
-      <y>350</y>
-      <width>3</width>
-      <height>61</height>
-     </rect>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Vertical</enum>
-    </property>
-   </widget>
-   <widget class="Line" name="line_2">
-    <property name="geometry">
-     <rect>
-      <x>80</x>
-      <y>350</y>
-      <width>3</width>
-      <height>61</height>
-     </rect>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Vertical</enum>
-    </property>
-   </widget>
-   <widget class="Line" name="line_3">
-    <property name="geometry">
-     <rect>
-      <x>511</x>
-      <y>347</y>
-      <width>20</width>
-      <height>61</height>
-     </rect>
     </property>
     <property name="layoutDirection">
      <enum>Qt::LeftToRight</enum>
     </property>
-    <property name="orientation">
-     <enum>Qt::Vertical</enum>
+    <property name="text">
+     <string>Optical sensor type</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
     </property>
    </widget>
-   <widget class="QLabel" name="ref_sens_status_label">
+   <widget class="QComboBox" name="sens_type_comboBox">
     <property name="geometry">
      <rect>
-      <x>230</x>
-      <y>90</y>
-      <width>281</width>
-      <height>20</height>
+      <x>310</x>
+      <y>70</y>
+      <width>171</width>
+      <height>24</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="open_settings_btn">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>280</y>
+      <width>80</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>SETTINGS</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="app_label">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>601</width>
+      <height>41</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>12</pointsize>
+      <pointsize>24</pointsize>
+      <bold>true</bold>
      </font>
-    </property>
-    <property name="text">
-     <string>REF SENS CONNECTED . . .</string>
-    </property>
-   </widget>
-   <widget class="Line" name="line_4">
-    <property name="geometry">
-     <rect>
-      <x>80</x>
-      <y>400</y>
-      <width>441</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Horizontal</enum>
-    </property>
-   </widget>
-   <widget class="QLabel" name="opt_sens_status_label">
-    <property name="geometry">
-     <rect>
-      <x>230</x>
-      <y>120</y>
-      <width>281</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>12</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>OPT SENS CONNECTED . . .</string>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="plot_graph_check">
-    <property name="geometry">
-     <rect>
-      <x>70</x>
-      <y>50</y>
-      <width>91</width>
-      <height>22</height>
-     </rect>
     </property>
     <property name="layoutDirection">
-     <enum>Qt::RightToLeft</enum>
+     <enum>Qt::LeftToRight</enum>
     </property>
     <property name="text">
-     <string>Plot graphs</string>
+     <string>APP NAME</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QComboBox" name="select_ses_type_channels_comboBox">
+   <widget class="QLabel" name="status_opt_label">
     <property name="geometry">
      <rect>
-      <x>400</x>
-      <y>50</y>
-      <width>121</width>
+      <x>310</x>
+      <y>180</y>
+      <width>171</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Optical device UP</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="status_label">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>200</y>
+      <width>151</width>
       <height>21</height>
      </rect>
     </property>
-    <item>
-     <property name="text">
-      <string>Select channels...</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>1-channel</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>2-channels</string>
-     </property>
-    </item>
+    <property name="font">
+     <font>
+      <pointsize>18</pointsize>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::LeftToRight</enum>
+    </property>
+    <property name="text">
+     <string>STATUS :</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
    </widget>
-   <widget class="Line" name="line_5">
+   <widget class="QLabel" name="status_ref_label">
     <property name="geometry">
      <rect>
-      <x>210</x>
-      <y>71</y>
-      <width>311</width>
-      <height>20</height>
+      <x>310</x>
+      <y>210</y>
+      <width>171</width>
+      <height>31</height>
      </rect>
     </property>
-    <property name="orientation">
-     <enum>Qt::Horizontal</enum>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Reference device UP</string>
     </property>
    </widget>
-   <widget class="Line" name="line_6">
+   <widget class="QLabel" name="null_detect_label">
     <property name="geometry">
      <rect>
-      <x>200</x>
-      <y>141</y>
-      <width>321</width>
-      <height>20</height>
+      <x>20</x>
+      <y>250</y>
+      <width>211</width>
+      <height>21</height>
      </rect>
     </property>
-    <property name="orientation">
-     <enum>Qt::Horizontal</enum>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Please setup parameters!</string>
     </property>
    </widget>
-   <widget class="Line" name="line_7">
+   <widget class="QPushButton" name="refresh_btn">
     <property name="geometry">
      <rect>
-      <x>513</x>
-      <y>80</y>
-      <width>16</width>
-      <height>71</height>
+      <x>500</x>
+      <y>280</y>
+      <width>80</width>
+      <height>24</height>
      </rect>
     </property>
-    <property name="orientation">
-     <enum>Qt::Vertical</enum>
+    <property name="text">
+     <string>REFRESH</string>
     </property>
    </widget>
-   <zorder>line_6</zorder>
-   <zorder>line_5</zorder>
-   <zorder>S_N_label</zorder>
-   <zorder>S_N_line</zorder>
-   <zorder>start_btn</zorder>
-   <zorder>progressBar</zorder>
-   <zorder>output_browser</zorder>
-   <zorder>pass_status_label</zorder>
-   <zorder>fail_status_label</zorder>
-   <zorder>line</zorder>
-   <zorder>line_2</zorder>
-   <zorder>line_3</zorder>
-   <zorder>ref_sens_status_label</zorder>
-   <zorder>line_4</zorder>
-   <zorder>opt_sens_status_label</zorder>
-   <zorder>plot_graph_check</zorder>
-   <zorder>select_ses_type_channels_comboBox</zorder>
-   <zorder>line_7</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -803,68 +747,8 @@
      <height>21</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuMenu">
-    <property name="title">
-     <string>Menu</string>
-    </property>
-    <widget class="QMenu" name="menuOpen_Sentinel_D">
-     <property name="title">
-      <string>Open Sentinel-D</string>
-     </property>
-     <addaction name="actionwithout_project"/>
-     <addaction name="actionwith_project"/>
-    </widget>
-    <widget class="QMenu" name="menuOpen_export_folder">
-     <property name="title">
-      <string>Open export folder</string>
-     </property>
-     <addaction name="actionmain_folder"/>
-     <addaction name="actioncalibration_folder"/>
-    </widget>
-    <addaction name="menuOpen_export_folder"/>
-    <addaction name="menuOpen_Sentinel_D"/>
-    <addaction name="actionOpen_Function_Generator"/>
-   </widget>
-   <widget class="QMenu" name="menuSettings">
-    <property name="title">
-     <string>Options</string>
-    </property>
-   </widget>
-   <widget class="QMenu" name="menuAbout">
-    <property name="title">
-     <string>About</string>
-    </property>
-   </widget>
-   <addaction name="menuMenu"/>
-   <addaction name="menuSettings"/>
-   <addaction name="menuAbout"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <action name="actionOpen_Function_Generator">
-   <property name="text">
-    <string>Open Function Generator</string>
-   </property>
-  </action>
-  <action name="actionwithout_project">
-   <property name="text">
-    <string>no project</string>
-   </property>
-  </action>
-  <action name="actionwith_project">
-   <property name="text">
-    <string>with project</string>
-   </property>
-  </action>
-  <action name="actionmain_folder">
-   <property name="text">
-    <string>main folder</string>
-   </property>
-  </action>
-  <action name="actioncalibration_folder">
-   <property name="text">
-    <string>calibration folder</string>
-   </property>
-  </action>
  </widget>
  <resources/>
  <connections/>

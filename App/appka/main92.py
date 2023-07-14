@@ -1,3 +1,4 @@
+import numpy as np
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
 import PyQt5.QtCore
 from mainwindow import Ui_MainWindow
@@ -6,6 +7,7 @@ import yaml
 import nidaqmx
 import time
 import os
+from scipy.fft import fft
 from nidaqmx.constants import AcquisitionType
 
 class start_timer_thread(PyQt5.QtCore.QThread):
@@ -26,9 +28,84 @@ class start_timer_thread(PyQt5.QtCore.QThread):
 
 class start_ref_sens_data_collection_thread(PyQt5.QtCore.QThread):
     finished_signal = PyQt5.QtCore.pyqtSignal()
+
     def run(self):
         kali.start_ref_sens_data_collection()
         self.finished_signal.emit()
+
+class start_check_new_file_thread(PyQt5.QtCore.QThread):
+    finished_signal = PyQt5.QtCore.pyqtSignal()
+
+    def run(self):
+        print("Start check thread")
+        kali.check_new_files()
+        self.finished_signal.emit()
+
+class start_ref_check_sin_thread(PyQt5.QtCore.QThread):
+    finished_signal = PyQt5.QtCore.pyqtSignal()
+
+    def __init__(self, deviceName_channel):
+        super().__init__()
+        self.termination = False
+        self.task_sin = nidaqmx.Task()
+        self.deviceName_channel = deviceName_channel
+
+    def run(self):
+        sample_rate = 12800
+        number_of_samples_per_channel = int(12800 / 3)
+        sin_threshold = 0.004
+        #
+        print("Start ref sens sinus check")
+        # nazov zariadenia/channel, min/max value -> očakávané hodnoty v tomto rozmedzí
+        self.task_sin.ai_channels.add_ai_accel_chan(self.deviceName_channel, sensitivity=1000)
+
+        # časovanie resp. vzorkovacia freqvencia, pocet vzoriek
+        self.task_sin.timing.cfg_samp_clk_timing(sample_rate, sample_mode=nidaqmx.constants.AcquisitionType.CONTINUOUS)
+        self.task_sin.start()
+
+        ## 2 varianta
+        while not self.termination:
+            data = self.task_sin.read(number_of_samples_per_channel=number_of_samples_per_channel,
+                                      timeout=nidaqmx.constants.WAIT_INFINITELY)
+            if self.is_sinus2(data, sample_rate):  # self.is_sinus(data, sin_threshold):
+                kali.ui.btn_start.setEnabled(True)
+                print("REF IS READY \n")
+            else:
+                kali.ui.btn_start.setEnabled(False)
+                print("INSTALL REF SENS \n")
+        kali.ui.btn_start.setEnabled(False)
+        self.task_sin.stop()
+
+    def is_sinus(self, samples, threshold):
+        # Perform frequency domain analysis using Fourier Transform (FFT)
+        fft_values = np.fft.fft(samples)
+        amplitudes = np.abs(fft_values)
+        max_amplitude = np.max(amplitudes)
+
+        # Calculate the normalized amplitude of the dominant frequency
+        normalized_amplitude = max_amplitude / len(samples)
+
+        # Check if the waveform is sinusoidal based on the threshold
+        print(normalized_amplitude)
+        if normalized_amplitude >= threshold:
+            return True
+        else:
+            return False
+
+    def is_sinus2(self, samples, sample_rate):
+        # Perform Fast Fourier Transform
+        data = np.array(samples)
+        yf = fft(data)
+        xf = np.linspace(0.0, 1.0 / (2.0 / sample_rate), len(data) // 2)
+
+        # Check if the signal forms a periodic waveform
+        # If there is a peak in the frequency domain, we can say that there is a periodic signal
+        peak_threshold = 10  # adjust this threshold according to your needs
+        peak_freqs = xf[np.abs(yf[:len(data) // 2]) > peak_threshold]
+        if len(peak_freqs) > 0:
+            return True
+        else:
+            return False
 
 class autokali(PyQt5.QtCore.QObject):
 
@@ -36,6 +113,8 @@ class autokali(PyQt5.QtCore.QObject):
         super().__init__()
         self.ref_sensitivity = 1.079511
         self.GainMark = 150
+        self.sensitivities_file = "sensitivities.csv"
+        self.timecorrections_file = "time_corrections.csv"
 
         documents_path = os.path.expanduser('~/Documents')
         main_folder_name = 'Sylex_sensors_export'
@@ -95,9 +174,14 @@ class autokali(PyQt5.QtCore.QObject):
         self.ui.lineEdit_saveFolder.editingFinished.connect(self.on_lineEdit_saveFolder_finished)
         ##
 
+        self.ui.output_browser.setText("Calibration results : " + '\n' + "please install reference sensor")
+
         self.window.show()
+        self.thread_check_sin = start_ref_check_sin_thread(self.deviceName_channel)
+        self.thread_check_sin.start()
 
     def on_btn_start_clicked(self):  # start merania
+        self.thread_check_sin.termination = True
         self.ui.btn_start.setEnabled(False)
         self.ui.label_progress.setText("Starting Sentinel-D")
 
@@ -105,18 +189,19 @@ class autokali(PyQt5.QtCore.QObject):
 
         self.thread_prog_bar = start_timer_thread((self.measure_time+4))
         self.thread_ref_sens = start_ref_sens_data_collection_thread()
+        self.thread_check_new_file = start_check_new_file_thread()
 
         self.thread_prog_bar.finished_signal.connect(self.thread_prog_bar_finished)
         self.thread_prog_bar.progress_signal.connect(self.update_progressBar)
         self.thread_ref_sens.finished.connect(self.thread_ref_sens_finished)
+        self.thread_check_new_file.finished.connect(self.thread_check_new_file_finished)
 
-        self.check_new_files()
-
-        self.thread_prog_bar.start()
-        self.thread_ref_sens.start()
+        self.thread_check_new_file.start()
 
     def thread_prog_bar_finished(self):
         self.ui.btn_start.setEnabled(True)
+        self.thread_check_sin = start_ref_check_sin_thread(self.deviceName_channel)
+        self.thread_check_sin.start()
 
     def thread_ref_sens_finished(self):
         self.make_opt_raw(4)
@@ -128,31 +213,51 @@ class autokali(PyQt5.QtCore.QObject):
         # [3]>flatness_edge_r,[4]>sens. flatness,[5]>MAX acc,[6]>MIN acc,[7]>DIFF symmetry,[8]>TimeCorrection
         self.save_calib_data()
 
+    def thread_check_new_file_finished(self):
+        self.thread_prog_bar.start()
+        self.thread_ref_sens.start()
+        print("finito")
+
     def save_calib_data(self):
+        self.passTest = "PASS/FAIL"
         file_path = os.path.join(self.subfolderCalibrationData, self.ref_opt_name)
+        self.ui.output_browser.setText("Calibration results: " + '\n' + '\n' +
+                                       "# S/N :" + '\t \t' + self.ref_opt_name + '\n' +
+                                       "# Date :" + '\t \t' + self.current_date + '\n' +
+                                       "# Time : " + '\t \t' + self.time_string + '\n' +
+                                       "# Center wavelength : " + '\t \t' + str(self.acc_kalib[0]) + '\n' +
+                                       "# Sensitivity : " + '\t \t' + str(self.acc_kalib[1]) + " pm/g at " + str(self.GainMark) + " Hz" + '\n' +
+                                       "# Sensitivity flatness : " + '\t \t' + str(self.acc_kalib[4]) + " between " +
+                                       str(self.acc_kalib[2]) + " Hz and " + str(self.acc_kalib[3]) + " Hz" + '\n' +
+                                       "--------->" + self.passTest + "<---------")
         with open(file_path, 'w') as file:
             file.write("# S/N :" + '\n' + '\t' + "place holder" + '\n')
-            file.write("# Date :" + '\n' + '\t' + self.date + '\n')
+            file.write("# Date :" + '\n' + '\t' + self.current_date + '\n')
             file.write("# Time : " + '\n' + '\t' + self.time_string + '\n')
-            file.write("# Center wavelength : " + '\n' + '\t' + self.acc_kalib[0] + '\n')
-            file.write("# Sensitivity : " + '\n' + '\t' + self.acc_kalib[1] + " pm/g at " + self.GainMark + " Hz" + '\n')
-            file.write("# Sensitivity flatness : " + '\n' + '\t' + self.acc_kalib[4] + " between " + self.acc_kalib[2] + " Hz and " + self.acc_kalib[3] + " Hz" + '\n')
+            file.write("# Center wavelength : " + '\n' + '\t' + str(self.acc_kalib[0]) + '\n')
+            file.write("# Sensitivity : " + '\n' + '\t' + str(self.acc_kalib[1]) + " pm/g at " + str(self.GainMark) + " Hz" + '\n')
+            file.write("# Sensitivity flatness : " + '\n' + '\t' + str(self.acc_kalib[4]) + " between " + str(self.acc_kalib[2]) + " Hz and " + str(self.acc_kalib[3]) + " Hz" + '\n')
 
-    def start_sentinel(self): # ! vybrat path to .exe a project
+        file_path = os.path.join(self.main_folder_path, self.sensitivities_file)
+        if os.path.exists(file_path):
+            os.remove(file_path)
+        file_path = os.path.join(self.main_folder_path, self.timecorrections_file)
+        if os.path.exists(file_path):
+            os.remove(file_path)
 
-        sentinel_app = r'C:\Users\lukac\Desktop\Sylex\Sentinel\Sentinel2_Dynamic_v0_4_1 (AE)\Sentinel2_Dynamic_v0_4_1'
+    def start_sentinel(self):  # ! vybrat path to .exe a project
+
+        sentinel_app = r'C:\Users\lukac\Desktop\Sylex\Sentinel\Sentinel2_Dynamic_v0_4_1\Sentinel2_Dynamic_v0_4_1'
         sentinel_project = 'test.ssd'
 
         os.chdir(sentinel_app)
-        os.system("start ClientApp_Dyn " + sentinel_project)
+        os.system("start /min ClientApp_Dyn " + sentinel_project)
 
     def check_new_files(self):
         # Get the initial set of files in the folder
         initial_files = set(os.listdir(self.subfolderOpt_path))
 
         while True:
-            # Sleep for some time
-            # time.sleep(0.1)
 
             # Get the current set of files in the folder
             current_files = set(os.listdir(self.subfolderOpt_path))
@@ -208,7 +313,7 @@ class autokali(PyQt5.QtCore.QObject):
             print(f"Cas trvania merania: {elapsed_time:.2f} ms")
 
             # ulozenie dát do txt súboru
-            self.save_data(data, time_string, elapsed_time)
+            self.save_data(data, elapsed_time)
             self.refData = data
 
     def update_progressBar(self, value):
@@ -233,18 +338,18 @@ class autokali(PyQt5.QtCore.QObject):
         from datetime import date
 
         today = date.today()
-        self.date = today.strftime("%b-%d-%Y")
+        self.current_date = today.strftime("%b-%d-%Y")
 
         file_path = os.path.join(self.subfolderRef_path, self.ref_opt_name)
         file_path_raw = os.path.join(self.subfolderRefRaw_path, self.ref_opt_name)
 
         with open(file_path, 'w') as file:
-            file.write("# " + date + '\n')
+            file.write("# " + self.current_date + '\n')
             file.write("# " + self.time_string + '\n')
             file.write("# Dĺžka merania : " + str(self.measure_time) + "s (" + str(round(elapsed_time/1000, 2)) + "s)" + '\n')
             file.write("# Vzorkovacia frekvencia : " + str(self.sample_rate) + '\n')
             file.write("# Počet vzoriek : " + str(self.number_of_samples_per_channel) + '\n')
-            file.write("# Merane napätie :" + '\n')
+            file.write("# Merane zrýchlenie :" + '\n')
             for item in data:
                 file.write(str(item) + '\n')
 
@@ -279,26 +384,6 @@ class autokali(PyQt5.QtCore.QObject):
             os.remove(self.ref_opt_name)
 
         os.rename(self.opt_sentinel_file_name, self.ref_opt_name)
-
-    # def plot_data(self, data):
-    #     file_path = os.path.join(self.save_folder, self.ref_opt_name)
-    #     # with open(file_path) as f:
-    #     #     lines = (line for line in f if not line.startswith('#'))
-    #     #     data = np.loadtxt(lines)
-    #
-    #
-    #     sample_rate_sec = 1 / self.sample_rate
-    #
-    #     plottime = np.arange(0, len(data) * sample_rate_sec, sample_rate_sec)
-    #
-    #     plt.plot(plottime, data)
-    #
-    #     plt.xlabel('Time [s]')
-    #     plt.ylabel('Acceleration [g]')
-    #     plt.title('Acceleration')
-    #     plt.grid(True)
-    #
-    #     plt.show()
 
     def on_btn_saveConfig_clicked(self):  # ulozenie configu
         print("on_btn_saveConfig_clicked")
@@ -359,13 +444,10 @@ class autokali(PyQt5.QtCore.QObject):
         # Create the subfolders inside the main folder
         os.makedirs(self.subfolderRef_path, exist_ok=True)
         os.makedirs(self.subfolderOpt_path, exist_ok=True)
-        print(f"Subfolder 1a created: {self.subfolderRef_path}")
-        print(f"Subfolder 2a created: {self.subfolderOpt_path}")
-
         os.makedirs(self.subfolderRefRaw_path, exist_ok=True)
         os.makedirs(self.subfolderOptRaw_path, exist_ok=True)
-        print(f"Subfolder 1b created: {self.subfolderRefRaw_path}")
-        print(f"Subfolder 2b created: {self.subfolderOptRaw_path}")
+        os.makedirs(self.subfolderCalibrationData, exist_ok=True)
+
 
 if __name__ == "__main__":
     # vytvorenie class s ui elementmi

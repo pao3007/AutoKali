@@ -2,24 +2,24 @@ calibration:
   do_spectrum: 1
   downsample: 1
   filter_data: high-pass
-  gain_mark: '150'
-  optical_sensitivity: '0'
+  gain_mark: 150
+  optical_sensitivity: 0
   plot: 0
 opt_measurement:
   project: test.ssd
-  sampling_rate: '800'
+  sampling_rate: 800
   sensor_type: accelerometer
 ref_device:
-  channel: ai0
-  name: ''
+  channel: null
+  measure_time: 25
+  name: cDAQ1Mod1
 ref_measurement:
-  measure_time: '25'
-  number_of_samples_per_channel: 320000
-  sample_rate: '12800'
+  number_of_samples_per_channel: 64000
+  sample_rate: 12800
 save_data:
   S_N: measured_data.csv
-  calibration_export: ''
-  main_folder: C:/Users/lukac/Documents/Sylex_sensors_export
+  calibration_export: C:/Users/lukac/Documents/Sylex_sensors_export/calibration
+  main_folder: C:\Users\lukac/Documents\Sylex_sensors_export
   opt_export: C:/Users/lukac/Documents/Sylex_sensors_export/optical
   opt_export_raw: C:/Users/lukac/Documents/Sylex_sensors_export/optical_raw
   ref_export: C:/Users/lukac/Documents/Sylex_sensors_export/reference
