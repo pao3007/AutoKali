@@ -1,3 +1,4 @@
+current: true
 calibration:
   do_spectrum: 1
   downsample: 1
@@ -24,4 +25,5 @@ save_data:
   opt_export_raw: C:/Users/lukac/Documents/Sylex_sensors_export/optical_raw
   ref_export: C:/Users/lukac/Documents/Sylex_sensors_export/reference
   ref_export_raw: C:/Users/lukac/Documents/Sylex_sensors_export/reference_raw
-  sentinel_folder: C:/Users/lukac/Desktop/Sylex/Sentinel/Sentinel2_Dynamic_v0_4_1/Sentinel2_Dynamic_v0_4_1
+  sentinel_D_folder: C:/Users/lukac/Desktop/Sylex/Sentinel/Sentinel2_Dynamic_v0_4_1/Sentinel2_Dynamic_v0_4_1
+  sentinel_S_folder:

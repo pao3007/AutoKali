@@ -13,7 +13,7 @@ from IPython.display import display
 import AC_functions_1FBG_v2 as fun
 class ACCalib:
 
-    def __init__(self, ref_opt_name, Scriptpath, Main_folder_path, Opt_path, Ref_path, Ref_sensitivity, GainMark):
+    def __init__(self, ref_opt_name, Scriptpath, Main_folder_path, Opt_path, Ref_path, Ref_sensitivity, GainMark, Opt_samp_freq, Ref_samp_freq, Filter_on, Downsample_ref, Do_spectrum, Set_sensitivity):
         self.ref_opt_name = ref_opt_name
         # %% Location of data and scrips
         # Path where the scripts are  (AC_functions_1FBG_v2 and AC_calibration_1FBG_v2)
@@ -28,8 +28,8 @@ class ACCalib:
         # Ref_sensitivity = 1.079511
         # Ref_sensitivity = 0.010061
         self.Ref_sensitivity = Ref_sensitivity
-        self.Opt_samp_freq = 800
-        self.Ref_samp_freq = 12800
+        self.Opt_samp_freq = Opt_samp_freq #  800
+        self.Ref_samp_freq = Ref_samp_freq #  12800
         # At which frequency to measure the sensitivity
         self.GainMark = GainMark  # Frequency at which sensitivity is determined, adjust as desired
 
@@ -53,27 +53,40 @@ class ACCalib:
         self.xScaleTransfer = [0, 400]  # Power spectrum and Bode analysis x-axis limit
 
         # 1 to filter signal, 0 to not filter
-        self.Filter_on = 1
+        if Filter_on == "highpass":
+            self.Filter_on = 1
+            # Cutoff frequenties for the filter. [lowend, highend]
+            # If you want a lowpass filter change the lowend to 0 and if you want a highpass filter change the highend to 0.5*Ref_samp_freq
+            self.CutOffOpt = [5, self.Opt_samp_freq / 2]
+            self.CutOffRef = [5, self.Ref_samp_freq / 2]
+            # CutOffOpt = [5, 400]
+            # CutOffRef = [5, 400]
+            print("high-pass")
+        elif Filter_on == "lowpass":
+            self.Filter_on = 1
+            self.CutOffOpt = [0, self.Opt_samp_freq / 2 - 1]
+            self.CutOffRef = [0, self.Ref_samp_freq / 2 - 1]
+            print("low-pass")
+        elif Filter_on == "bandpass":
+            self.Filter_on = 1
+            self.CutOffOpt = [5, self.Opt_samp_freq / 2 - 1]
+            self.CutOffRef = [5, self.Ref_samp_freq / 2 - 1]
+        else:
+            self.Filter_on = 0
+
         # 1 to downsample reference signal to optical signal frequency,0 to upsample optical signal to reference signal frequency
-        self.Downsample_ref = 1
+        self.Downsample_ref = Downsample_ref
 
         # Necessary settings in normal calibration, can be disabled if desired
         self.Adjust_time_correction = 1
-        self.Do_spectrum = 1
+        self.Do_spectrum = Do_spectrum
         # 0 to obtain sensitivity from data file, enter value if other sensitivity is desired
-        self.Set_sensitivity = 0
+        self.Set_sensitivity = Set_sensitivity
 
     def start(self, Make_plots):
     # Changes dir to where the scripts are saved. This way cells can be run without issue
         os.chdir(self.Scriptpath)
         acc_kalib = []
-
-        # Cutoff frequenties for the filter. [lowend, highend]
-        # If you want a lowpass filter change the lowend to 0 and if you want a highpass filter change the highend to 0.5*Ref_samp_freq
-        CutOffOpt = [5, self.Opt_samp_freq / 2 - 1]
-        CutOffRef = [5, self.Ref_samp_freq / 2 - 1]
-        # CutOffOpt = [5, 400]
-        # CutOffRef = [5, 400]
 
         # %% Load timeshifts and sensitivities
         # If timeshift and sensitivy file are present, they will be loaded, otherwise they will be created
@@ -159,24 +172,24 @@ class ACCalib:
         # %% Filtering
         # Currently bandpass filtering is used, if other form of filtering is desired, adjust cutoff frequency accordingly
         if self.Filter_on == 1:
-            if CutOffOpt[0] == 0:
-                B, A = signal.butter(3, CutOffOpt[1] / (0.5 * self.Opt_samp_freq), 'lowpass')
+            if self.CutOffOpt[0] == 0:
+                B, A = signal.butter(3, self.CutOffOpt[1] / (0.5 * self.Opt_samp_freq), 'lowpass')
             else:
-                if CutOffOpt[1] == 0.5 * self.Opt_samp_freq:
-                    B, A = signal.butter(3, CutOffOpt[0] / (0.5 * self.Opt_samp_freq), 'highpass')
+                if self.CutOffOpt[1] == 0.5 * self.Opt_samp_freq:
+                    B, A = signal.butter(3, self.CutOffOpt[0] / (0.5 * self.Opt_samp_freq), 'highpass')
                 else:
-                    CutOffOpt = [CutOffOpt[0] / (0.5 * self.Opt_samp_freq), CutOffOpt[1] / (0.5 * self.Opt_samp_freq)]
-                    B, A = signal.butter(3, CutOffOpt, 'bandpass')
+                    self.CutOffOpt = [self.CutOffOpt[0] / (0.5 * self.Opt_samp_freq), self.CutOffOpt[1] / (0.5 * self.Opt_samp_freq)]
+                    B, A = signal.butter(3, self.CutOffOpt, 'bandpass')
             opt_sens_filtered = signal.filtfilt(B, A, optical_sensor_data)
 
-            if CutOffRef[0] == 0:
-                B, A = signal.butter(3, CutOffRef[1] / (0.5 * self.Ref_samp_freq), 'lowpass')
+            if self.CutOffRef[0] == 0:
+                B, A = signal.butter(3, self.CutOffRef[1] / (0.5 * self.Ref_samp_freq), 'lowpass')
             else:
-                if CutOffRef[1] == 0.5 * self.Ref_samp_freq:
-                    B, A = signal.butter(3, CutOffRef[0] / (0.5 * self.Ref_samp_freq), 'highpass')
+                if self.CutOffRef[1] == 0.5 * self.Ref_samp_freq:
+                    B, A = signal.butter(3, self.CutOffRef[0] / (0.5 * self.Ref_samp_freq), 'highpass')
                 else:
-                    CutOffRef = [CutOffRef[0] / (0.5 * self.Ref_samp_freq), CutOffRef[1] / (0.5 * self.Ref_samp_freq)]
-                    B, A = signal.butter(3, CutOffRef, 'bandpass')
+                    self.CutOffRef = [self.CutOffRef[0] / (0.5 * self.Ref_samp_freq), self.CutOffRef[1] / (0.5 * self.Ref_samp_freq)]
+                    B, A = signal.butter(3, self.CutOffRef, 'bandpass')
             ref_sens_filtered = signal.filtfilt(B, A, reference_sensor_data)
         else:
             opt_sens_filtered = optical_sensor_data

@@ -487,7 +487,7 @@
     <property name="geometry">
      <rect>
       <x>310</x>
-      <y>150</y>
+      <y>160</y>
       <width>81</width>
       <height>24</height>
      </rect>
@@ -497,7 +497,7 @@
     <property name="geometry">
      <rect>
       <x>310</x>
-      <y>110</y>
+      <y>130</y>
       <width>171</width>
       <height>24</height>
      </rect>
@@ -507,7 +507,7 @@
     <property name="geometry">
      <rect>
       <x>140</x>
-      <y>150</y>
+      <y>160</y>
       <width>151</width>
       <height>21</height>
      </rect>
@@ -532,7 +532,7 @@
     <property name="geometry">
      <rect>
       <x>60</x>
-      <y>110</y>
+      <y>130</y>
       <width>231</width>
       <height>21</height>
      </rect>
@@ -557,9 +557,9 @@
     <property name="geometry">
      <rect>
       <x>230</x>
-      <y>250</y>
+      <y>260</y>
       <width>141</width>
-      <height>51</height>
+      <height>41</height>
      </rect>
     </property>
     <property name="font">
@@ -576,7 +576,7 @@
     <property name="geometry">
      <rect>
       <x>60</x>
-      <y>60</y>
+      <y>40</y>
       <width>231</width>
       <height>41</height>
      </rect>
@@ -601,7 +601,7 @@
     <property name="geometry">
      <rect>
       <x>310</x>
-      <y>70</y>
+      <y>50</y>
       <width>171</width>
       <height>24</height>
      </rect>
@@ -649,8 +649,8 @@
     <property name="geometry">
      <rect>
       <x>310</x>
-      <y>180</y>
-      <width>171</width>
+      <y>190</y>
+      <width>281</width>
       <height>31</height>
      </rect>
     </property>
@@ -667,7 +667,7 @@
     <property name="geometry">
      <rect>
       <x>140</x>
-      <y>200</y>
+      <y>210</y>
       <width>151</width>
       <height>21</height>
      </rect>
@@ -692,8 +692,8 @@
     <property name="geometry">
      <rect>
       <x>310</x>
-      <y>210</y>
-      <width>171</width>
+      <y>220</y>
+      <width>281</width>
       <height>31</height>
      </rect>
     </property>
@@ -724,18 +724,55 @@
      <string>Please setup parameters!</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="refresh_btn">
+   <widget class="QLabel" name="opt_channel_label">
     <property name="geometry">
      <rect>
-      <x>500</x>
-      <y>280</y>
-      <width>80</width>
+      <x>60</x>
+      <y>80</y>
+      <width>231</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::LeftToRight</enum>
+    </property>
+    <property name="text">
+     <string>Number of channels</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="opt_channel_comboBox">
+    <property name="geometry">
+     <rect>
+      <x>310</x>
+      <y>80</y>
+      <width>121</width>
       <height>24</height>
      </rect>
     </property>
-    <property name="text">
-     <string>REFRESH</string>
-    </property>
+    <item>
+     <property name="text">
+      <string>select channels</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>1-channel</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>2-channels</string>
+     </property>
+    </item>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

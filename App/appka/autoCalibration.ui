@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>600</width>
-    <height>475</height>
+    <height>450</height>
    </rect>
   </property>
   <property name="palette">
@@ -487,7 +487,7 @@
     <property name="geometry">
      <rect>
       <x>80</x>
-      <y>10</y>
+      <y>8</y>
       <width>51</width>
       <height>31</height>
      </rect>
@@ -522,7 +522,7 @@
      <rect>
       <x>80</x>
       <y>80</y>
-      <width>141</width>
+      <width>131</width>
       <height>71</height>
      </rect>
     </property>
@@ -541,32 +541,38 @@
     <property name="geometry">
      <rect>
       <x>80</x>
-      <y>160</y>
+      <y>155</y>
       <width>441</width>
-      <height>16</height>
+      <height>21</height>
      </rect>
     </property>
     <property name="value">
      <number>24</number>
+    </property>
+    <property name="textVisible">
+     <bool>false</bool>
     </property>
    </widget>
    <widget class="QTextBrowser" name="output_browser">
     <property name="geometry">
      <rect>
       <x>80</x>
-      <y>190</y>
+      <y>180</y>
       <width>441</width>
       <height>161</height>
      </rect>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Plain</enum>
     </property>
    </widget>
    <widget class="QLabel" name="pass_status_label">
     <property name="geometry">
      <rect>
       <x>80</x>
-      <y>350</y>
+      <y>340</y>
       <width>221</width>
-      <height>51</height>
+      <height>61</height>
      </rect>
     </property>
     <property name="font">
@@ -586,9 +592,9 @@
     <property name="geometry">
      <rect>
       <x>300</x>
-      <y>340</y>
+      <y>330</y>
       <width>221</width>
-      <height>71</height>
+      <height>81</height>
      </rect>
     </property>
     <property name="font">
@@ -607,40 +613,17 @@
    <widget class="Line" name="line">
     <property name="geometry">
      <rect>
-      <x>300</x>
-      <y>350</y>
+      <x>299</x>
+      <y>340</y>
       <width>3</width>
-      <height>61</height>
-     </rect>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Vertical</enum>
-    </property>
-   </widget>
-   <widget class="Line" name="line_2">
-    <property name="geometry">
-     <rect>
-      <x>80</x>
-      <y>350</y>
-      <width>3</width>
-      <height>61</height>
-     </rect>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Vertical</enum>
-    </property>
-   </widget>
-   <widget class="Line" name="line_3">
-    <property name="geometry">
-     <rect>
-      <x>511</x>
-      <y>347</y>
-      <width>20</width>
-      <height>61</height>
+      <height>65</height>
      </rect>
     </property>
     <property name="layoutDirection">
-     <enum>Qt::LeftToRight</enum>
+     <enum>Qt::RightToLeft</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Plain</enum>
     </property>
     <property name="orientation">
      <enum>Qt::Vertical</enum>
@@ -664,19 +647,6 @@
      <string>REF SENS CONNECTED . . .</string>
     </property>
    </widget>
-   <widget class="Line" name="line_4">
-    <property name="geometry">
-     <rect>
-      <x>80</x>
-      <y>400</y>
-      <width>441</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Horizontal</enum>
-    </property>
-   </widget>
    <widget class="QLabel" name="opt_sens_status_label">
     <property name="geometry">
      <rect>
@@ -698,10 +668,10 @@
    <widget class="QCheckBox" name="plot_graph_check">
     <property name="geometry">
      <rect>
-      <x>70</x>
-      <y>50</y>
+      <x>65</x>
+      <y>40</y>
       <width>91</width>
-      <height>22</height>
+      <height>41</height>
      </rect>
     </property>
     <property name="layoutDirection">
@@ -739,11 +709,14 @@
    <widget class="Line" name="line_5">
     <property name="geometry">
      <rect>
-      <x>210</x>
-      <y>71</y>
-      <width>311</width>
+      <x>221</x>
+      <y>72</y>
+      <width>301</width>
       <height>20</height>
      </rect>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Plain</enum>
     </property>
     <property name="orientation">
      <enum>Qt::Horizontal</enum>
@@ -752,27 +725,151 @@
    <widget class="Line" name="line_6">
     <property name="geometry">
      <rect>
-      <x>200</x>
-      <y>141</y>
-      <width>321</width>
+      <x>221</x>
+      <y>139</y>
+      <width>301</width>
       <height>20</height>
      </rect>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Plain</enum>
     </property>
     <property name="orientation">
      <enum>Qt::Horizontal</enum>
     </property>
    </widget>
-   <widget class="Line" name="line_7">
+   <widget class="QComboBox" name="select_config">
     <property name="geometry">
      <rect>
-      <x>513</x>
-      <y>80</y>
-      <width>16</width>
-      <height>71</height>
+      <x>240</x>
+      <y>50</y>
+      <width>121</width>
+      <height>21</height>
      </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>39</y>
+      <width>49</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Config</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="Line" name="line_2">
+    <property name="geometry">
+     <rect>
+      <x>519</x>
+      <y>340</y>
+      <width>3</width>
+      <height>65</height>
+     </rect>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::RightToLeft</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Plain</enum>
     </property>
     <property name="orientation">
      <enum>Qt::Vertical</enum>
+    </property>
+   </widget>
+   <widget class="Line" name="line_3">
+    <property name="geometry">
+     <rect>
+      <x>79</x>
+      <y>340</y>
+      <width>3</width>
+      <height>65</height>
+     </rect>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::RightToLeft</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Plain</enum>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
+    </property>
+   </widget>
+   <widget class="Line" name="line_4">
+    <property name="geometry">
+     <rect>
+      <x>520</x>
+      <y>82</y>
+      <width>3</width>
+      <height>68</height>
+     </rect>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::RightToLeft</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Plain</enum>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
+    </property>
+   </widget>
+   <widget class="Line" name="line_7">
+    <property name="geometry">
+     <rect>
+      <x>220</x>
+      <y>82</y>
+      <width>3</width>
+      <height>68</height>
+     </rect>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::RightToLeft</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Plain</enum>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
+    </property>
+   </widget>
+   <widget class="Line" name="line_8">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>330</y>
+      <width>441</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Plain</enum>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="Line" name="line_9">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>395</y>
+      <width>441</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Plain</enum>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
     </property>
    </widget>
    <zorder>line_6</zorder>
@@ -785,14 +882,18 @@
    <zorder>pass_status_label</zorder>
    <zorder>fail_status_label</zorder>
    <zorder>line</zorder>
-   <zorder>line_2</zorder>
-   <zorder>line_3</zorder>
    <zorder>ref_sens_status_label</zorder>
-   <zorder>line_4</zorder>
    <zorder>opt_sens_status_label</zorder>
    <zorder>plot_graph_check</zorder>
    <zorder>select_ses_type_channels_comboBox</zorder>
+   <zorder>select_config</zorder>
+   <zorder>label</zorder>
+   <zorder>line_2</zorder>
+   <zorder>line_3</zorder>
+   <zorder>line_4</zorder>
    <zorder>line_7</zorder>
+   <zorder>line_8</zorder>
+   <zorder>line_9</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

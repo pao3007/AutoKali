@@ -1,0 +1,10 @@
+address:
+  city: New York
+  zip_code: '10001'
+age: 30
+email: john.doe@example.com
+hobbies:
+- reading
+- traveling
+- hiking
+name: John Doe
