@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
 import PyQt5.QtCore
 from mainwindow import Ui_MainWindow
-from AC_calibration_1FBG_v3 import ACCalib
+from AC_calibration_1FBG_v3 import ACCalib_1ch
 import yaml
 import nidaqmx
 import time

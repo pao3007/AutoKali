@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox
 import PyQt5.QtWidgets
 import PyQt5.QtCore
 from PyQt5.QtCore import QFileInfo
-from AC_calibration_1FBG_v3 import ACCalib
+from AC_calibration_1FBG_v3 import ACCalib_1ch
 import yaml
 import nidaqmx
 import time
@@ -120,14 +120,6 @@ class ThreadOptCheckIfReady(PyQt5.QtCore.QThread):
                     i += 1
                     # print(sample)
 
-            # end_time = time.time()
-            # elapsed_time = end_time - start_time
-            # # print(f"Elapsed time: {elapsed_time:.6f} seconds")
-            # samples = fun.resample_by_interpolation(samples, 1 / (elapsed_time / self.number_of_samples), 1000)
-            # samples = [(x - float((sum(samples) / float(self.number_of_samples)))) * 1000 for x in samples]
-            #
-            # amp = data_contains_sinus2(samples, 1000, 100)  # 1/(elapsed_time/self.number_of_samples)
-            # print("Opt : " + str(amp) + " sampling rate : " + str(1 / (elapsed_time / self.number_of_samples)))
             return int(not (np.any(samples == 0.0)))
         else:
             client.open()
@@ -1315,12 +1307,12 @@ class AutoCalibMain:
             os.remove(file_path)
         if index == 1:
             print("START CALIB")
-            acc_script = ACCalib(window.calib_window.S_N, window.starting_folder, window.folder_main,
-                                 window.folder_opt_export_raw,
-                                 window.folder_ref_export_raw, window.calib_reference_sensitivity,
-                                 window.calib_gain_mark, window.opt_sampling_rate, window.ref_sample_rate,
-                                 window.calib_filter_data, window.calib_downsample, window.calib_do_spectrum,
-                                 window.calib_optical_sensitivity)
+            acc_script = ACCalib_1ch(window.calib_window.S_N, window.starting_folder, window.folder_main,
+                                     window.folder_opt_export_raw,
+                                     window.folder_ref_export_raw, window.calib_reference_sensitivity,
+                                     window.calib_gain_mark, window.opt_sampling_rate, window.ref_sample_rate,
+                                     window.calib_filter_data, window.calib_downsample, window.calib_do_spectrum,
+                                     window.calib_optical_sensitivity)
 
             acc_script.start(0)
             self.acc_calib = acc_script.start(1)  # [0]>wavelength,[1]>sensitivity pm/g at gainMark,[2]>flatness_edge_l,

@@ -1,0 +1,89 @@
+Aug-14-202310:07:28.792532Traceback (most recent call last):
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 978, in start_calib_app
+    self.calib_window = MyMainWindow()
+                        ^^^^^^^^^^^^^^
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 1348, in __init__
+    self.autoCalib = AutoCalibMain()
+                     ^^^^^^^^^^^^^^^
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 1567, in __init__
+    self.thread_check_sensors.check_ready.connect(window.calib_window.check_sensors_ready)
+                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'check_sensors_ready'
+Aug-14-202310:57:32.219856Traceback (most recent call last):
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 512, in run
+    gen = check_function_gen_connected(window.generator_id)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 178, in check_function_gen_connected
+    devices.append(devices)
+    ^^^^^^^^^^^^^^
+AttributeError: 'tuple' object has no attribute 'append'
+Aug-15-202309:17:54.268086Traceback (most recent call last):
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 2006, in <module>
+    window = MyStartUpWindow()
+             ^^^^^^^^^^^^^^^^^
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 715, in __init__
+    self.ui.opt_config_combobox.highlighted.connect(load_all_config_files(self.ui.opt_config_combobox))
+                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 1073, in load_all_config_files
+    yaml_files = window.return_all_configs()
+                 ^^^^^^
+NameError: name 'window' is not defined
+Aug-15-202309:19:59.744481Traceback (most recent call last):
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 754, in showEvent
+    self.check_devices_load_comboboxes()
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 1035, in check_devices_load_comboboxes
+    load_all_config_files(self.ui.opt_config_combobox)
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 1072, in load_all_config_files
+    yaml_files = window.return_all_configs()
+                 ^^^^^^
+NameError: name 'window' is not defined
+Aug-15-202309:23:35.136000Traceback (most recent call last):
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 756, in showEvent
+    self.check_devices_load_comboboxes()
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 1037, in check_devices_load_comboboxes
+    load_all_config_files(self.ui.opt_config_combobox, self.return_all_configs, self.config_file_path)
+                                                                                ^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'MyStartUpWindow' object has no attribute 'config_file_path'
+Aug-15-202309:24:57.351976Traceback (most recent call last):
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 2008, in <module>
+    window = MyStartUpWindow()
+             ^^^^^^^^^^^^^^^^^
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 729, in __init__
+    self.ui.opt_config_combobox.highlighted.connect(load_all_config_files(self.ui.opt_config_combobox, self.return_all_configs, self.config_file_path))
+TypeError: argument 1 has unexpected type 'NoneType'
+Aug-15-202309:25:29.135550Traceback (most recent call last):
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 2008, in <module>
+    window = MyStartUpWindow()
+             ^^^^^^^^^^^^^^^^^
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 729, in __init__
+    self.ui.opt_config_combobox.highlighted.connect(load_all_config_files(self.ui.opt_config_combobox, self.return_all_configs(), self.config_file_path))
+                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 1075, in load_all_config_files
+    yaml_files = return_all_configs()
+                 ^^^^^^^^^^^^^^^^^^^^
+TypeError: 'list' object is not callable
+Aug-15-202309:26:11.208191Traceback (most recent call last):
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 2008, in <module>
+    window = MyStartUpWindow()
+             ^^^^^^^^^^^^^^^^^
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 729, in __init__
+    self.ui.opt_config_combobox.highlighted.connect(load_all_config_files(self.ui.opt_config_combobox, self.return_all_configs(), self.config_file_path))
+TypeError: argument 1 has unexpected type 'NoneType'
+Aug-15-202310:59:42.904715Traceback (most recent call last):
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 1314, in save_settings
+    window.save_config_file(True)
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 1030, in save_config_file
+    with open(self.config_file_path, 'w') as file:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: expected str, bytes or os.PathLike object, not NoneType
+Aug-15-202311:30:04.703323Traceback (most recent call last):
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 890, in sens_type_combobox_changed
+    self.setup_config()
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 930, in setup_config
+    self.create_config_file()
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 992, in create_config_file
+    self.load_config_file()
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 947, in load_config_file
+    self.opt_channels = int(self.config['opt_measurement']['channels'])
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'

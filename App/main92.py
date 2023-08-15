@@ -2,7 +2,7 @@ import numpy as np
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
 import PyQt5.QtCore
 from mainwindow import Ui_MainWindow
-from AC_calibration_1FBG_v3 import ACCalib
+from AC_calibration_1FBG_v3 import ACCalib_1ch
 import yaml
 import nidaqmx
 import time
@@ -205,8 +205,8 @@ class autokali(PyQt5.QtCore.QObject):
 
     def thread_ref_sens_finished(self):
         self.make_opt_raw(4)
-        acc_script = ACCalib(self.ref_opt_name[0:-4], self.script_folder_path, self.main_folder_path, self.subfolderOptRaw_path,
-                             self.subfolderRefRaw_path, self.ref_sensitivity, self.GainMark)
+        acc_script = ACCalib_1ch(self.ref_opt_name[0:-4], self.script_folder_path, self.main_folder_path, self.subfolderOptRaw_path,
+                                 self.subfolderRefRaw_path, self.ref_sensitivity, self.GainMark)
 
         acc_script.start(0)
         self.acc_kalib = acc_script.start(1)  # [0]>wavelength,[1]>sensitivity pm/g at gainMark,[2]>flatness_edge_l,
