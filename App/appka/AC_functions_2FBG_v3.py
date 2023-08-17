@@ -4,12 +4,14 @@ Created on Thu Mar 31 13:38:29 2022
 
 @author: ErayMyumyun
 """
+from fnmatch import fnmatch
 
 import numpy as np
 from pandas import read_csv as pd_read_csv, DataFrame as pd_DataFrame
 from scipy import fft
 from math import log2 as math_log2, ceil as math_ceil
-from os.path import isfile as os_path_isfile
+from os.path import isfile as os_path_isfile, join as path_join
+from os import walk as os_walk
 
 # def mov_avg(y, x):
 #     '''
@@ -83,31 +85,31 @@ from os.path import isfile as os_path_isfile
 #     time_sec = np.array(time_sec)
 #     return time_sec
 
-# def detect_txt_files(path_folder):
-#     '''
-#     Detects all txt files in a given folder
-#
-#     Parameters
-#     ----------
-#     path_folder : str, path object or file-like object
-#         Any valid string path is acceptable. The string could be a URL. Valid
-#         URL schemes include http, ftp, s3, gs, and file. For file URLs, a host
-#         is expected.
-#
-#     Return
-#     ------
-#     fullnames : list
-#         List with the full names of the txt files. Fullname consists of the
-#         path and filename.
-#     '''
-#     fullnames = []
-#     for path,dirs,files in os.walk(path_folder):
-#         for file in files:
-#             if fnmatch.fnmatch(file,'*.txt'):
-#                 fullname = os.path.join(path,file)
-#                 if fullname.endswith('.txt'):
-#                     fullnames.append(fullname)
-#     return fullnames
+def detect_txt_files(path_folder):
+    '''
+    Detects all txt files in a given folder
+
+    Parameters
+    ----------
+    path_folder : str, path object or file-like object
+        Any valid string path is acceptable. The string could be a URL. Valid
+        URL schemes include http, ftp, s3, gs, and file. For file URLs, a host
+        is expected.
+
+    Return
+    ------
+    fullnames : list
+        List with the full names of the txt files. Fullname consists of the
+        path and filename.
+    '''
+    fullnames = []
+    for path,dirs,files in os_walk(path_folder):
+        for file in files:
+            if fnmatch(file,'*.txt'):
+                fullname = path_join(path,file)
+                if fullname.endswith('.txt'):
+                    fullnames.append(fullname)
+    return fullnames
 
 # def read_Enlight_Data(txt_file):
 #     '''
@@ -148,18 +150,18 @@ from os.path import isfile as os_path_isfile
 def read_txt_file(txt_file, skiprows, decimal=','):
     '''
     Reads in the data from txt or csv file.
-    
+
     Returns an array of data. The header is disabled.
-    
+
     Parameters
     ----------
     txt_file : str, path object or file-like object
         Any valid string path is acceptable. The string could be a URL. Valid
-        URL schemes include http, ftp, s3, gs, and file. For file URLs, a host 
+        URL schemes include http, ftp, s3, gs, and file. For file URLs, a host
         is expected.
     skiprows : int
         Give how many rows to skip before real data is met
-    
+
     Return
     ------
     data : numpy array
@@ -173,16 +175,16 @@ def read_txt_file(txt_file, skiprows, decimal=','):
 def calculateAC(data_wavelength, sensitivity_opt):
     '''
     Converts wavelengths to acceleration by dividing data with sensitivity.
-    
+
     Returns an array of data.
-    
+
     Parameters
     ----------
     data_wavelength : (N,) array_like
         Input array, one dimentional array.
     sensitivity_opt : float
         The sensitivity of the sensor
-    
+
     Return
     ------
     DataAC : (N,) array_like
@@ -213,14 +215,14 @@ def resample_by_interpolation(signal, input_fs, output_fs):
     return resampled_signal
 
 def SignalResize(Signal1,Signal2,SampleDiff):
-    
+
     # This function cuts data signals such that they are the same length and
     # are corrected for a time shift.
-    
+
     # if SampleDiff is positive then functions cuts of data from signal1
     # or (synonimously) assumes signal1 started earlier
     # and if SammpleDiff is negfative it cuts from signal2
-    
+
     if SampleDiff > 0:
         Signal1Resized=Signal1[int(SampleDiff-1):-1]
         Signal2Resized=Signal2
@@ -244,7 +246,7 @@ def SignalResize(Signal1,Signal2,SampleDiff):
                 else:
                     Signal1Resized=Signal1
                     Signal2Resized=Signal2[0:len(Signal1)]
-    
+
     return Signal1Resized,Signal2Resized
 
 def FourierAnalisis(SignalIn,SignalOut,AqFreq):
@@ -252,7 +254,7 @@ def FourierAnalisis(SignalIn,SignalOut,AqFreq):
     NFFT = 2**math_ceil(math_log2(abs(len(SignalOut))))
     SpectrumSignalIn = fft.fft(SignalIn,NFFT)/NFFT
     SpectrumSignalOut = fft.fft(SignalOut,NFFT)/NFFT
-    
+
     SInOut= np.conj(SpectrumSignalIn)*SpectrumSignalOut
     SInIn = np.conj(SpectrumSignalIn)*SpectrumSignalIn
     Transfer = SInOut/SInIn
@@ -264,17 +266,17 @@ def FourierAnalisis(SignalIn,SignalOut,AqFreq):
 def interp1_for_remco(x,y,x_prime):
     #Finds y_prime at location x_prime with linear interpolation of two
     #points in y.
-    
+
     x_l_index = np.where(x < x_prime)
     x_l_index = x_l_index[-1][-1]
     x_r_index = np.where(x > x_prime)
     x_r_index = x_r_index[0][0]
-    
+
     y_l = y[x_l_index]
     x_l = x[x_l_index]
     y_r = y[x_r_index]
     x_r = x[x_r_index]
-    
+
     y_prime = y_l + ((x_prime-x_r)/(x_r_index-x_l)*(y_r-y_l))
     return y_prime
 
@@ -306,7 +308,7 @@ def interp1_for_remco(x,y,x_prime):
 #
 #     return Data
 
-def read_txt_file_AC(txt_file, skiprows): 
+def read_txt_file_AC(txt_file, skiprows):
     # Reading of wavelength data from MicronOptics interrogator output
     # Tab-delimited text file with headers
     # Get first line of txt file. This line gives how many rows need to be skipped before the actual data is reached
@@ -318,13 +320,13 @@ def read_txt_file_AC(txt_file, skiprows):
             l = line.strip().split('\t')
             Data1.append(float(l[-2].replace(',','.')))
             Data2.append(float(l[-1].replace(',','.')))
-        
+
         Data = np.full([len(File) - skiprows,2], None)
         for i in range(len(File) - skiprows):
             Data[i,0] = Data1[i]
             Data[i,1] = Data2[i]
-                  
+
     else:
         Data = 0
-    
+
     return Data

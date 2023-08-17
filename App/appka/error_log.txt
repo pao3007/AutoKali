@@ -87,3 +87,28 @@ Aug-15-202311:30:04.703323Traceback (most recent call last):
     self.opt_channels = int(self.config['opt_measurement']['channels'])
                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'
+Aug-16-202309:09:05.117319Traceback (most recent call last):
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 1124, in open_settings_window
+    self.settings_window = MySettingsWindow(True)
+                           ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 1161, in __init__
+    self.load_settings()
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 1395, in load_settings
+    print("Nidaq devices : " + self.nidaq_devices)
+          ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~
+TypeError: can only concatenate str (not "DeviceCollection") to str
+Aug-16-202309:20:00.026275Traceback (most recent call last):
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 234, in run
+    print(str(self.nidaq_devices()) + " + " +  str(current_devices))
+              ^^^^^^^^^^^^^^^^^^^^
+TypeError: 'DeviceCollection' object is not callable
+Aug-16-202309:21:55.916809Traceback (most recent call last):
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 1131, in open_settings_window
+    self.settings_window = MySettingsWindow(True)
+                           ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 1168, in __init__
+    self.load_settings()
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 1409, in load_settings
+    self.ui.ref_device_comboBox.addItem(f'{device.name}')
+                                           ^^^^^^^^^^^
+AttributeError: 'str' object has no attribute 'name'

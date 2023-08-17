@@ -8,7 +8,7 @@ if __name__ == "__main__":
     splash = QSplashScreen(splash_pix, Qt.WindowStaysOnTopHint)
     splash.show()
 
-
+from matplotlib.pyplot import close as pyplot_close
 from codecs import open as codecs_open
 from configparser import ConfigParser
 import pythoncom
@@ -40,6 +40,7 @@ def excepthook(exc_type, exc_value, exc_tb):
         f.write(tb)  # Write the traceback to the file
 
     print("catched: ", tb)
+    kill_sentinel(True, True)
     sys.exit(1)
 
 
@@ -208,24 +209,31 @@ def load_all_config_files(combobox, return_all_configs, config_file_path):
 class ThreadSettingsCheckNew(QThread):
     status = pyqtSignal()
 
-    def __init__(self):
+    def __init__(self, nidaq_devices, resources, all_configs):
         super().__init__()
         self.termination = None
+        self.nidaq_devices = nidaq_devices
+        self.resources = resources
+        self.all_configs = all_configs
 
     def run(self):
         while True:
             self.msleep(1000)
 
             system = nidaqmx_system.System.local()
-            current_devices = system.devices
+            current_devices = system.devices.device_names
 
             rm = pyvisa_ResourceManager()
             current_resources = rm.list_resources()
 
             current_configs = window.return_all_configs()
-            if not (set(window.settings_window.nidaq_devices) == set(current_devices)) or \
-                    not (set(window.settings_window.resources) == set(current_resources)) or \
-                    not (set(window.settings_window.all_configs) == set(current_configs)):
+            if not (set(self.nidaq_devices) == set(current_devices)) or \
+                    not (set(self.resources) == set(current_resources)) or \
+                    not (set(self.all_configs) == set(current_configs)):
+                print("True")
+                print(str(self.nidaq_devices) + " + " +  str(current_devices))
+                print(str(self.resources) + " + " + str(current_resources))
+                print(str(self.all_configs) + " + " + str(current_configs))
                 self.status.emit()
 
 
@@ -257,11 +265,11 @@ class ThreadControlFuncGen(QThread):
             instrument.write('SOURce1:FREQuency ' + str(self.generator_sweep_stop_freq / 2))
             instrument.write('SOURce1:VOLTage:LIMit:HIGH +' + str(self.generator_max_vpp))
             instrument.write('SOURce1:VOLTage:LIMit:STATe 0')
-            instrument.write('SOURce1:VOLTage ' + str(self.generator_max_vpp / 2))
+            instrument.write('SOURce1:VOLTage ' + str(self.generator_max_vpp/5))
             instrument.write('TRIGger1:SOURce IMMediate')
 
             while not window.start_sens_test:
-                if window.emergency_stop or not window.calib_window.gen_emit:
+                if window.emergency_stop or not window.calib_window.sensor_gen_check:
                     window.emergency_stop = True
                     return
                 self.msleep(25)
@@ -269,7 +277,7 @@ class ThreadControlFuncGen(QThread):
             instrument.write('OUTPut1:STATe ON')
             i = 0
             while not window.end_sens_test:
-                if window.emergency_stop or not window.calib_window.gen_emit:
+                if window.emergency_stop or not window.calib_window.sensor_gen_check:
                     window.emergency_stop = True
                     return
                 self.msleep(25)
@@ -283,7 +291,7 @@ class ThreadControlFuncGen(QThread):
             start_sentinel_s(window.opt_project)
 
             while not window.start_measuring:
-                if window.emergency_stop or not window.calib_window.gen_emit:
+                if window.emergency_stop or not window.calib_window.sensor_gen_check:
                     window.emergency_stop = True
                     return
                 self.msleep(25)
@@ -299,7 +307,7 @@ class ThreadControlFuncGen(QThread):
             i = 0
             self.step_status.emit("Measuring central wavelength...")
             while i < 20:
-                if window.emergency_stop:
+                if window.emergency_stop or not window.calib_window.sensor_gen_check:
                     return
                 self.msleep(25)
                 i += 1
@@ -308,7 +316,7 @@ class ThreadControlFuncGen(QThread):
             i = 0
             self.step_status.emit("Starting the measurement...")
             while i < 100:
-                if window.emergency_stop:
+                if window.emergency_stop or not window.calib_window.sensor_gen_check:
                     return
                 self.msleep(25)
                 i += 1
@@ -326,7 +334,6 @@ class ThreadControlFuncGen(QThread):
                     self.connected_status.emit(False)
                     return
                 self.msleep(25)
-            self.step_status.emit("Calibration...")
         except Exception as e:
             print("GEN : " + str(e))
 
@@ -363,8 +370,7 @@ class ThreadRefSensDataCollection(QThread):
     def start_ref_sens_data_collection(self):
         from time import time as time_time
         from datetime import datetime
-        # self.thread_check_sin_opt.terminate()
-        # self.thread_check_sin_ref.terminate()
+
         window.calib_window.autoCalib.thread_check_sin_opt.terminate()
         window.calib_window.autoCalib.thread_check_sin_ref.terminate()
 
@@ -385,10 +391,8 @@ class ThreadRefSensDataCollection(QThread):
         # čítam získane vzorky
         data = self.task.read(number_of_samples_per_channel=window.ref_number_of_samples,
                               timeout=WAIT_INFINITELY)
-
-        end_time = time_time()
-
         kill_sentinel(True, False)
+        end_time = time_time()
 
         # stop
         # task.close()
@@ -453,6 +457,7 @@ class ThreadOptAndGenCheckIfReady(QThread):
         self.do_action = False
         self.samples2 = np.empty(self.number_of_samples)
         self.samples1 = np.empty(self.number_of_samples)
+        self.first_start = True
 
     def run(self):
         self.client = self.ModbusClient(host=self.server_ip, port=self.server_port, unit_id=self.unit_id)
@@ -482,24 +487,35 @@ class ThreadOptAndGenCheckIfReady(QThread):
                 if regs1 is not None:
                     i += 1
                     # Assume the first register is the whole number and the second is the decimal part
-                    sample = regs1[0] + regs1[1] / 10000  # Add them to form a floating point number
+                    sample = regs1[0] + regs1[1] / 1000  # Add them to form a floating point number
                     self.samples1[i] = sample
                     # print(sample)
                 if window.opt_channels == 2:
-                    regs2 = self.client.read_input_registers(self.address + 100, 2)
+                    regs2 = self.client.read_input_registers(self.address+2, 2)
                     if regs2 is not None:
                         # Assume the first register is the whole number and the second is the decimal part
-                        sample = regs2[0] + regs2[1] / 10000  # Add them to form a floating point number
+                        sample = regs2[0] + regs2[1] / 1000  # Add them to form a floating point number
                         self.samples2[i] = sample
                         # print(sample)
                 QThread.msleep(1)
-
-            if window.opt_channels == 1:
-                return int(not (np.any(self.samples1 == 0.0)))
-            elif window.opt_channels == 2:
-                return int(not (np.any(self.samples1 == 0.0))) and int(not (np.any(self.samples2 == 0.0)))
-            else:
-                return 0
+            if not self.first_start:
+                if not window.start_sens_test:
+                    if window.opt_channels == 1:
+                        return int(not (np.any(self.samples1 == 0.0)))
+                    elif window.opt_channels == 2:
+                        return int(not (np.any(self.samples1 == 0.0)) and int(not (np.any(self.samples2 == 0.0))))
+                else:
+                    if window.opt_channels == 1:
+                        return int(not (np.any(self.samples1 == 0.0))) + 4
+                    elif window.opt_channels == 2:
+                        return int(not (np.any(self.samples1 == 0.0)) and int(not (np.any(self.samples2 == 0.0)))) + 4
+                    # if window.opt_channels == 1:
+                    #     return int(not (np.any(self.samples1 == 0.0)) and (len(set(self.samples1)) > int(self.number_of_samples/4))) + 4
+                    # elif window.opt_channels == 2:
+                    #     return int(not (np.any(self.samples1 == 0.0)) and int(not (np.any(self.samples2 == 0.0))) and
+                    #                (len(set(self.samples1)) > int(self.number_of_samples/4)) and
+                    #                (len(set(self.samples2)) > int(self.number_of_samples/4))) + 4
+            self.first_start = False
 
         else:
             self.check_ready_opt.emit(3)
@@ -521,6 +537,21 @@ class ThreadOptAndGenCheckIfReady(QThread):
         self.thread_check_new_file.wait()
 
 
+def dominant_frequency(samples, sampling_rate):
+    # Calculate the FFT and its magnitude
+    fft_values = np.fft.fft(samples)
+    magnitudes = np.abs(fft_values)
+
+    # Find the frequency with the highest magnitude
+    dominant_freq_index = np.argmax(magnitudes[1:]) + 1  # exclude the 0Hz component
+
+    # Calculate the actual frequency in Hz
+    freqs = np.fft.fftfreq(len(samples), 1 / sampling_rate)
+    dominant_freq = freqs[dominant_freq_index]
+
+    return abs(dominant_freq)
+
+
 #  kontrola ref senzora
 class ThreadRefCheckIfReady(QThread):
     finished_signal = pyqtSignal()
@@ -534,10 +565,13 @@ class ThreadRefCheckIfReady(QThread):
         self.sample_rate = 12800
         self.deviceName_channel = device_name_and_channel
         self.data = []
+        self.last_peak = 0
+        self.first_start = True
+        self.noise = [0] * 12
+        self.avg_noise = 0
 
     def run(self):
         number_of_samples_per_channel = int(12800 / 6)
-
         print("Start ref sens sinus check")
         # nazov zariadenia/channel, min/max value -> očakávané hodnoty v tomto rozmedzí
         while not self.termination:
@@ -547,17 +581,7 @@ class ThreadRefCheckIfReady(QThread):
                 self.task_sin.ai_channels.add_ai_accel_chan(self.deviceName_channel, sensitivity=1000)
                 self.task_sin.timing.cfg_samp_clk_timing(self.sample_rate,
                                                          sample_mode=AcquisitionType.CONTINUOUS)
-                if window.ref_first_start:
-                    self.data = []
-                    window.ref_first_start = False
-                    self.task_sin.start()
-                    self.check_ready.emit(4)
-                    self.task_sin.read(number_of_samples_per_channel=self.sample_rate * 5,
-                                       timeout=WAIT_INFINITELY)
 
-                peaks = 0
-                index = 0
-                threshold = 2
                 timeout = 0
                 # 2 varianta
                 while not self.termination:
@@ -565,41 +589,38 @@ class ThreadRefCheckIfReady(QThread):
                     # print("CHECKING REF")
                     data = self.task_sin.read(number_of_samples_per_channel=number_of_samples_per_channel,
                                               timeout=WAIT_INFINITELY)
+
                     # ready, amp = data_contains_sinus(data, 0.01)
-                    peak = data_contains_sinus2(data, 12800, threshold)
-                    print(np.max(data))
-                    # print(peak)
-                    peaks += peak
-                    if index > 10:
-                        calc = peaks / (index + 1)
-                        print("calc : " + calc)
+                    peak = round(dominant_frequency(data, self.sample_rate), 2)
+                    print(str(peak) + " - " + str(np.max(np.abs(data))))
+                    if not self.first_start:
                         if not window.start_sens_test:  # kontrola či je pripojený senzor
                             self.check_ready.emit(1)
-                        else:  # kontrola či je pripevnený na shaker
-                            if 50 <= calc:
-                                print('test ok:' + str(timeout))
-                                timeout -= 1
-                                if timeout <= (-3):
-                                    self.check_ready.emit(2)
-                                    if timeout <= (-5):
-                                        timeout = -5
-                            else:
-                                print('test bad:' + str(timeout))
+                            timeout = 0
+                        else:
+                            if ((window.generator_sweep_stop_freq/2 - (window.generator_sweep_stop_freq/2)/20) <= peak <=
+                                    (window.generator_sweep_stop_freq/2 + (window.generator_sweep_stop_freq/2)/20)) and peak == \
+                                    self.last_peak:
+                                # print("True")
                                 timeout += 1
-                                if timeout >= 3:
+                                if timeout >= 10:
+                                    self.check_ready.emit(2) # (2) je ok
+                                    if timeout <= 10:
+                                        timeout = 10
+                            else:
+                                timeout -= 1
+                                if timeout <= (-10):
                                     self.check_ready.emit(6)
-                                    if timeout >= 5:
-                                        timeout = 5
-
-                        index = 0
-                        peaks = 0
-                    index += 1
+                                    if timeout <= (-10):
+                                        timeout = -10
+                        self.last_peak = peak
+                    self.first_start = False
                 break
             except Exception as e:
-                print(e)
+                print("REF CHECK:" + str(e))
                 self.check_ready.emit(3)
                 self.task_sin.close()
-                window.ref_first_start = True
+
             QThread.msleep(333)
         self.task_sin.close()
 
@@ -645,7 +666,6 @@ class MyStartUpWindow(QMainWindow):
         self.calib_l_flatness = None
         self.opt_dev_vendor = None
         self.ref_dev_vendor = None
-        self.ref_first_start = True
         self.opt_first_start = True
         self.calib_window = None
         self.settings_window = None
@@ -795,7 +815,6 @@ class MyStartUpWindow(QMainWindow):
         splash.hide()
         self.show()
 
-
     def config_combobox_changed(self, text):
         self.config_file_path = os_path.join(window.subfolderConfig_path, text)
         with open(self.config_file_path, 'r') as file:
@@ -867,15 +886,6 @@ class MyStartUpWindow(QMainWindow):
             if ref_connected and opt_connected and gen_connected and self.ui.start_app.text() == "START":
                 self.ui.start_app.setEnabled(True)
         else:
-            self.ui.start_app.setEnabled(False)
-
-        # self.ui.start_app.setEnabled(True)
-        if self.ui.start_app.text() == "STARTING":
-            self.ui.sens_type_comboBox.setEnabled(False)
-            self.ui.opt_channel_comboBox.setEnabled(False)
-            self.ui.ref_device_comboBox.setEnabled(False)
-            self.ui.ref_channel_comboBox.setEnabled(False)
-            self.ui.open_settings_btn.setEnabled(False)
             self.ui.start_app.setEnabled(False)
 
         if not ref_connected:
@@ -1127,10 +1137,15 @@ class MyStartUpWindow(QMainWindow):
         self.settings_window.show()
 
     def start_calib_app(self):
+        self.ui.ref_device_comboBox.setEnabled(False)
+        self.ui.opt_config_combobox.setEnabled(False)
+        self.ui.ref_channel_comboBox.setEnabled(False)
+        self.ui.sens_type_comboBox.setEnabled(False)
+        self.ui.open_settings_btn.setEnabled(False)
+        self.ui.menubar.setEnabled(False)
         self.ui.start_app.setText("STARTING")
         self.ui.start_app.setEnabled(False)
         self.thread_check_usb_devices.termination = True
-        self.ui.start_app.setEnabled(False)
         self.calib_window = MyMainWindow()
         self.calib_window.first_sentinel_start()
 
@@ -1193,8 +1208,8 @@ class MySettingsWindow(QMainWindow):
         self.btn_translate_dy = 8
         self.ui.btn_ref_tab.move(self.ui.btn_ref_tab.pos().x(), self.ui.btn_ref_tab.pos().y() + self.btn_translate_dy)
         self.ui.btn_ref_tab.setEnabled(False)
-        self.thread_check_new = ThreadSettingsCheckNew()
-        self.thread_check_new.status.connect(self.load_settings)
+        self.thread_check_new = ThreadSettingsCheckNew(self.nidaq_devices, self.resources, self.all_configs)
+        self.thread_check_new.status.connect(self.new_setting_enabled)
         self.thread_check_new.start()
         self.setWindowIcon(QIcon('logo_icon.png'))
 
@@ -1322,7 +1337,7 @@ class MySettingsWindow(QMainWindow):
         window.opt_channels = int(self.ui.opt_channels_combobox.currentText())
         window.calib_gain_mark = int(self.ui.calib_gain_mark_line.text())
         window.calib_optical_sensitivity = float(self.ui.calib_opt_sensitivity_line.text())
-        window.calib_optical_sensitivity = float(self.ui.calib_opt_sensitivity_toler_line.text())
+        window.calib_optical_sens_tolerance = float(self.ui.calib_opt_sensitivity_toler_line.text())
         window.folder_main = self.ui.main_folder_line.text()
         window.folder_ref_export = self.ui.ref_exp_folder_line.text()
         window.folder_ref_export_raw = self.ui.ref_exp_folder_raw_line.text()
@@ -1354,6 +1369,12 @@ class MySettingsWindow(QMainWindow):
 
         window.save_config_file(True)
         self.close()
+
+    def new_setting_enabled(self):
+        self.load_settings()
+        self.thread_check_new.nidaq_devices = self.nidaq_devices
+        self.thread_check_new.all_configs = self.all_configs
+        self.thread_check_new.resource = self.resources
 
     def load_settings(self):
         # load lineEdits
@@ -1389,19 +1410,24 @@ class MySettingsWindow(QMainWindow):
         self.ui.calib_plot_graphs_check.setChecked(window.calib_plot)
         # load comboBox
         # devices
+        self.ui.ref_device_comboBox.blockSignals(True)
+        self.ui.ref_device_comboBox.clear()
         system = nidaqmx_system.System.local()
-        self.nidaq_devices = system.devices
+        self.nidaq_devices = system.devices.device_names
         for device in self.nidaq_devices:
-            self.ui.ref_device_comboBox.addItem(f'{device.name}')
+            self.ui.ref_device_comboBox.addItem(f'{device}')
         if window.ref_device_name is not None:
             self.ui.ref_device_comboBox.setCurrentText(window.ref_device_name)
         # channels
+        self.ui.ref_channel_comboBox.blockSignals(True)
+        self.ui.ref_channel_comboBox.clear()
         self.ui.ref_channel_comboBox.addItem('ai0')
         self.ui.ref_channel_comboBox.addItem('ai1')
         self.ui.ref_channel_comboBox.addItem('ai2')
         if window.ref_channel is not None:
             self.ui.ref_channel_comboBox.setCurrentText(window.ref_channel)
         # gen device ID
+        self.ui.gen_id_combobox.clear
         self.gen_id_combobox_clicked()
         self.ui.gen_id_combobox.setCurrentText(str(window.generator_id))
         # filter
@@ -1409,23 +1435,21 @@ class MySettingsWindow(QMainWindow):
         self.all_configs = window.return_all_configs()
         # configs
         load_all_config_files(self.ui.select_config_file, self.all_configs, window.config_file_path)
+        self.ui.ref_channel_comboBox.blockSignals(False)
+        self.ui.ref_device_comboBox.blockSignals(False)
 
     def gen_id_combobox_clicked(self):
         self.ui.gen_id_combobox.blockSignals(True)
         self.ui.gen_id_combobox.clear()
         self.ui.gen_id_combobox.addItem("SELECT DEVICE")
-        self.ui.gen_id_combobox.setItemData(0, "please select function generator", Qt.ToolTipRole)
         i = 1
         rm = pyvisa_ResourceManager()
         self.resources = rm.list_resources()
         for resource_name in self.resources:
             try:
                 instrument = rm.open_resource(resource_name)
-                identity = instrument.query("*IDN?").strip()
                 instrument.close()
-
                 self.ui.gen_id_combobox.addItem(str(resource_name))
-                self.ui.gen_id_combobox.setItemData(i, f"Device: {identity}", Qt.ToolTipRole)
                 i += 1
             except Exception as e:
                 print(self.resources)
@@ -1528,8 +1552,8 @@ class MyMainWindow(QMainWindow):
         self.S_N = None
         self.ref_init = 0
         self.remaining_time = 3
-        self.sensor_ref_check = 4
-        self.sensor_opt_check = 1
+        self.sensor_ref_check = -1
+        self.sensor_opt_check = -1
 
         self.ui = Ui_AutoCalibration()
         self.ui.setupUi(self)
@@ -1547,10 +1571,11 @@ class MyMainWindow(QMainWindow):
         self.ui.select_config.currentTextChanged.connect(self.config_changed)
         self.ui.progressBar.setValue(0)
         self.ui.start_btn.setEnabled(False)
-        font = QFont("Arial", 10)  # Here, "Arial" is the font type and 12 is the font size.
+        font = QFont("Arial", 10)
+        font2 = QFont("Arial", 12)
         self.ui.output_browser_2.setFont(font)
         self.ui.output_browser.setFont(font)
-        self.ui.output_browser_3.setFont(font)
+        self.ui.output_browser_3.setFont(font2)
         self.ui.output_browser_3.setText("Work flow: \n1. CONNECT and TURN ON ALL device\n"
                                        "2. Properly mount optical sensor\n3. Properly mount reference sensor on top "
                                        "of the optical sensor\n"
@@ -1574,14 +1599,18 @@ class MyMainWindow(QMainWindow):
         print("STOP")
         window.emergency_stop = True
         kill_sentinel(True, False)
-        self.autoCalib.thread_ref_sens.task.close()
+        try:
+            self.autoCalib.thread_ref_sens.task.close()
+        except:
+            pass
         self.autoCalib.thread_ref_sens.terminate()
         self.ui.stop_btn.setEnabled(False)
-        window.finished_measuring = False
-        window.start_measuring = False
-        window.start_sens_test = False
-        window.end_sens_test = False
-        window.calib_window.measure = False
+        self.ui.S_N_line.setEnabled(True)
+        self.ui.select_config.setEnabled(True)
+        self.ui.plot_graph_check.setEnabled(True)
+        self.ui.menubar.setEnabled(True)
+        self.ui.start_btn.setEnabled(True)
+        self.measure = False
 
     def first_sentinel_start(self):
         start_sentinel_s(window.opt_project)
@@ -1599,8 +1628,8 @@ class MyMainWindow(QMainWindow):
         if os_path.exists(window.calib_window.autoCalib.opt_sentinel_file_name + '.csv'):
             os_remove(window.calib_window.autoCalib.opt_sentinel_file_name + '.csv')
         QThread.msleep(100)
-        window.hide()
         window.calib_window.show()
+        window.hide()
         QThread.msleep(100)
 
         self.autoCalib.start()
@@ -1619,7 +1648,7 @@ class MyMainWindow(QMainWindow):
             if self.sensor_opt_check == 1:
                 self.ui.opt_sens_status_label.setText("OPT. SENSOR IS CONNECTED")
                 self.ui.opt_sens_status_label.setStyleSheet("color: blue;")
-            else:
+            elif self.sensor_opt_check == 3:
                 self.ui.opt_sens_status_label.setText("OPT. USB DEVICE DISCONNECTED!")
                 if self.ui.opt_sens_status_label.isEnabled():
                     self.ui.opt_sens_status_label.setStyleSheet("color: red;")
@@ -1627,6 +1656,13 @@ class MyMainWindow(QMainWindow):
                 else:
                     self.ui.opt_sens_status_label.setStyleSheet("color: black;")
                     self.ui.opt_sens_status_label.setEnabled(True)
+            elif self.sensor_opt_check == 4:
+                self.ui.opt_sens_status_label.setText("OPT. SENSOR IS NOT READY")
+                self.ui.opt_sens_status_label.setStyleSheet("color: red;")
+            elif self.sensor_opt_check == 5:
+                self.ui.opt_sens_status_label.setText("OPT. SENSOR IS READY")
+                self.ui.opt_sens_status_label.setStyleSheet("color: green;")
+
         else:
             self.ui.opt_sens_status_label.setText("OPT. SENSOR IS NOT CONNECTED")
             self.ui.opt_sens_status_label.setStyleSheet("color: orange;")
@@ -1642,8 +1678,6 @@ class MyMainWindow(QMainWindow):
                 self.ui.ref_sens_status_label.setText("REF. SENSOR IS NOT READY")
                 self.ui.ref_sens_status_label.setStyleSheet("color: red;")
             elif self.sensor_ref_check == 3:
-                self.ref_init = 0
-                self.remaining_time = 3
                 self.ui.ref_sens_status_label.setText("REF. USB DEVICE DISCONNECTED!")
                 if self.ui.ref_sens_status_label.isEnabled():
                     self.ui.ref_sens_status_label.setStyleSheet("color: red;")
@@ -1651,16 +1685,6 @@ class MyMainWindow(QMainWindow):
                 else:
                     self.ui.ref_sens_status_label.setStyleSheet("color: black;")
                     self.ui.ref_sens_status_label.setEnabled(True)
-            elif self.sensor_ref_check == 4:
-                self.ref_init += 1
-                if not self.ref_init % 4:
-                    if self.remaining_time > 0:
-                        self.remaining_time -= 1
-                    else:
-                        self.remaining_time = 0
-                self.ui.ref_sens_status_label.setText("REF. SENSOR INITIALIZATION..." + str(self.remaining_time) + "s")
-                self.ui.ref_sens_status_label.setStyleSheet("color: orange;")
-
         else:
             self.ui.ref_sens_status_label.setText("REF. SENSOR IS NOT CONNECTED")
             self.ui.ref_sens_status_label.setStyleSheet("color: orange;")
@@ -1687,12 +1711,13 @@ class MyMainWindow(QMainWindow):
         else:
             self.ui.start_btn.setEnabled(False)
 
-        if self.sensor_ref_check == 2 and True:
+        if self.sensor_ref_check == 2 and self.sensor_opt_check == 5:
+            pass
             # print("TERMINATION ------------------------")
-            self.autoCalib.thread_check_sin_opt.termination = True
-            self.autoCalib.thread_check_sin_ref.termination = True
-            self.sensor_ref_check = 1
-            self.sensor_opt_check = 1
+            # self.autoCalib.thread_check_sin_opt.termination = True
+            # self.autoCalib.thread_check_sin_ref.termination = True
+            # self.sensor_ref_check = 2
+            # self.sensor_opt_check = 5
 
     def config_changed(self, text):
         window.current_conf = False
@@ -1717,7 +1742,7 @@ class MyMainWindow(QMainWindow):
 
     def showEvent(self, event):
         self.ui.plot_graph_check.setChecked(window.calib_plot)
-        load_all_config_files(self.ui.select_config_file, window.return_all_configs(), window.config_file_path)
+        load_all_config_files(self.ui.select_config, window.return_all_configs(), window.config_file_path)
         # label info o opt senz
 
         self.ui.label_start_freq.setText(str(window.generator_sweep_start_freq) + " Hz")
@@ -1727,7 +1752,6 @@ class MyMainWindow(QMainWindow):
         self.ui.label_sweep_time.setText(str(window.generator_sweep_time) + " s")
 
     def closeEvent(self, event):
-        from matplotlib.pyplot import close as pyplot_close
         reply = QMessageBox.question(self, 'Confirmation',
                                      "Are you sure you want to exit?",
                                      QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
@@ -1774,13 +1798,14 @@ class AutoCalibMain:
         self.thread_check_new_file.start()
 
     def start(self):
+        window.finished_measuring = False
         print("START() CHECKING SENSORS -------------")
-        print("SENS IS RUNNING ? : " + str(self.thread_check_sensors.isRunning()))
-        print("OPT IS RUNNING ? : " + str(self.thread_check_sin_opt.isRunning()))
-        print("REF IS RUNNING ? : " + str(self.thread_check_sin_ref.isRunning()))
-        print("CONTROL GEN IS RUNNING ? : " + str(self.thread_control_gen.isRunning()))
-        print("PROG IS RUNNING ? : " + str(self.thread_prog_bar.isRunning()))
-        print("REF MEASURE GEN IS RUNNING ? : " + str(self.thread_ref_sens.isRunning()))
+        # print("SENS IS RUNNING ? : " + str(self.thread_check_sensors.isRunning()))
+        # print("OPT IS RUNNING ? : " + str(self.thread_check_sin_opt.isRunning()))
+        # print("REF IS RUNNING ? : " + str(self.thread_check_sin_ref.isRunning()))
+        # print("CONTROL GEN IS RUNNING ? : " + str(self.thread_control_gen.isRunning()))
+        # print("PROG IS RUNNING ? : " + str(self.thread_prog_bar.isRunning()))
+        # print("REF MEASURE GEN IS RUNNING ? : " + str(self.thread_ref_sens.isRunning()))
         self.thread_control_gen.terminate()
         self.thread_prog_bar.terminate()
         self.thread_ref_sens.terminate()
@@ -1839,46 +1864,74 @@ class AutoCalibMain:
             window.calib_window.ui.start_btn.setEnabled(False)
             window.calib_window.ui.start_btn.setHidden(False)
             window.calib_window.ui.stop_btn.setHidden(True)
-            window.calib_window.ui.stop_btn.setEnabled(False)
+            window.calib_window.ui.stop_btn.setEnabled(True)
+            window.emergency_stop = False
 
     def terminate_measure_threads(self):
         self.thread_ref_sens.terminate()
         kill_sentinel(True, False)
 
     def on_btn_start_clicked(self):  # start merania
-        window.calib_window.ui.pass_status_label.setStyleSheet("color: rgba(170, 170, 127,150);")
-        window.calib_window.ui.fail_status_label.setStyleSheet("color: rgba(170, 170, 127,150);")
-        window.calib_window.ui.fail_status_label.setHidden(False)
-        window.calib_window.ui.pass_status_label.setHidden(False)
-        window.calib_window.measure = True
-        window.calib_window.ui.S_N_line.setEnabled(False)
-        window.calib_window.ui.select_config.setEnabled(False)
-        window.calib_window.ui.plot_graph_check.setEnabled(False)
-        window.calib_window.ui.menubar.setEnabled(False)
-        window.calib_window.ui.start_btn.setEnabled(False)
+        try:
+            pyplot_close('all')
+        except:
+            pass
 
-        self.thread_control_gen = ThreadControlFuncGen(window.generator_id, window.generator_sweep_time,
-                                                       window.generator_sweep_start_freq,
-                                                       window.generator_sweep_stop_freq, window.generator_sweep_type,
-                                                       window.generator_max_mvpp)
-        self.thread_control_gen.connected_status.connect(window.calib_window.gen_emit)
-        self.thread_control_gen.step_status.connect(window.calib_window.write_to_output_browser)
-        self.thread_control_gen.finished.connect(self.thread_control_gen_finished)
+        start_calibration = True
 
-        self.thread_check_new_file = ThreadSentinelCheckNewFile()
-        self.thread_check_new_file.finished.connect(self.thread_check_new_file_finished)
+        if os_path.exists(os_path.join(window.folder_calibration_export, window.calib_window.S_N + '.csv')):
+            window.calib_window.setEnabled(False)
+            msgBox = QMessageBox()
+            msgBox.setIcon(QMessageBox.Information)
+            msgBox.setText("Do you want to re-calibrate this sensor?")
+            msgBox.setWindowTitle("Re-calibrate Sensor?")
+            msgBox.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+            returnValue = msgBox.exec()
+            if returnValue == QMessageBox.Yes:
+                start_calibration = True
+            else:
+                start_calibration = False
+            window.calib_window.setEnabled(True)
 
-        self.thread_prog_bar = ThreadProgressBar(int(window.ref_measure_time))
-        self.thread_ref_sens = ThreadRefSensDataCollection()
-        #
-        self.thread_prog_bar.finished.connect(self.thread_prog_bar_finished)
-        self.thread_prog_bar.progress_signal.connect(update_progress_bar)
-        self.thread_ref_sens.finished.connect(self.thread_ref_sens_finished)
-        window.start_sens_test = True
-        self.thread_control_gen.start()
-        window.calib_window.ui.stop_btn.setHidden(False)
-        window.calib_window.ui.start_btn.setHidden(True)
-        window.calib_window.ui.start_btn.setEnabled(False)
+        if start_calibration:
+            window.calib_window.ui.output_browser.clear()
+            window.calib_window.ui.output_browser_2.clear()
+            window.start_measuring = False
+            window.start_sens_test = False
+            window.end_sens_test = False
+            window.calib_window.ui.pass_status_label.setStyleSheet("color: rgba(170, 170, 127,150);")
+            window.calib_window.ui.fail_status_label.setStyleSheet("color: rgba(170, 170, 127,150);")
+            window.calib_window.ui.fail_status_label.setHidden(False)
+            window.calib_window.ui.pass_status_label.setHidden(False)
+            window.calib_window.measure = True
+            window.calib_window.ui.S_N_line.setEnabled(False)
+            window.calib_window.ui.select_config.setEnabled(False)
+            window.calib_window.ui.plot_graph_check.setEnabled(False)
+            window.calib_window.ui.menubar.setEnabled(False)
+            window.calib_window.ui.start_btn.setEnabled(False)
+
+            self.thread_control_gen = ThreadControlFuncGen(window.generator_id, window.generator_sweep_time,
+                                                           window.generator_sweep_start_freq,
+                                                           window.generator_sweep_stop_freq, window.generator_sweep_type,
+                                                           window.generator_max_mvpp)
+            self.thread_control_gen.connected_status.connect(window.calib_window.gen_emit)
+            self.thread_control_gen.step_status.connect(window.calib_window.write_to_output_browser)
+            self.thread_control_gen.finished.connect(self.thread_control_gen_finished)
+
+            self.thread_check_new_file = ThreadSentinelCheckNewFile()
+            self.thread_check_new_file.finished.connect(self.thread_check_new_file_finished)
+
+            self.thread_prog_bar = ThreadProgressBar(int(window.ref_measure_time))
+            self.thread_ref_sens = ThreadRefSensDataCollection()
+            #
+            self.thread_prog_bar.finished.connect(self.thread_prog_bar_finished)
+            self.thread_prog_bar.progress_signal.connect(update_progress_bar)
+            self.thread_ref_sens.finished.connect(self.thread_ref_sens_finished)
+            window.start_sens_test = True
+            self.thread_control_gen.start()
+            window.calib_window.ui.stop_btn.setHidden(False)
+            window.calib_window.ui.start_btn.setHidden(True)
+            window.calib_window.ui.start_btn.setEnabled(False)
 
     def save_data(self, data, elapsed_time):
         from datetime import date
@@ -1952,7 +2005,7 @@ class AutoCalibMain:
                 os_remove(file_path)
             if window.opt_channels == 1:
                 from AC_calibration_1FBG_v3 import ACCalib_1ch
-                acc_script_1ch = ACCalib_1ch(window.calib_window.S_N, window.starting_folder, window.folder_main,
+                self.acc_calib = ACCalib_1ch(window.calib_window.S_N, window.starting_folder, window.folder_main,
                                              window.folder_opt_export_raw, window.folder_ref_export_raw,
                                              float(window.calib_reference_sensitivity), int(window.calib_gain_mark),
                                              int(window.opt_sampling_rate),
@@ -1961,15 +2014,30 @@ class AutoCalibMain:
                                              int(window.calib_do_spectrum),
                                              int(window.calib_l_flatness),
                                              int(window.calib_r_flatness), int(window.calib_angle_set_freq),
-                                             int(window.calib_phase_mark))
-                acc_script_1ch.start(0, window.calib_optical_sensitivity)
-                self.acc_calib = acc_script_1ch.start(
-                    window.calib_plot, 0)  # [0]>wavelength 1,[1]>sensitivity pm/g at gainMark,[2]>flatness_edge_l,
+                                             int(window.calib_phase_mark)).start(False,
+                                                                                 window.calib_optical_sensitivity/1000,
+                                                                                 True, 0)
+                self.acc_calib = ACCalib_1ch(window.calib_window.S_N, window.starting_folder, window.folder_main,
+                                             window.folder_opt_export_raw, window.folder_ref_export_raw,
+                                             float(window.calib_reference_sensitivity), int(window.calib_gain_mark),
+                                             int(window.opt_sampling_rate),
+                                             int(window.ref_sample_rate), window.calib_filter_data,
+                                             int(window.calib_downsample),
+                                             int(window.calib_do_spectrum),
+                                             int(window.calib_l_flatness),
+                                             int(window.calib_r_flatness), int(window.calib_angle_set_freq),
+                                             int(window.calib_phase_mark)).start(window.calib_plot,
+                                                                                 self.acc_calib[1]/1000,
+                                                                                 True, self.acc_calib[8])
+
+                # self.acc_calib = acc_script_1ch.start(window.calib_plot, window.calib_optical_sensitivity/1000, True)
+                # self.acc_calib = acc_script_1ch.start(
+                #     window.calib_plot, 0)  # [0]>wavelength 1,[1]>sensitivity pm/g at gainMark,[2]>flatness_edge_l,
                 # [3]>flatness_edge_r,[4]>sens. flatness,[5]>MAX acc,[6]>MIN acc,[7]>DIFF symmetry,[8]>TimeCorrection,
                 # [9]>wavelength 2
             elif window.opt_channels == 2:
                 from AC_calibration_2FBG_edit import ACCalib_2ch
-                acc_script_2ch = ACCalib_2ch(window.calib_window.S_N, window.starting_folder, window.folder_main,
+                self.acc_calib = ACCalib_2ch(window.calib_window.S_N, window.starting_folder, window.folder_main,
                                              window.folder_opt_export_raw, window.folder_ref_export_raw,
                                              float(window.calib_reference_sensitivity), int(window.calib_gain_mark),
                                              int(window.opt_sampling_rate),
@@ -1978,10 +2046,29 @@ class AutoCalibMain:
                                              int(window.calib_do_spectrum),
                                              int(window.calib_l_flatness),
                                              int(window.calib_r_flatness), int(window.calib_angle_set_freq),
-                                             int(window.calib_phase_mark))
-                acc_script_2ch.start(0, window.calib_optical_sensitivity)
-                self.acc_calib = acc_script_2ch.start(
-                    window.calib_plot, 0)  # [0]>wavelength 1,[1]>sensitivity pm/g at gainMark,[2]>flatness_edge_l,
+                                             int(window.calib_phase_mark)).start(False,
+                                                                                 window.calib_optical_sensitivity/1000,
+                                                                                 True, 0)
+                self.acc_calib = ACCalib_2ch(window.calib_window.S_N, window.starting_folder, window.folder_main,
+                                             window.folder_opt_export_raw, window.folder_ref_export_raw,
+                                             float(window.calib_reference_sensitivity), int(window.calib_gain_mark),
+                                             int(window.opt_sampling_rate),
+                                             int(window.ref_sample_rate), window.calib_filter_data,
+                                             int(window.calib_downsample),
+                                             int(window.calib_do_spectrum),
+                                             int(window.calib_l_flatness),
+                                             int(window.calib_r_flatness), int(window.calib_angle_set_freq),
+                                             int(window.calib_phase_mark)).start(window.calib_plot,
+                                                                                 self.acc_calib[1] / 1000,
+                                                                                 True, self.acc_calib[8])
+
+                # self.acc_calib = acc_script_2ch.start(window.calib_plot, window.calib_optical_sensitivity, True)
+
+                # acc_script_2ch.start(False, window.calib_optical_sensitivity/1000, True)
+                # self.acc_calib = acc_script_2ch.start(window.calib_plot, 0, True)
+
+                # self.acc_calib = acc_script_2ch.start(
+                #     window.calib_plot, 0)  # [0]>wavelength 1,[1]>sensitivity pm/g at gainMark,[2]>flatness_edge_l,
                 # [3]>flatness_edge_r,[4]>sens. flatness,[5]>MAX acc,[6]>MIN acc,[7]>DIFF symmetry,[8]>TimeCorrection,
                 # [9]>wavelength 2
 
@@ -1993,8 +2080,9 @@ class AutoCalibMain:
             self.check_if_calib_is_valid()
 
     def check_if_calib_is_valid(self):
-        if window.calib_optical_sensitivity - window.calib_optical_sens_tolerance <= self.acc_calib[1] <= \
-                window.calib_optical_sensitivity + window.calib_optical_sens_tolerance:
+        print(str((window.calib_optical_sensitivity - window.calib_optical_sens_tolerance)) + "<=" + str(self.acc_calib[1]) + "<=" + str((window.calib_optical_sensitivity + window.calib_optical_sens_tolerance)))
+        if (window.calib_optical_sensitivity - window.calib_optical_sens_tolerance) <= self.acc_calib[1] <= \
+                (window.calib_optical_sensitivity + window.calib_optical_sens_tolerance):
 
             window.calib_window.ui.pass_status_label.setStyleSheet("color: green;")
             window.calib_window.ui.fail_status_label.setStyleSheet("color: rgba(170, 170, 127,150);")
@@ -2007,36 +2095,36 @@ class AutoCalibMain:
         window.calib_window.ui.output_browser_3.setText("Calibration results: " + '\n')
 
         if len(self.acc_calib) <= 9:
-            window.calib_window.ui.output_browser.append("# Center wavelength : ")
-            window.calib_window.ui.output_browser_2.setText(str(self.acc_calib[0]) + ' nm')
+            window.calib_window.ui.output_browser.append("# Center wavelength :\n")
+            window.calib_window.ui.output_browser_2.setText(str(self.acc_calib[0]) + ' nm\n')
         else:
-            window.calib_window.ui.output_browser.append("Center wavelengths :")
+            window.calib_window.ui.output_browser.append("Center wavelengths :\n")
             window.calib_window.ui.output_browser_2.setText(str(self.acc_calib[0]) + '; ' + str(self.acc_calib[9]) +
-                                                            ' nm')
+                                                            ' nm\n')
 
-        window.calib_window.ui.output_browser.append("# Sensitivity : " + '\n' +
+        window.calib_window.ui.output_browser.append("# Sensitivity : " + '\n\n' +
                                                      "# Sensitivity flatness : ")
-        window.calib_window.ui.output_browser_2.append(str(self.acc_calib[1]) + " pm/g at " +
-                                                       str(window.calib_gain_mark) + " Hz\n" + str(self.acc_calib[4]) +
+        window.calib_window.ui.output_browser_2.append(str(round(self.acc_calib[1], 3)) + " pm/g at " +
+                                                       str(window.calib_gain_mark) + " Hz\n\n" + str(self.acc_calib[4]) +
                                                        " between " + str(self.acc_calib[2]) + " Hz and " +
                                                        str(self.acc_calib[3]) + " Hz")
 
         with open(file_path, 'w') as file:
-            file.write("# S/N :" + '\n' + '\t' + str(window.calib_window.S_N) + '\n')
-            file.write("# Date :" + '\n' + '\t' + self.current_date + '\n')
-            file.write("# Time : " + '\n' + '\t' + self.time_string + '\n')
+            file.write("# S/N :" + '\n' + '\t\t' + str(window.calib_window.S_N) + '\n')
+            file.write("# Date :" + '\n' + '\t\t' + self.current_date + '\n')
+            file.write("# Time : " + '\n' + '\t\t' + self.time_string + '\n')
             if len(self.acc_calib) <= 9:
-                file.write("# Channels : " + '\n' + '\t' "1" + '\n')
-                file.write("# Center wavelength : " + '\n' + '\t' + str(self.acc_calib[0]) + '\n')
+                file.write("# Channels : " + '\n' + '\t\t' "1" + '\n')
+                file.write("# Center wavelength : " + '\n' + '\t\t' + str(self.acc_calib[0]) + '\n')
             else:
-                file.write("# Channels : " + '\n' + '\t' "2")
-                file.write("# Center wavelength : " + '\n' + '\t' + str(self.acc_calib[0]) + ';' +
+                file.write("# Channels : " + '\n' + '\t\t' "2 \n")
+                file.write("# Center wavelength : " + '\n' + '\t\t' + str(self.acc_calib[0]) + ';' +
                            str(self.acc_calib[9]) + '\n')
-            file.write("# Sensitivity : " + '\n' + '\t' + str(self.acc_calib[1]) + " pm/g at " + str(
+            file.write("# Sensitivity : " + '\n' + '\t\t' + str(self.acc_calib[1]) + " pm/g at " + str(
                 window.calib_gain_mark) + " Hz" + '\n')
-            file.write("# Sensitivity flatness : " + '\n' + '\t' + str(self.acc_calib[4]) + " between " + str(
+            file.write("# Sensitivity flatness : " + '\n' + '\t\t' + str(self.acc_calib[4]) + " between " + str(
                 self.acc_calib[2]) + " Hz and " + str(self.acc_calib[3]) + " Hz" + '\n')
-            file.write("# Difference in symmetry : " + '\n' + '\t' + str(self.acc_calib[7]) + " % " + '\n')
+            file.write("# Difference in symmetry : " + '\n' + '\t\t' + str(self.acc_calib[7]) + " % " + '\n')
 
     def make_opt_raw(self, num_lines_to_skip):
         file_path = os_path.join(window.folder_opt_export, self.opt_sentinel_file_name)
@@ -2056,7 +2144,7 @@ class AutoCalibMain:
             extracted_columns = []
 
             # Determine the number of lines to read (excluding the last line)
-            lines_to_read = total_lines - num_lines_to_skip - 1
+            lines_to_read = total_lines - num_lines_to_skip - 1 # int(window.opt_sampling_rate*0.15)
 
             for _ in range(lines_to_read):
                 line = file.readline()

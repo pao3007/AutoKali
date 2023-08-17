@@ -92,7 +92,7 @@ class ACCalib_1ch:
         self.Do_spectrum = Do_spectrum
         # 0 to obtain sensitivity from data file, enter value if other sensitivity is desired
 
-    def start(self, Make_plots, Set_sensitivity):
+    def start(self, Make_plots, Set_sensitivity, Adjust_gain, add_time_correction):
         print("START CALIB SCRIPT")
     # Changes dir to where the scripts are saved. This way cells can be run without issue
         os_chdir(self.Scriptpath)
@@ -158,27 +158,44 @@ class ACCalib_1ch:
         # Loads saved sensitivity for analyzing and adjusting
         if Set_sensitivity != 0:
             Sensitivity_opt = Set_sensitivity
-            Adjust_gain = 0
+            # Adjust_gain = False
         else:
             Sensitivity_opt = sensitivities[0]
-            Adjust_gain = 1
+            # Adjust_gain = True
 
         if math_isnan(Sensitivity_opt) == True:
             Sensitivity_opt = 1e-10
 
-        acc_kalib.append(round(np.mean(DataOptRel[0:100]), 5))
+        acc_kalib.append(round(np.mean(DataOptRel[100:200]), 5))
         # display(['Center wavelength = ' + str(acc_kalib[0]) + ' nm'])
         # Calculate acceleration from optical data and previously determined sensitivity
-        optical_sensor_data = fun.calculateAC((DataOptRel[int(self.Opt_samp_freq*1):len(DataOptRel-1)] - acc_kalib[0]), Sensitivity_opt)
+        optical_sensor_data = fun.calculateAC((DataOptRel - acc_kalib[0]), Sensitivity_opt)
         # Calculate acceleration from reference data and corresponsing sensitivity for reference sensor
-        reference_sensor_data = DataRefRel[int(self.Ref_samp_freq*1):(len(DataRefRel)-1)] / -self.Ref_sensitivity # DataRefRel[:, 1] / Ref_sensitivity
+        reference_sensor_data = DataRefRel / self.Ref_sensitivity # DataRefRel[:, 1] / Ref_sensitivity
+
+        def detect_max_in_first_second(data, sampling_rate):
+            data_in_first_second = data[:int(sampling_rate)]
+            return np.argmax(np.abs(data_in_first_second))
+
+        opt_max_idx = detect_max_in_first_second(optical_sensor_data, self.Opt_samp_freq)
+        ref_max_idx = detect_max_in_first_second(reference_sensor_data, self.Ref_samp_freq)
+
+        opt_time = float(opt_max_idx) / float(self.Opt_samp_freq)
+        ref_time = float(ref_max_idx) / float(self.Ref_samp_freq)
+
+        ShiftLeft = (opt_time - ref_time)
+        print("TIme shif : " + str(ShiftLeft))
+
+        optical_sensor_data = optical_sensor_data[self.Opt_samp_freq:len(optical_sensor_data-1)]
+        reference_sensor_data = reference_sensor_data[self.Ref_samp_freq:len(reference_sensor_data-1)]
+
         # %% Time Syncing
         # Creating time arrays for optical and reference signal according to sampling frequency
         TimeOpt = np.linspace(1 / self.Opt_samp_freq, len(optical_sensor_data) / self.Opt_samp_freq, num=len(optical_sensor_data))
         TimeRef = np.linspace(1 / self.Ref_samp_freq, len(reference_sensor_data) / self.Ref_samp_freq, num=len(reference_sensor_data))
         # Load timecorrection shift from file and adjust time of reference signal
-        ShiftLeft = -time_corrections[0]
-        TimeRefShifted = TimeRef + ShiftLeft
+        # ShiftLeft = -time_corrections[0]
+        TimeRefShifted = TimeRef + ShiftLeft + add_time_correction
         # %% Filtering
         # Currently bandpass filtering is used, if other form of filtering is desired, adjust cutoff frequency accordingly
         if self.Filter_on == 1:
@@ -277,7 +294,7 @@ class ACCalib_1ch:
         # %% Determine gain at set frequency
         GainAtMark = fun.interp1_for_remco(FreqTransfer, SmoothTransfer, self.GainMark)
         # Convert gain to sensitivity and save for further use
-        if Adjust_gain == 1:
+        if Adjust_gain:
             sensitivities[0] = Sensitivity_opt * GainAtMark
             acc_kalib.append(sensitivities[0] * 1000.0)
             # display(['Sensitivity of ' + str(acc_kalib[1]) + ' pm/g' + ' at ' + str(self.GainMark) + ' Hz'])
@@ -317,7 +334,7 @@ class ACCalib_1ch:
         acc_kalib.append(TimeCorrection)
         # display(['Calculated TimeCorrection is: ' + str(acc_kalib[8])])
         # Saving of time correction for further use
-        if (self.Adjust_time_correction == 1) and (Adjust_gain == 1):
+        if (self.Adjust_time_correction == 1) and Adjust_gain:
             if abs(TimeCorrection) > 0.001 / BodeSampFreq:
                 # display(['Time correction used'])
                 time_corrections[0] = time_corrections[0] + (1 / 0.9) * TimeCorrection

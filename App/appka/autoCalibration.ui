@@ -662,7 +662,7 @@
      </font>
     </property>
     <property name="text">
-     <string>REF SENS CONNECTED . . .</string>
+     <string>REF SENS INITIALIZATION . . .</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -683,7 +683,7 @@
      </font>
     </property>
     <property name="text">
-     <string>OPT SENS CONNECTED . . .</string>
+     <string>OPT SENS INITIALIZATION . . .</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -898,8 +898,8 @@ color: rgb(0, 0, 0);</string>
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgba(255, 0, 0, 75);
-color: rgba(255, 255, 255, 180);</string>
+     <string notr="true">background-color: rgb(171, 0, 0);
+color: rgba(255, 255, 255, 200);</string>
     </property>
     <property name="text">
      <string>STOP</string>
@@ -1298,8 +1298,8 @@ GENERATOR
    <zorder>gen_status_label_2</zorder>
    <zorder>label_opt_sens_type_label</zorder>
    <zorder>output_browser_2</zorder>
-   <zorder>output_browser_3</zorder>
    <zorder>logo_label</zorder>
+   <zorder>output_browser_3</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

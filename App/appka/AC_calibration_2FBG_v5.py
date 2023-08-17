@@ -15,13 +15,13 @@ from colorama import Fore, Back, Style
 import AC_functions_2FBG_v3 as fun
 #%% Location of data and scrips
 # Path where the scripts are  (AC_functions_2FBG_v2 and AC_calibration_2FBG_v2)
-Scriptpath = r'c:\Users\tsalat.SYLEX\Desktop\Python'
+Scriptpath = os.getcwd()
 
 # Main path is where the sensitivities.csv and time_corrections.csv will be saved.
 # If sensitivities.csv and time_corrections.csv do not exist, they will be automatically generated
-Main_folder_path = (r"c:\Users\tsalat.SYLEX\Desktop\Python\Data_Folder")
-Opt_path = (r"c:\Users\tsalat.SYLEX\Desktop\Python\Data_Folder\AC-1000\Opt\90794")
-Ref_path = (r"c:\Users\tsalat.SYLEX\Desktop\Python\Data_Folder\AC-1000\Ref\90794")
+Main_folder_path = (r"C:\Users\lukac\Documents\Sylex_sensors_export")
+Opt_path = (r"C:\Users\lukac\Documents\Sylex_sensors_export\optical_raw")
+Ref_path = (r"C:\Users\lukac\Documents\Sylex_sensors_export\reference_raw")
 
 # Changes dir to where the scripts are saved. This way cells can be run without issue
 os.chdir(Scriptpath)
@@ -174,7 +174,7 @@ display(['Center wavelength = ' + str(round(DataOptRel[0,0],5)) + ' and ' + str(
 #Calculate acceleration from optical data and previously determined sensitivity
 optical_sensor_data = fun.calculateAC(-(DataOptRel[:,0] - DataOptRel[:,1]) + (DataOptRel[0,0] - DataOptRel[0,1]), Sensitivity_opt)
 #Calculate acceleration from reference data and corresponsing sensitivity for reference sensor
-reference_sensor_data= DataRefRel[:,1]/Ref_sensitivity
+reference_sensor_data= DataRefRel/Ref_sensitivity
 #%% Time Syncing
 # Creating time arrays for optical and reference signal according to sampling frequency
 TimeOpt = np.linspace(1/Opt_samp_freq,len(optical_sensor_data)/Opt_samp_freq,num=len(optical_sensor_data))

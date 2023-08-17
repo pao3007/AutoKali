@@ -1,10 +1,17 @@
 import os
 
-from AC_calibration_1FBG_v3 import ACCalib_1ch
+from AC_calibration_2FBG_edit import ACCalib_2ch
 
-acc = ACCalib_1ch('123',os.getcwd(),r'C:\Users\lukac\Documents\Sylex_sensors_export',
+acc_yeet = ACCalib_2ch('242358_05_autoCalib',os.getcwd(),r'C:\Users\lukac\Documents\Sylex_sensors_export',
                   r'C:\Users\lukac\Documents\Sylex_sensors_export\optical_raw',
-                  r'C:\Users\lukac\Documents\Sylex_sensors_export\reference_raw', 1.079511, 150, 800, 12800, "bandpass",
-                  1, 1, 0, 10, 100, 10, 300)
+                  r'C:\Users\lukac\Documents\Sylex_sensors_export\reference_raw', 1.079511, 50, 800, 12800, "bandpass",
+                  1, 1, 10, 100, 30, 50).start(False, 1.35, True, 0)
 
-acc.start(True)
+ACCalib_2ch('242358_05_autoCalib',os.getcwd(),r'C:\Users\lukac\Documents\Sylex_sensors_export',
+                  r'C:\Users\lukac\Documents\Sylex_sensors_export\optical_raw',
+                  r'C:\Users\lukac\Documents\Sylex_sensors_export\reference_raw', 1.079511, 50, 800, 12800, "bandpass",
+                  1, 1, 10, 100, 30, 50).start(True, acc_yeet[1]/1000, True, acc_yeet[8])
+
+
+# acc.start(True, acc_yeet[1]/1000, True)
+# acc.start(False, 0, True)
