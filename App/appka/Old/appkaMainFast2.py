@@ -1,10 +1,16 @@
 from PyQt5.QtWidgets import QSplashScreen, QApplication
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QPixmap
+from PyQt5.QtCore import Qt, QCoreApplication
+from PyQt5.QtGui import QPixmap, QGuiApplication
 
 if __name__ == "__main__":
+    if hasattr(QCoreApplication, 'setAttribute'):
+        QCoreApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
+
+    if hasattr(QGuiApplication, 'setHighDpiScaleFactorRoundingPolicy'):
+        QGuiApplication.setHighDpiScaleFactorRoundingPolicy(Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
+
     app = QApplication([])
-    splash_pix = QPixmap('logo.png')
+    splash_pix = QPixmap('../Working/images/logo.png')
     splash = QSplashScreen(splash_pix, Qt.WindowStaysOnTopHint)
     splash.show()
 
@@ -14,7 +20,7 @@ from configparser import ConfigParser
 import pythoncom
 import numpy as np
 from PyQt5.QtGui import QFont, QIcon
-from PyQt5.QtWidgets import QMainWindow, QFileDialog, QMessageBox, QAction
+from PyQt5.QtWidgets import QMainWindow, QFileDialog, QMessageBox, QAction, QWidget
 from PyQt5.QtCore import QFileInfo, QThread, pyqtSignal
 from yaml import safe_load as yaml_safe_load, dump as yaml_dump, YAMLError
 from nidaqmx import Task as nidaqmx_Task, system as nidaqmx_system
@@ -27,14 +33,20 @@ from traceback import format_exception
 from pyvisa import ResourceManager as pyvisa_ResourceManager
 import sys
 from start_up import Ui_Setup
+from ImportWaveLengths import ImportWaveLengths
+from xml.etree.ElementTree import parse as ET_parse
+from re import search as re_search
+
+start_fold = os_getcwd()
 
 
 def excepthook(exc_type, exc_value, exc_tb):
     from datetime import datetime
+    os_chdir(start_fold)
     tb = "".join(format_exception(exc_type, exc_value, exc_tb))
     current_time = datetime.now().time().strftime("%H:%M:%S.%f")
     today = datetime.today().strftime("%b-%d-%Y")
-    with open("error_log.txt", "a") as f:  # Open the file in append mode
+    with open("../error_log.txt", "a") as f:  # Open the file in append mode
         f.write(today)
         f.write(current_time)
         f.write(tb)  # Write the traceback to the file
@@ -47,21 +59,48 @@ def excepthook(exc_type, exc_value, exc_tb):
 # Install exception hook
 sys.excepthook = excepthook
 
+# OK
+def center_on_screen(self):
+    screen_geo = QApplication.desktop().screenGeometry()
+    window_geo = self.geometry()
 
-def plot_check_changed(state):
-    if state == 2:
-        window.calib_plot = True
-    else:
-        window.calib_plot = False
-    window.save_config_file(True)
+    # Calculate the horizontal and vertical center position
+    center_x = int((screen_geo.width() - window_geo.width()) / 2)
+    center_y = int((screen_geo.height() - window_geo.height()) / 2)
 
+    # Move the window to the calculated position
+    self.move(center_x, center_y)
 
+# OK
+def scale_app(widget, scale_factor):
+    # Check if it's a QWidget instance before accessing specific attributes
+    if isinstance(widget, QWidget):
+
+        # Adjust font size
+        if hasattr(widget, 'font') and hasattr(widget, 'setFont'):
+            font = widget.font()
+            font.setPointSize(int(font.pointSize() * scale_factor))
+            widget.setFont(font)
+
+        # Adjust size for all widgets
+        current_size = widget.size()
+        widget.resize(int(current_size.width() * scale_factor), int(current_size.height() * scale_factor))
+
+        # Adjust position for all widgets
+        current_pos = widget.pos()
+        widget.move(int(current_pos.x() * scale_factor), int(current_pos.y() * scale_factor))
+
+    # Recursively scale child widgets or objects
+    for child in widget.children():
+        scale_app(child, scale_factor)
+
+# ???
 def channel_type_changed(index):
     window.opt_channels = int(index)
     kill_sentinel(False, True)
-    start_sentinel_modbus()
+    start_sentinel_modbus(window.folder_sentinel_modbus_folder, window.folder_sentinel_D_folder, window.opt_project)
 
-
+# OK
 def start_sentinel_s(project):  # ! vybrat path to .exe a project
 
     sentinel_app = window.folder_sentinel_D_folder
@@ -69,9 +108,9 @@ def start_sentinel_s(project):  # ! vybrat path to .exe a project
     os_chdir(sentinel_app)
     os_system("start /min ClientApp_Dyn " + project)
 
-
-def start_sentinel_modbus():
-    sentinel_app = window.folder_sentinel_modbus_folder
+# OK
+def start_sentinel_modbus(modbus_path: str, sentinel_path: str, project: str):
+    sentinel_app = modbus_path
     os_chdir(sentinel_app)
 
     config = ConfigParser()
@@ -79,9 +118,9 @@ def start_sentinel_modbus():
         config.read_file(f)
 
     if window.opt_channels == 1:
-        config.set('ranges', 'definition_file', 'test1ch.ssd')
+        config.set('ranges', 'definition_file', f'{sentinel_path}/Sensors/{project}')
     elif window.opt_channels == 2:
-        config.set('ranges', 'definition_file', 'test2ch.ssd')
+        config.set('ranges', 'definition_file', f'{sentinel_path}/Sensors/{project}')
 
     with open('settings.ini', 'w') as configfile:
         config.write(configfile)
@@ -100,7 +139,7 @@ def update_progress_bar(value):
         else:
             window.calib_window.ui.progressBar.setValue(100)
 
-
+# OK
 def kill_sentinel(dyn: bool, mod: bool):
     if dyn:
         app_name = "ClientApp_Dyn"
@@ -125,7 +164,7 @@ def kill_sentinel(dyn: bool, mod: bool):
 #     else:
 #         return False, normalized_amplitude
 
-
+# OK
 def data_contains_sinus2(samples, sample_rate, peak_threshold):
     # Perform Fast Fourier Transform
     data = np.array(samples)
@@ -138,10 +177,10 @@ def data_contains_sinus2(samples, sample_rate, peak_threshold):
 
     return len(peak_freqs)
 
-
+# OK
 def start_modbus():
     kill_sentinel(True, False)
-    start_sentinel_modbus()
+    start_sentinel_modbus(window.folder_sentinel_modbus_folder, window.folder_sentinel_D_folder, window.opt_project)
     QThread.msleep(100)
 
     os_chdir(window.folder_opt_export)
@@ -149,7 +188,7 @@ def start_modbus():
     if os_path.exists(window.calib_window.autoCalib.opt_sentinel_file_name + '.csv'):
         os_remove(window.calib_window.autoCalib.opt_sentinel_file_name + '.csv')
 
-
+# OK
 def check_usb(opt_vendor_ids, ref_vendor_ids):
     c = wmi_WMI()
     opt = False
@@ -176,24 +215,16 @@ def check_usb(opt_vendor_ids, ref_vendor_ids):
     return opt, ref
 
 
-def clear_threads(threads):
-    for thread in threads:
-        thread.terminate()
-    for thread in threads:
-        thread.wait()
-
-
 def check_function_gen_connected(generator_id):
     rm = pyvisa_ResourceManager()
     devices = rm.list_resources()
-    # print(devices)
 
     if generator_id in devices:
         return True
     else:
         return False
 
-
+# OK
 def load_all_config_files(combobox, return_all_configs, config_file_path):
     combobox.blockSignals(True)
     combobox.clear()
@@ -205,7 +236,34 @@ def load_all_config_files(combobox, return_all_configs, config_file_path):
     combobox.blockSignals(False)
 
 
-#  settingWindows - kontrola zmien
+def set_wavelengths(s_n: str, sentinel_file_path: str, project: str):
+    iwl = ImportWaveLengths()
+    wl = iwl.load_sylex_nominal_wavelength(objednavka_id=s_n)
+    project_path = os_path.join(sentinel_file_path, f"Sensors/{project}")
+
+    tree = ET_parse(project_path)
+    root = tree.getroot()
+
+    i = 0
+    for peak_range in root.findall(".//PeakRangeDefinition"):
+        print("PEAK")
+        # Find RangeStart and RangeEnd elements
+        range_start = peak_range.find("RangeStart")
+        range_end = peak_range.find("RangeEnd")
+
+        if range_start is not None and range_end is not None and i < len(wl):
+            print("Change")
+            # Modify their values
+            range_start.text = str(float(wl[i] - 2))
+            range_end.text = str(float(wl[i] + 2))
+            i += 1
+        else:
+            return 0
+    tree.write(project_path)
+    return wl
+
+
+#  settingWindows - kontrola zmien OK
 class ThreadSettingsCheckNew(QThread):
     status = pyqtSignal()
 
@@ -231,7 +289,7 @@ class ThreadSettingsCheckNew(QThread):
                     not (set(self.resources) == set(current_resources)) or \
                     not (set(self.all_configs) == set(current_configs)):
                 print("True")
-                print(str(self.nidaq_devices) + " + " +  str(current_devices))
+                print(str(self.nidaq_devices) + " + " + str(current_devices))
                 print(str(self.resources) + " + " + str(current_resources))
                 print(str(self.all_configs) + " + " + str(current_configs))
                 self.status.emit()
@@ -265,15 +323,20 @@ class ThreadControlFuncGen(QThread):
             instrument.write('SOURce1:FREQuency ' + str(self.generator_sweep_stop_freq / 2))
             instrument.write('SOURce1:VOLTage:LIMit:HIGH +' + str(self.generator_max_vpp))
             instrument.write('SOURce1:VOLTage:LIMit:STATe 0')
-            instrument.write('SOURce1:VOLTage ' + str(self.generator_max_vpp/5))
+            instrument.write('SOURce1:VOLTage ' + str(self.generator_max_vpp / 5))
             instrument.write('TRIGger1:SOURce IMMediate')
+            self.msleep(100)
 
             while not window.start_sens_test:
                 if window.emergency_stop or not window.calib_window.sensor_gen_check:
                     window.emergency_stop = True
                     return
                 self.msleep(25)
-            self.step_status.emit("Testing sensors...")
+
+            if window.opt_channels == 2:
+                self.step_status.emit("Testing sensors...\n\nPLEASE UNLOCK THE SENSOR!")
+            else:
+                self.step_status.emit("Testing sensors...")
             instrument.write('OUTPut1:STATe ON')
             i = 0
             while not window.end_sens_test:
@@ -406,7 +469,7 @@ class ThreadRefSensDataCollection(QThread):
         # self.save_data(data, elapsed_time)
         window.calib_window.autoCalib.save_data(data, elapsed_time)
         # self.refData = data
-        start_sentinel_modbus()
+        start_sentinel_modbus(window.folder_sentinel_modbus_folder, window.folder_sentinel_D_folder, window.opt_project)
         window.finished_measuring = True
 
 
@@ -440,6 +503,7 @@ class ThreadOptAndGenCheckIfReady(QThread):
     check_ready_opt = pyqtSignal(int)
     check_ready_gen = pyqtSignal(bool)
     from pyModbusTCP.client import ModbusClient
+    from RollingAverager import RollingAverager
 
     def __init__(self, server_ip, server_port, unit_id, address, number_of_samples, threshold):
         super().__init__()
@@ -458,6 +522,8 @@ class ThreadOptAndGenCheckIfReady(QThread):
         self.samples2 = np.empty(self.number_of_samples)
         self.samples1 = np.empty(self.number_of_samples)
         self.first_start = True
+        self.averager = self.RollingAverager(10)
+        self.average = 0
 
     def run(self):
         self.client = self.ModbusClient(host=self.server_ip, port=self.server_port, unit_id=self.unit_id)
@@ -491,15 +557,18 @@ class ThreadOptAndGenCheckIfReady(QThread):
                     self.samples1[i] = sample
                     # print(sample)
                 if window.opt_channels == 2:
-                    regs2 = self.client.read_input_registers(self.address+2, 2)
+                    regs2 = self.client.read_input_registers(self.address + 2, 2)
                     if regs2 is not None:
                         # Assume the first register is the whole number and the second is the decimal part
                         sample = regs2[0] + regs2[1] / 1000  # Add them to form a floating point number
                         self.samples2[i] = sample
                         # print(sample)
                 QThread.msleep(1)
+
+            max = np.max(self.samples1)
             if not self.first_start:
                 if not window.start_sens_test:
+                    self.average = self.averager.update(max)
                     if window.opt_channels == 1:
                         return int(not (np.any(self.samples1 == 0.0)))
                     elif window.opt_channels == 2:
@@ -508,13 +577,8 @@ class ThreadOptAndGenCheckIfReady(QThread):
                     if window.opt_channels == 1:
                         return int(not (np.any(self.samples1 == 0.0))) + 4
                     elif window.opt_channels == 2:
-                        return int(not (np.any(self.samples1 == 0.0)) and int(not (np.any(self.samples2 == 0.0)))) + 4
-                    # if window.opt_channels == 1:
-                    #     return int(not (np.any(self.samples1 == 0.0)) and (len(set(self.samples1)) > int(self.number_of_samples/4))) + 4
-                    # elif window.opt_channels == 2:
-                    #     return int(not (np.any(self.samples1 == 0.0)) and int(not (np.any(self.samples2 == 0.0))) and
-                    #                (len(set(self.samples1)) > int(self.number_of_samples/4)) and
-                    #                (len(set(self.samples2)) > int(self.number_of_samples/4))) + 4
+                        return (int(not (np.any(self.samples1 == 0.0)) and int(not (np.any(self.samples2 == 0.0))))
+                                and (self.average-0.25 > max or self.average+0.25 < max)) + 4
             self.first_start = False
 
         else:
@@ -556,6 +620,7 @@ def dominant_frequency(samples, sampling_rate):
 class ThreadRefCheckIfReady(QThread):
     finished_signal = pyqtSignal()
     check_ready = pyqtSignal(int)
+    from RollingAverager import RollingAverager
 
     def __init__(self, device_name_and_channel):
         super().__init__()
@@ -569,6 +634,8 @@ class ThreadRefCheckIfReady(QThread):
         self.first_start = True
         self.noise = [0] * 12
         self.avg_noise = 0
+        self.averager = self.RollingAverager(10)
+        self.average = 0
 
     def run(self):
         number_of_samples_per_channel = int(12800 / 6)
@@ -589,32 +656,38 @@ class ThreadRefCheckIfReady(QThread):
                     # print("CHECKING REF")
                     data = self.task_sin.read(number_of_samples_per_channel=number_of_samples_per_channel,
                                               timeout=WAIT_INFINITELY)
-
+                    max_g = np.max(np.abs(data))
                     # ready, amp = data_contains_sinus(data, 0.01)
                     peak = round(dominant_frequency(data, self.sample_rate), 2)
-                    print(str(peak) + " - " + str(np.max(np.abs(data))))
+                    # print(str(peak) + " - " + str(max_g))
                     if not self.first_start:
                         if not window.start_sens_test:  # kontrola či je pripojený senzor
                             self.check_ready.emit(1)
                             timeout = 0
+                            self.average = self.averager.update(max_g)
                         else:
-                            if ((window.generator_sweep_stop_freq/2 - (window.generator_sweep_stop_freq/2)/20) <= peak <=
-                                    (window.generator_sweep_stop_freq/2 + (window.generator_sweep_stop_freq/2)/20)) and peak == \
-                                    self.last_peak:
+                            if ((window.generator_sweep_stop_freq / 2 - (
+                                    window.generator_sweep_stop_freq / 2) / 20) <= peak <=
+                                (window.generator_sweep_stop_freq / 2 + (
+                                        window.generator_sweep_stop_freq / 2) / 20)) and peak == \
+                                    self.last_peak and (2*self.average < max_g):
                                 # print("True")
                                 timeout += 1
-                                if timeout >= 10:
-                                    self.check_ready.emit(2) # (2) je ok
-                                    if timeout <= 10:
-                                        timeout = 10
+                                if timeout >= 20:
+                                    self.check_ready.emit(2)  # (2) je ok
+                                    if timeout >= 20:
+                                        timeout = 20
                             else:
+                                if timeout > 0:
+                                    timeout = 0
                                 timeout -= 1
-                                if timeout <= (-10):
+                                if timeout <= (-5):
                                     self.check_ready.emit(6)
-                                    if timeout <= (-10):
-                                        timeout = -10
+                                    if timeout <= (-5):
+                                        timeout = -5
                         self.last_peak = peak
                     self.first_start = False
+                self.task_sin.close()
                 break
             except Exception as e:
                 print("REF CHECK:" + str(e))
@@ -622,7 +695,7 @@ class ThreadRefCheckIfReady(QThread):
                 self.task_sin.close()
 
             QThread.msleep(333)
-        self.task_sin.close()
+
 
 
 #  kontrola USB zariadení
@@ -653,6 +726,8 @@ class ThreadCheckDevicesConnected(QThread):
 class MyStartUpWindow(QMainWindow):
     def __init__(self):
         super().__init__()
+        self.window_scale_delta = 1
+        self.window_scale = 1
         self.calib_optical_sens_tolerance = None
         self.end_sens_test = False
         self.start_sens_test = False
@@ -714,7 +789,7 @@ class MyStartUpWindow(QMainWindow):
         calibration_data_folder_name = 'calibration'
         config_folder_name = 'x_configs'
 
-        self.folder_sentinel_modbus_folder = "C:\\Users\\lukac\\Desktop\\Sylex\\Sentinel\\Sentinel2_Dynamic_Modbus_v1_0_7"
+        self.folder_sentinel_modbus_folder = r"C:\Users\PC\Desktop\Sylex\Sentinel\Sentinel2_Dynamic_Modbus_v1_0_7"
         self.main_folder_path = os_path.join(documents_path, main_folder_name)
         self.subfolderRef_path = os_path.join(self.main_folder_path, subfolder1a_name)
         self.subfolderOpt_path = os_path.join(self.main_folder_path, subfolder2a_name)
@@ -744,7 +819,7 @@ class MyStartUpWindow(QMainWindow):
             'calibration': {
                 'gain_mark': 150,
                 'optical_sensitivity': 0,
-                'oprical_sens_tolerance': 0,
+                'optical_sens_tolerance': 0,
                 'filter_data': 'high-pass',
                 'plot': 0,
                 'downsample': 1,
@@ -802,7 +877,9 @@ class MyStartUpWindow(QMainWindow):
         self.ui.null_detect_label.setHidden(True)
 
         #  graphics
-        self.ui.logo_label.setPixmap(QPixmap("logo.png"))
+        self.ui.logo_label.setPixmap(QPixmap("../Working/images/logo.png"))
+
+        scale_app(self, self.window_scale)
 
         self.config_file_path = self.check_config_if_selected()
         self.setup_config()
@@ -811,7 +888,7 @@ class MyStartUpWindow(QMainWindow):
         self.thread_check_usb_devices = ThreadCheckDevicesConnected(self.opt_dev_vendor, self.ref_dev_vendor)
         self.thread_check_usb_devices.all_connected.connect(self.all_dev_connected_signal)
         self.thread_check_usb_devices.start()
-        self.setWindowIcon(QIcon('logo_icon.png'))
+        self.setWindowIcon(QIcon('../Working/images/logo_icon.png'))
         splash.hide()
         self.show()
 
@@ -836,6 +913,9 @@ class MyStartUpWindow(QMainWindow):
         self.ref_dev_vendor = data['reference']
 
     def showEvent(self, event):
+        scale_app(self, self.window_scale_delta)
+        self.window_scale_delta = 1
+        center_on_screen(self)
         self.check_devices_load_comboboxes()
 
     def channel_type_changed(self, index):
@@ -872,14 +952,10 @@ class MyStartUpWindow(QMainWindow):
 
     def all_dev_connected_signal(self, opt_connected, ref_connected, gen_connected):
         if self.config_contains_none:
-            if self.ui.null_detect_label.isEnabled():
-                self.ui.null_detect_label.setHidden(False)
-                self.ui.null_detect_label.setEnabled(False)
-                self.ui.null_detect_label.setStyleSheet("color: black;")
-            else:
-                self.ui.null_detect_label.setHidden(False)
-                self.ui.null_detect_label.setEnabled(True)
-                self.ui.null_detect_label.setStyleSheet("color: red;")
+            self.ui.null_detect_label.setHidden(False)
+            self.ui.null_detect_label.setEnabled(not self.ui.null_detect_label.isEnabled())
+            self.ui.null_detect_label.setStyleSheet(
+                "color: red;" if self.ui.null_detect_label.isEnabled() else "color: black;")
             self.ui.start_app.setEnabled(False)
         elif window.opt_channels != 0:
             self.ui.null_detect_label.setHidden(True)
@@ -888,50 +964,22 @@ class MyStartUpWindow(QMainWindow):
         else:
             self.ui.start_app.setEnabled(False)
 
-        if not ref_connected:
-            if self.ui.status_ref_label.isEnabled():
-                self.ui.status_ref_label.setEnabled(False)
-                self.ui.status_ref_label.setText("Reference USB device DISCONNECTED")
-                self.ui.status_ref_label.setStyleSheet("color: black;")
-            else:
-                self.ui.status_ref_label.setEnabled(True)
-                self.ui.status_ref_label.setText("Reference USB device DISCONNECTED")
-                self.ui.status_ref_label.setStyleSheet("color: red;")
-            if self.ref_connected:
+        for status, device_name, connected_flag in [
+            (self.ui.status_ref_label, "Reference USB device", ref_connected),
+            (self.ui.status_opt_label, "Optical USB device", opt_connected),
+            (self.ui.status_gen_label, "Function generator", gen_connected)
+        ]:
+            status.setEnabled(not status.isEnabled())
+            status.setText(f"{device_name} {'DISCONNECTED' if not connected_flag else 'CONNECTED'}")
+            status.setStyleSheet(
+                "color: red;" if not connected_flag and status.isEnabled() else "color: black;" if not connected_flag else "color: green;")
+
+            if device_name == "Reference USB device" and not connected_flag and self.ref_connected:
                 self.check_devices_load_comboboxes()
                 self.ref_connected = False
-        else:
-            self.ui.status_ref_label.setText("Reference USB device CONNECTED")
-            self.ui.status_ref_label.setStyleSheet("color: green;")
-            if not self.ref_connected:
+            elif device_name == "Reference USB device" and connected_flag and not self.ref_connected:
                 self.ref_connected = True
                 self.check_devices_load_comboboxes()
-
-        if not opt_connected:
-            if self.ui.status_opt_label.isEnabled():
-                self.ui.status_opt_label.setEnabled(False)
-                self.ui.status_opt_label.setText("Optical USB device DISCONNECTED")
-                self.ui.status_opt_label.setStyleSheet("color: black;")
-            else:
-                self.ui.status_opt_label.setEnabled(True)
-                self.ui.status_opt_label.setText("Optical USB device DISCONNECTED")
-                self.ui.status_opt_label.setStyleSheet("color: red;")
-        else:
-            self.ui.status_opt_label.setText("Optical USB device CONNECTED")
-            self.ui.status_opt_label.setStyleSheet("color: green;")
-
-        if not gen_connected:
-            if self.ui.status_gen_label.isEnabled():
-                self.ui.status_gen_label.setEnabled(False)
-                self.ui.status_gen_label.setText("Function generator DISCONNECTED")
-                self.ui.status_gen_label.setStyleSheet("color: black;")
-            else:
-                self.ui.status_gen_label.setEnabled(True)
-                self.ui.status_gen_label.setText("Function generator DISCONNECTED")
-                self.ui.status_gen_label.setStyleSheet("color: red;")
-        else:
-            self.ui.status_gen_label.setText("Function generator CONNECTED")
-            self.ui.status_gen_label.setStyleSheet("color: green;")
 
     def sens_type_combobox_changed(self, text):
         self.opt_sensor_type = text
@@ -1137,6 +1185,14 @@ class MyStartUpWindow(QMainWindow):
         self.settings_window.show()
 
     def start_calib_app(self):
+        path_config = os_path.join(self.folder_sentinel_D_folder,"config.ini")
+        config = ConfigParser()
+        with codecs_open(path_config, 'r', encoding='utf-8-sig') as f:
+            config.read_file(f)
+        config.set('general', 'export_folder_path', self.folder_opt_export)
+        with open(path_config, 'w') as configfile:
+            config.write(configfile)
+
         self.ui.ref_device_comboBox.setEnabled(False)
         self.ui.opt_config_combobox.setEnabled(False)
         self.ui.ref_channel_comboBox.setEnabled(False)
@@ -1176,6 +1232,7 @@ class MySettingsWindow(QMainWindow):
         self.ui.setupUi(self)
         self.load_settings()
         self.config_file = None
+        self.slider_value = window.window_scale
 
         # btns
         self.ui.save_btn.clicked.connect(self.save_settings)
@@ -1196,7 +1253,10 @@ class MySettingsWindow(QMainWindow):
         self.ui.btn_calib_tab.clicked.connect(self.clicked_btn_calib)
         self.ui.btn_gen_tab.clicked.connect(self.clicked_btn_gen)
 
-        self.ui.logo_label.setPixmap(QPixmap("logo.png"))
+        self.ui.slider_win_scale.setRange(1, 5)
+        self.ui.slider_win_scale.valueChanged.connect(self.slider_scale_changed)
+
+        self.ui.logo_label.setPixmap(QPixmap("../Working/images/logo.png"))
 
         self.ui.calib_export_btn.clicked.connect(self.calib_export_folder_path_select)
         self.ui.save_as_btn.clicked.connect(self.save_as_settings)
@@ -1211,7 +1271,29 @@ class MySettingsWindow(QMainWindow):
         self.thread_check_new = ThreadSettingsCheckNew(self.nidaq_devices, self.resources, self.all_configs)
         self.thread_check_new.status.connect(self.new_setting_enabled)
         self.thread_check_new.start()
-        self.setWindowIcon(QIcon('logo_icon.png'))
+        self.setWindowIcon(QIcon('../Working/images/logo_icon.png'))
+        scale_app(self, window.window_scale)
+
+    def slider_scale_get_real_value(self, value):
+        def get_key_for_value(d, value):
+            for k, v in d.items():
+                if v == value:
+                    return k
+            return None
+
+        # Mapping integer values of the slider to the desired float values
+        mapping = {
+            1: 1,
+            2: 1.25,
+            3: 1.5,
+            4: 1.75,
+            5: 2
+        }
+        return mapping[int(value)], get_key_for_value(mapping, value)
+
+    def slider_scale_changed(self, value):
+        self.slider_value, _ = self.slider_scale_get_real_value(value)
+        self.ui.settings_scale2x_label.setText(str(self.slider_value) + "x")
 
     def move_btns_back(self):
         if not self.ui.btn_calib_tab.isEnabled():
@@ -1327,6 +1409,11 @@ class MySettingsWindow(QMainWindow):
             self.save_settings()
 
     def save_settings(self):
+        window.window_scale_delta = self.slider_value / window.window_scale
+        print(
+            "VALUE : " + str(self.slider_value) + "/" + str(window.window_scale) + "=" + str(window.window_scale_delta))
+        window.window_scale = self.slider_value
+
         window.ref_channel = self.ui.ref_channel_comboBox.currentText()
         window.ref_device_name = self.ui.ref_device_comboBox.currentText()
         window.calib_filter_data = self.ui.calib_filter_data_comboBox.currentText()
@@ -1368,6 +1455,7 @@ class MySettingsWindow(QMainWindow):
             window.ref_measure_time * window.ref_sample_rate)
 
         window.save_config_file(True)
+
         self.close()
 
     def new_setting_enabled(self):
@@ -1378,6 +1466,10 @@ class MySettingsWindow(QMainWindow):
 
     def load_settings(self):
         # load lineEdits
+        _, value = self.slider_scale_get_real_value(window.window_scale)
+        self.ui.slider_win_scale.setValue(value)
+        self.ui.settings_scale2x_label.setText(str(window.window_scale) + "x")
+
         self.ui.main_folder_line.setText(window.folder_main)
         self.ui.ref_sampling_rate_line.setText(str(window.ref_sample_rate))
         self.ui.ref_exp_folder_line.setText(window.folder_ref_export)
@@ -1427,7 +1519,7 @@ class MySettingsWindow(QMainWindow):
         if window.ref_channel is not None:
             self.ui.ref_channel_comboBox.setCurrentText(window.ref_channel)
         # gen device ID
-        self.ui.gen_id_combobox.clear
+        self.ui.gen_id_combobox.clear()
         self.gen_id_combobox_clicked()
         self.ui.gen_id_combobox.setCurrentText(str(window.generator_id))
         # filter
@@ -1535,6 +1627,9 @@ class MySettingsWindow(QMainWindow):
             window.calib_window.show()
         super().closeEvent(event)
 
+    def showEvent(self, event):
+        center_on_screen(self)
+
 
 #  okno merania + stavy...
 class MyMainWindow(QMainWindow):
@@ -1542,6 +1637,22 @@ class MyMainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         from autoCalibration import Ui_AutoCalibration
+
+        self.opt_sens_status_mapping = {
+            0: ("OPT. SENSOR IS NOT CONNECTED", "orange"),
+            1: ("OPT. SENSOR IS CONNECTED", "blue"),
+            3: ("OPT. USB DEVICE DISCONNECTED!", "red", "black"),
+            4: ("OPT. SENSOR IS NOT READY", "red"),
+            5: ("OPT. SENSOR IS READY", "green"),
+        }
+
+        self.ref_sens_status_mapping = {
+            0: ("REF. SENSOR IS NOT CONNECTED", "orange"),
+            1: ("REF. SENSOR IS CONNECTED", "blue"),
+            2: ("REF. SENSOR IS READY", "green"),
+            3: ("REF. USB DEVICE DISCONNECTED!", "red", "black"),
+            6: ("REF. SENSOR IS NOT READY", "red"),
+        }
 
         self.sensor_gen_check = True
         self.thread_check_new_file = None
@@ -1562,13 +1673,14 @@ class MyMainWindow(QMainWindow):
         self.ui.menuSettings.addAction(open_action)
         self.autoCalib = AutoCalibMain()
 
-        self.ui.logo_label.setPixmap(QPixmap("logo.png"))
+        self.ui.logo_label.setPixmap(QPixmap("../Working/images/logo.png"))
 
         self.ui.S_N_line.editingFinished.connect(self.set_s_n)
         self.ui.start_btn.clicked.connect(self.autoCalib.on_btn_start_clicked)
         self.ui.stop_btn.clicked.connect(self.emergency_stop_clicked)
-        self.ui.plot_graph_check.stateChanged.connect(plot_check_changed)
+        self.ui.plot_graph_check.stateChanged.connect(self.plot_check_changed)
         self.ui.select_config.currentTextChanged.connect(self.config_changed)
+        self.ui.btn_load_wl.clicked.connect(self.btn_connect_load_wl)
         self.ui.progressBar.setValue(0)
         self.ui.start_btn.setEnabled(False)
         font = QFont("Arial", 10)
@@ -1577,17 +1689,25 @@ class MyMainWindow(QMainWindow):
         self.ui.output_browser.setFont(font)
         self.ui.output_browser_3.setFont(font2)
         self.ui.output_browser_3.setText("Work flow: \n1. CONNECT and TURN ON ALL device\n"
-                                       "2. Properly mount optical sensor\n3. Properly mount reference sensor on top "
-                                       "of the optical sensor\n"
-                                       "4. Connect optical sensor to the interrogator\n5. Connect reference"
-                                       " sensor to the NI USB device's 2nd channel\n"
-                                       "6. Start calibration")
+                                         "2. Properly mount optical sensor\n3. Properly mount reference sensor on top "
+                                         "of the optical sensor\n"
+                                         "4. Connect optical sensor to the interrogator\n5. Connect reference"
+                                         " sensor to the NI USB device's 2nd channel\n"
+                                         "6. Start calibration")
 
         self.ui.stop_btn.setHidden(True)
         self.ui.gen_status_label.setHidden(False)
         self.ui.gen_status_label_2.setHidden(True)
         self.change_sens_type_label()
-        self.setWindowIcon(QIcon('logo_icon.png'))
+        self.setWindowIcon(QIcon('../Working/images/logo_icon.png'))
+        scale_app(self, window.window_scale)
+
+    def plot_check_changed(self, state):
+        if state == 2:
+            window.calib_plot = True
+        else:
+            window.calib_plot = False
+        window.save_config_file(True)
 
     def write_to_output_browser(self, text):
         self.ui.output_browser_3.setText(text)
@@ -1621,7 +1741,7 @@ class MyMainWindow(QMainWindow):
     def start_modbus(self):
         kill_sentinel(True, False)
         QThread.msleep(100)
-        start_sentinel_modbus()
+        start_sentinel_modbus(window.folder_sentinel_modbus_folder, window.folder_sentinel_D_folder, window.opt_project)
 
         os_chdir(window.folder_opt_export)
 
@@ -1644,80 +1764,45 @@ class MyMainWindow(QMainWindow):
         self.sensor_ref_check = is_ready
 
     def check_sensors_ready(self):
-        if self.sensor_opt_check != 0:
-            if self.sensor_opt_check == 1:
-                self.ui.opt_sens_status_label.setText("OPT. SENSOR IS CONNECTED")
-                self.ui.opt_sens_status_label.setStyleSheet("color: blue;")
-            elif self.sensor_opt_check == 3:
-                self.ui.opt_sens_status_label.setText("OPT. USB DEVICE DISCONNECTED!")
-                if self.ui.opt_sens_status_label.isEnabled():
-                    self.ui.opt_sens_status_label.setStyleSheet("color: red;")
-                    self.ui.opt_sens_status_label.setEnabled(False)
-                else:
-                    self.ui.opt_sens_status_label.setStyleSheet("color: black;")
-                    self.ui.opt_sens_status_label.setEnabled(True)
-            elif self.sensor_opt_check == 4:
-                self.ui.opt_sens_status_label.setText("OPT. SENSOR IS NOT READY")
-                self.ui.opt_sens_status_label.setStyleSheet("color: red;")
-            elif self.sensor_opt_check == 5:
-                self.ui.opt_sens_status_label.setText("OPT. SENSOR IS READY")
-                self.ui.opt_sens_status_label.setStyleSheet("color: green;")
-
-        else:
-            self.ui.opt_sens_status_label.setText("OPT. SENSOR IS NOT CONNECTED")
-            self.ui.opt_sens_status_label.setStyleSheet("color: orange;")
-
-        if self.sensor_ref_check != 0:
-            if self.sensor_ref_check == 1:
-                self.ui.ref_sens_status_label.setText("REF. SENSOR IS CONNECTED")
-                self.ui.ref_sens_status_label.setStyleSheet("color: blue;")
-            elif self.sensor_ref_check == 2:
-                self.ui.ref_sens_status_label.setText("REF. SENSOR IS READY")
-                self.ui.ref_sens_status_label.setStyleSheet("color: green;")
-            elif self.sensor_ref_check == 6:
-                self.ui.ref_sens_status_label.setText("REF. SENSOR IS NOT READY")
-                self.ui.ref_sens_status_label.setStyleSheet("color: red;")
-            elif self.sensor_ref_check == 3:
-                self.ui.ref_sens_status_label.setText("REF. USB DEVICE DISCONNECTED!")
-                if self.ui.ref_sens_status_label.isEnabled():
-                    self.ui.ref_sens_status_label.setStyleSheet("color: red;")
-                    self.ui.ref_sens_status_label.setEnabled(False)
-                else:
-                    self.ui.ref_sens_status_label.setStyleSheet("color: black;")
-                    self.ui.ref_sens_status_label.setEnabled(True)
-        else:
-            self.ui.ref_sens_status_label.setText("REF. SENSOR IS NOT CONNECTED")
-            self.ui.ref_sens_status_label.setStyleSheet("color: orange;")
+        def update_status(label, mapping, check_value):
+            text, color1, color2 = mapping.get(check_value, ("", "black", "black"))
+            label.setText(text)
+            label.setStyleSheet(f"color: {color1};")
+            if check_value in {3} and label.isEnabled():
+                label.setEnabled(False)
+                label.setStyleSheet(f"color: {color2};")
+            elif check_value in {3}:
+                label.setEnabled(True)
+                label.setStyleSheet(f"color: {color2};")
+        if self.sensor_opt_check >= 0:
+            update_status(self.ui.opt_sens_status_label, self.opt_sens_status_mapping, self.sensor_opt_check)
+            update_status(self.ui.ref_sens_status_label, self.ref_sens_status_mapping, self.sensor_ref_check)
 
         if not self.sensor_gen_check:
             self.ui.gen_status_label_2.setHidden(False)
-            if self.ui.gen_status_label.isEnabled():
-                self.ui.gen_status_label.setStyleSheet("color: red;")
-                self.ui.gen_status_label_2.setStyleSheet("color: red;")
-                self.ui.gen_status_label.setEnabled(False)
-            else:
-                self.ui.gen_status_label.setStyleSheet("color: black;")
-                self.ui.gen_status_label_2.setStyleSheet("color: black;")
-                self.ui.gen_status_label.setEnabled(True)
+            self.ui.gen_status_label.setEnabled(not self.ui.gen_status_label.isEnabled())
+            color = "red" if self.ui.gen_status_label.isEnabled() else "black"
+            self.ui.gen_status_label.setStyleSheet(f"color: {color};")
+            self.ui.gen_status_label_2.setStyleSheet(f"color: {color};")
         else:
             self.ui.gen_status_label.setStyleSheet("color: black;")
             self.ui.gen_status_label_2.setHidden(True)
 
         if window.opt_channels != 0 and self.ui.S_N_line.text().strip():
-            if self.sensor_opt_check == 1 and self.sensor_ref_check == 1 and self.sensor_gen_check and not self.measure:
-                self.ui.start_btn.setEnabled(True)
-            else:
-                self.ui.start_btn.setEnabled(False)
+            self.ui.btn_load_wl.setEnabled(True)
+            self.ui.start_btn.setEnabled(
+                self.sensor_opt_check == 1 and self.sensor_ref_check == 1 and self.sensor_gen_check and not self.measure
+            )
         else:
             self.ui.start_btn.setEnabled(False)
+            self.ui.btn_load_wl.setEnabled(False)
 
         if self.sensor_ref_check == 2 and self.sensor_opt_check == 5:
-            pass
-            # print("TERMINATION ------------------------")
-            # self.autoCalib.thread_check_sin_opt.termination = True
-            # self.autoCalib.thread_check_sin_ref.termination = True
-            # self.sensor_ref_check = 2
-            # self.sensor_opt_check = 5
+            print("TERMINATION ------------------------")
+            self.autoCalib.thread_check_sin_opt.termination = True
+            self.autoCalib.thread_check_sin_ref.termination = True
+            self.sensor_ref_check = 2
+            self.sensor_opt_check = 5
 
     def config_changed(self, text):
         window.current_conf = False
@@ -1735,12 +1820,23 @@ class MyMainWindow(QMainWindow):
     def set_s_n(self):
         self.S_N = self.ui.S_N_line.text()
 
+    def btn_connect_load_wl(self):
+        order_id = re_search(r'(-?\d+(\.\d+)?)', self.S_N).group(1)
+        if window.opt_channels not in [0, 1]:
+            kill_sentinel(False, True)
+            set_wavelengths(order_id, window.folder_sentinel_D_folder, window.opt_project)
+            start_sentinel_modbus(window.folder_sentinel_modbus_folder, window.folder_sentinel_D_folder,
+                                  window.opt_project)
+
     def open_settings_window(self):
         self.settings_window = MySettingsWindow(False)
         window.calib_window.hide()
         self.settings_window.show()
 
     def showEvent(self, event):
+        scale_app(self, window.window_scale_delta)
+        window.window_scale_delta = 1
+        center_on_screen(self)
         self.ui.plot_graph_check.setChecked(window.calib_plot)
         load_all_config_files(self.ui.select_config, window.return_all_configs(), window.config_file_path)
         # label info o opt senz
@@ -1879,7 +1975,7 @@ class AutoCalibMain:
 
         start_calibration = True
 
-        if os_path.exists(os_path.join(window.folder_calibration_export, window.calib_window.S_N + '.csv')):
+        if os_path.exists(os_path.join(window.folder_calibration_export, window.calib_window.s_n + '.csv')):
             window.calib_window.setEnabled(False)
             msgBox = QMessageBox()
             msgBox.setIcon(QMessageBox.Information)
@@ -1912,7 +2008,8 @@ class AutoCalibMain:
 
             self.thread_control_gen = ThreadControlFuncGen(window.generator_id, window.generator_sweep_time,
                                                            window.generator_sweep_start_freq,
-                                                           window.generator_sweep_stop_freq, window.generator_sweep_type,
+                                                           window.generator_sweep_stop_freq,
+                                                           window.generator_sweep_type,
                                                            window.generator_max_mvpp)
             self.thread_control_gen.connected_status.connect(window.calib_window.gen_emit)
             self.thread_control_gen.step_status.connect(window.calib_window.write_to_output_browser)
@@ -1939,8 +2036,8 @@ class AutoCalibMain:
         today = date.today()
         self.current_date = today.strftime("%b-%d-%Y")
 
-        file_path = os_path.join(window.folder_ref_export, window.calib_window.S_N + '.csv')
-        file_path_raw = os_path.join(window.folder_ref_export_raw, window.calib_window.S_N + '.csv')
+        file_path = os_path.join(window.folder_ref_export, window.calib_window.s_n + '.csv')
+        file_path_raw = os_path.join(window.folder_ref_export_raw, window.calib_window.s_n + '.csv')
         with open(file_path, 'w') as file:
             file.write("# " + self.current_date + '\n')
             file.write("# " + self.time_string + '\n')
@@ -2005,7 +2102,7 @@ class AutoCalibMain:
                 os_remove(file_path)
             if window.opt_channels == 1:
                 from AC_calibration_1FBG_v3 import ACCalib_1ch
-                self.acc_calib = ACCalib_1ch(window.calib_window.S_N, window.starting_folder, window.folder_main,
+                self.acc_calib = ACCalib_1ch(window.calib_window.s_n, window.starting_folder, window.folder_main,
                                              window.folder_opt_export_raw, window.folder_ref_export_raw,
                                              float(window.calib_reference_sensitivity), int(window.calib_gain_mark),
                                              int(window.opt_sampling_rate),
@@ -2015,9 +2112,9 @@ class AutoCalibMain:
                                              int(window.calib_l_flatness),
                                              int(window.calib_r_flatness), int(window.calib_angle_set_freq),
                                              int(window.calib_phase_mark)).start(False,
-                                                                                 window.calib_optical_sensitivity/1000,
+                                                                                 window.calib_optical_sensitivity / 1000,
                                                                                  True, 0)
-                self.acc_calib = ACCalib_1ch(window.calib_window.S_N, window.starting_folder, window.folder_main,
+                self.acc_calib = ACCalib_1ch(window.calib_window.s_n, window.starting_folder, window.folder_main,
                                              window.folder_opt_export_raw, window.folder_ref_export_raw,
                                              float(window.calib_reference_sensitivity), int(window.calib_gain_mark),
                                              int(window.opt_sampling_rate),
@@ -2027,17 +2124,14 @@ class AutoCalibMain:
                                              int(window.calib_l_flatness),
                                              int(window.calib_r_flatness), int(window.calib_angle_set_freq),
                                              int(window.calib_phase_mark)).start(window.calib_plot,
-                                                                                 self.acc_calib[1]/1000,
+                                                                                 self.acc_calib[1] / 1000,
                                                                                  True, self.acc_calib[8])
-
-                # self.acc_calib = acc_script_1ch.start(window.calib_plot, window.calib_optical_sensitivity/1000, True)
-                # self.acc_calib = acc_script_1ch.start(
-                #     window.calib_plot, 0)  # [0]>wavelength 1,[1]>sensitivity pm/g at gainMark,[2]>flatness_edge_l,
+                 # [0]>wavelength 1,[1]>sensitivity pm/g at gainMark,[2]>flatness_edge_l,
                 # [3]>flatness_edge_r,[4]>sens. flatness,[5]>MAX acc,[6]>MIN acc,[7]>DIFF symmetry,[8]>TimeCorrection,
                 # [9]>wavelength 2
             elif window.opt_channels == 2:
                 from AC_calibration_2FBG_edit import ACCalib_2ch
-                self.acc_calib = ACCalib_2ch(window.calib_window.S_N, window.starting_folder, window.folder_main,
+                self.acc_calib = ACCalib_2ch(window.calib_window.s_n, window.starting_folder, window.folder_main,
                                              window.folder_opt_export_raw, window.folder_ref_export_raw,
                                              float(window.calib_reference_sensitivity), int(window.calib_gain_mark),
                                              int(window.opt_sampling_rate),
@@ -2047,9 +2141,9 @@ class AutoCalibMain:
                                              int(window.calib_l_flatness),
                                              int(window.calib_r_flatness), int(window.calib_angle_set_freq),
                                              int(window.calib_phase_mark)).start(False,
-                                                                                 window.calib_optical_sensitivity/1000,
+                                                                                 window.calib_optical_sensitivity / 1000,
                                                                                  True, 0)
-                self.acc_calib = ACCalib_2ch(window.calib_window.S_N, window.starting_folder, window.folder_main,
+                self.acc_calib = ACCalib_2ch(window.calib_window.s_n, window.starting_folder, window.folder_main,
                                              window.folder_opt_export_raw, window.folder_ref_export_raw,
                                              float(window.calib_reference_sensitivity), int(window.calib_gain_mark),
                                              int(window.opt_sampling_rate),
@@ -2062,13 +2156,6 @@ class AutoCalibMain:
                                                                                  self.acc_calib[1] / 1000,
                                                                                  True, self.acc_calib[8])
 
-                # self.acc_calib = acc_script_2ch.start(window.calib_plot, window.calib_optical_sensitivity, True)
-
-                # acc_script_2ch.start(False, window.calib_optical_sensitivity/1000, True)
-                # self.acc_calib = acc_script_2ch.start(window.calib_plot, 0, True)
-
-                # self.acc_calib = acc_script_2ch.start(
-                #     window.calib_plot, 0)  # [0]>wavelength 1,[1]>sensitivity pm/g at gainMark,[2]>flatness_edge_l,
                 # [3]>flatness_edge_r,[4]>sens. flatness,[5]>MAX acc,[6]>MIN acc,[7]>DIFF symmetry,[8]>TimeCorrection,
                 # [9]>wavelength 2
 
@@ -2080,7 +2167,8 @@ class AutoCalibMain:
             self.check_if_calib_is_valid()
 
     def check_if_calib_is_valid(self):
-        print(str((window.calib_optical_sensitivity - window.calib_optical_sens_tolerance)) + "<=" + str(self.acc_calib[1]) + "<=" + str((window.calib_optical_sensitivity + window.calib_optical_sens_tolerance)))
+        print(str((window.calib_optical_sensitivity - window.calib_optical_sens_tolerance)) + "<=" + str(
+            self.acc_calib[1]) + "<=" + str((window.calib_optical_sensitivity + window.calib_optical_sens_tolerance)))
         if (window.calib_optical_sensitivity - window.calib_optical_sens_tolerance) <= self.acc_calib[1] <= \
                 (window.calib_optical_sensitivity + window.calib_optical_sens_tolerance):
 
@@ -2091,7 +2179,7 @@ class AutoCalibMain:
             window.calib_window.ui.pass_status_label.setStyleSheet("color: rgba(170, 170, 127,150);")
 
     def save_calib_data(self):
-        file_path = os_path.join(window.folder_calibration_export, window.calib_window.S_N + '.csv')
+        file_path = os_path.join(window.folder_calibration_export, window.calib_window.s_n + '.csv')
         window.calib_window.ui.output_browser_3.setText("Calibration results: " + '\n')
 
         if len(self.acc_calib) <= 9:
@@ -2105,12 +2193,13 @@ class AutoCalibMain:
         window.calib_window.ui.output_browser.append("# Sensitivity : " + '\n\n' +
                                                      "# Sensitivity flatness : ")
         window.calib_window.ui.output_browser_2.append(str(round(self.acc_calib[1], 3)) + " pm/g at " +
-                                                       str(window.calib_gain_mark) + " Hz\n\n" + str(self.acc_calib[4]) +
+                                                       str(window.calib_gain_mark) + " Hz\n\n" + str(
+            self.acc_calib[4]) +
                                                        " between " + str(self.acc_calib[2]) + " Hz and " +
                                                        str(self.acc_calib[3]) + " Hz")
 
         with open(file_path, 'w') as file:
-            file.write("# S/N :" + '\n' + '\t\t' + str(window.calib_window.S_N) + '\n')
+            file.write("# S/N :" + '\n' + '\t\t' + str(window.calib_window.s_n) + '\n')
             file.write("# Date :" + '\n' + '\t\t' + self.current_date + '\n')
             file.write("# Time : " + '\n' + '\t\t' + self.time_string + '\n')
             if len(self.acc_calib) <= 9:
@@ -2128,7 +2217,7 @@ class AutoCalibMain:
 
     def make_opt_raw(self, num_lines_to_skip):
         file_path = os_path.join(window.folder_opt_export, self.opt_sentinel_file_name)
-        file_path_raw = os_path.join(window.folder_opt_export_raw, window.calib_window.S_N + '.csv')
+        file_path_raw = os_path.join(window.folder_opt_export_raw, window.calib_window.s_n + '.csv')
 
         with open(file_path, 'r') as file:
             total_lines = sum(1 for line in file)
@@ -2144,7 +2233,7 @@ class AutoCalibMain:
             extracted_columns = []
 
             # Determine the number of lines to read (excluding the last line)
-            lines_to_read = total_lines - num_lines_to_skip - 1 # int(window.opt_sampling_rate*0.15)
+            lines_to_read = total_lines - num_lines_to_skip - 1  # int(window.opt_sampling_rate*0.15)
 
             for _ in range(lines_to_read):
                 line = file.readline()
@@ -2154,32 +2243,16 @@ class AutoCalibMain:
                     extracted_columns.append(columns[2].lstrip())
                 elif window.opt_channels == 2 and len(columns) >= 4:
                     extracted_columns.append(columns[2].lstrip() + ' ' + columns[3].lstrip())
-            # Skip the specified number of lines
-            # for _ in range(num_lines_to_skip):
-            #     next(file)
-            #
-            # # Read the third column from each line
-            # extracted_columns = []
-            # if window.channels == 1:
-            #     for line in file:
-            #         columns = line.strip().split(';')
-            #         if len(columns) >= 3:
-            #             extracted_columns.append(columns[2].lstrip())
-            # elif window.channels == 2:
-            #     for line in file:
-            #         columns = line.strip().split(';')
-            #         if len(columns) >= 4:
-            #             extracted_columns.append(columns[2].lstrip() + ' ' + columns[3].lstrip())
 
         with open(file_path_raw, 'w') as output_file:
             output_file.write('\n'.join(extracted_columns))
 
         os_chdir(window.folder_opt_export)
 
-        if os_path.exists(window.calib_window.S_N + '.csv'):
-            os_remove(window.calib_window.S_N + '.csv')
+        if os_path.exists(window.calib_window.s_n + '.csv'):
+            os_remove(window.calib_window.s_n + '.csv')
 
-        os_rename(self.opt_sentinel_file_name, window.calib_window.S_N + '.csv')
+        os_rename(self.opt_sentinel_file_name, window.calib_window.s_n + '.csv')
 
 
 if __name__ == "__main__":

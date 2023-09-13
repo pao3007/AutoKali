@@ -348,7 +348,7 @@ if Make_plots:
     plt.grid(which='both')
     plt.minorticks_on()
     manager = plt.get_current_fig_manager()
-    manager.window.showMaximized()
+    manager.start_window.showMaximized()
     plt.show()
 
     if Filter_on:
@@ -362,7 +362,7 @@ if Make_plots:
         plt.grid(which='both')
         plt.minorticks_on()
         manager = plt.get_current_fig_manager()
-        manager.window.showMaximized()
+        manager.start_window.showMaximized()
         plt.show()
 
     plt.figure(num='Resized filtered data')
@@ -375,7 +375,7 @@ if Make_plots:
     plt.grid(which='both')
     plt.minorticks_on()
     manager = plt.get_current_fig_manager()
-    manager.window.showMaximized()
+    manager.start_window.showMaximized()
     plt.show()
 
     if Do_spectrum:
@@ -389,7 +389,7 @@ if Make_plots:
         plt.grid(which='both')
         plt.minorticks_on()
         manager = plt.get_current_fig_manager()
-        manager.window.showMaximized()
+        manager.start_window.showMaximized()
         plt.show()
 
     plt.figure(num='Bode analysis')
@@ -402,7 +402,7 @@ if Make_plots:
     plt.grid(which='both')
     plt.minorticks_on()
     manager = plt.get_current_fig_manager()
-    manager.window.showMaximized()
+    manager.start_window.showMaximized()
     plt.show()
 
     fig, axs = plt.subplots(2, num='Frequency response')
@@ -428,5 +428,5 @@ if Make_plots:
     plt.xscale('log')
     plt.tight_layout()
     manager = plt.get_current_fig_manager()
-    manager.window.showMaximized()
+    manager.start_window.showMaximized()
     plt.show()

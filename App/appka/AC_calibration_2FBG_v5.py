@@ -140,6 +140,7 @@ else:
         display(['.csv file complete'])
     if Faz == 1:
         display(['Optical .csv file not found. Creating .csv file ...'])
+        display(['Optical .csv file not found. Creating .csv file ...'])
         DataOptRel = fun.read_txt_file(opt_file_name, 0)[0:, (8, 14)]*10**9
         np.savetxt(opt_file_name[0:-4]+'.csv',DataOptRel)
         display(['.csv file complete'])
@@ -336,7 +337,7 @@ if Make_plots:
     plt.grid(which = 'both')
     plt.minorticks_on()
     manager = plt.get_current_fig_manager()
-    manager.window.showMaximized()
+    manager.start_window.showMaximized()
     plt.show()
     
     if Filter_on:
@@ -350,7 +351,7 @@ if Make_plots:
         plt.grid(which = 'both')
         plt.minorticks_on()
         manager = plt.get_current_fig_manager()
-        manager.window.showMaximized()
+        manager.start_window.showMaximized()
         plt.show()
     
     plt.figure(num = 'Resized filtered data')
@@ -363,7 +364,7 @@ if Make_plots:
     plt.grid(which = 'both')
     plt.minorticks_on()
     manager = plt.get_current_fig_manager()
-    manager.window.showMaximized()
+    manager.start_window.showMaximized()
     plt.show()
    
     if Do_spectrum:
@@ -378,7 +379,7 @@ if Make_plots:
         plt.grid(which = 'both')
         plt.minorticks_on()
         manager = plt.get_current_fig_manager()
-        manager.window.showMaximized()
+        manager.start_window.showMaximized()
         plt.show()
    
     plt.figure(num = 'Bode analysis')
@@ -391,7 +392,7 @@ if Make_plots:
     plt.grid(which = 'both')
     plt.minorticks_on()
     manager = plt.get_current_fig_manager()
-    manager.window.showMaximized()
+    manager.start_window.showMaximized()
     plt.show()
     
     fig, axs = plt.subplots(2, num = 'Frequency response')
@@ -415,5 +416,5 @@ if Make_plots:
     axs[1].minorticks_on()
     plt.tight_layout()
     manager = plt.get_current_fig_manager()
-    manager.window.showMaximized()
+    manager.start_window.showMaximized()
     plt.show()

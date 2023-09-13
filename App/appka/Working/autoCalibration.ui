@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>600</width>
-    <height>450</height>
+    <width>602</width>
+    <height>499</height>
    </rect>
   </property>
   <property name="palette">
@@ -562,7 +562,7 @@
       <x>80</x>
       <y>220</y>
       <width>221</width>
-      <height>121</height>
+      <height>181</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -582,9 +582,9 @@
     <property name="geometry">
      <rect>
       <x>80</x>
-      <y>340</y>
+      <y>400</y>
       <width>221</width>
-      <height>61</height>
+      <height>51</height>
      </rect>
     </property>
     <property name="font">
@@ -607,9 +607,9 @@
     <property name="geometry">
      <rect>
       <x>300</x>
-      <y>330</y>
+      <y>400</y>
       <width>221</width>
-      <height>81</height>
+      <height>51</height>
      </rect>
     </property>
     <property name="font">
@@ -626,25 +626,6 @@
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="Line" name="line">
-    <property name="geometry">
-     <rect>
-      <x>299</x>
-      <y>340</y>
-      <width>3</width>
-      <height>65</height>
-     </rect>
-    </property>
-    <property name="layoutDirection">
-     <enum>Qt::RightToLeft</enum>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Plain</enum>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Vertical</enum>
     </property>
    </widget>
    <widget class="QLabel" name="ref_sens_status_label">
@@ -705,38 +686,6 @@
      <string>Plot graphs</string>
     </property>
    </widget>
-   <widget class="Line" name="line_5">
-    <property name="geometry">
-     <rect>
-      <x>221</x>
-      <y>72</y>
-      <width>301</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Plain</enum>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Horizontal</enum>
-    </property>
-   </widget>
-   <widget class="Line" name="line_6">
-    <property name="geometry">
-     <rect>
-      <x>221</x>
-      <y>139</y>
-      <width>301</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Plain</enum>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Horizontal</enum>
-    </property>
-   </widget>
    <widget class="QComboBox" name="select_config">
     <property name="geometry">
      <rect>
@@ -773,114 +722,6 @@ color: rgb(0, 0, 0);</string>
      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
     </property>
    </widget>
-   <widget class="Line" name="line_2">
-    <property name="geometry">
-     <rect>
-      <x>519</x>
-      <y>180</y>
-      <width>3</width>
-      <height>225</height>
-     </rect>
-    </property>
-    <property name="layoutDirection">
-     <enum>Qt::RightToLeft</enum>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Plain</enum>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Vertical</enum>
-    </property>
-   </widget>
-   <widget class="Line" name="line_3">
-    <property name="geometry">
-     <rect>
-      <x>79</x>
-      <y>180</y>
-      <width>3</width>
-      <height>225</height>
-     </rect>
-    </property>
-    <property name="layoutDirection">
-     <enum>Qt::RightToLeft</enum>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Plain</enum>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Vertical</enum>
-    </property>
-   </widget>
-   <widget class="Line" name="line_4">
-    <property name="geometry">
-     <rect>
-      <x>520</x>
-      <y>82</y>
-      <width>3</width>
-      <height>68</height>
-     </rect>
-    </property>
-    <property name="layoutDirection">
-     <enum>Qt::RightToLeft</enum>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Plain</enum>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Vertical</enum>
-    </property>
-   </widget>
-   <widget class="Line" name="line_7">
-    <property name="geometry">
-     <rect>
-      <x>220</x>
-      <y>82</y>
-      <width>3</width>
-      <height>68</height>
-     </rect>
-    </property>
-    <property name="layoutDirection">
-     <enum>Qt::RightToLeft</enum>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Plain</enum>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Vertical</enum>
-    </property>
-   </widget>
-   <widget class="Line" name="line_8">
-    <property name="geometry">
-     <rect>
-      <x>80</x>
-      <y>330</y>
-      <width>441</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Plain</enum>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Horizontal</enum>
-    </property>
-   </widget>
-   <widget class="Line" name="line_9">
-    <property name="geometry">
-     <rect>
-      <x>80</x>
-      <y>395</y>
-      <width>441</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Plain</enum>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Horizontal</enum>
-    </property>
-   </widget>
    <widget class="QPushButton" name="stop_btn">
     <property name="geometry">
      <rect>
@@ -903,22 +744,6 @@ color: rgba(255, 255, 255, 200);</string>
     </property>
     <property name="text">
      <string>STOP</string>
-    </property>
-   </widget>
-   <widget class="Line" name="line_10">
-    <property name="geometry">
-     <rect>
-      <x>80</x>
-      <y>170</y>
-      <width>441</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Plain</enum>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Horizontal</enum>
     </property>
    </widget>
    <widget class="QLabel" name="gen_status_label">
@@ -956,7 +781,7 @@ GENERATOR
     </property>
     <property name="font">
      <font>
-      <pointsize>8</pointsize>
+      <pointsize>7</pointsize>
       <bold>true</bold>
      </font>
     </property>
@@ -999,7 +824,7 @@ GENERATOR
     </property>
     <property name="font">
      <font>
-      <pointsize>8</pointsize>
+      <pointsize>7</pointsize>
       <bold>true</bold>
      </font>
     </property>
@@ -1063,7 +888,7 @@ GENERATOR
     </property>
     <property name="font">
      <font>
-      <pointsize>8</pointsize>
+      <pointsize>7</pointsize>
       <bold>true</bold>
      </font>
     </property>
@@ -1106,7 +931,7 @@ GENERATOR
     </property>
     <property name="font">
      <font>
-      <pointsize>8</pointsize>
+      <pointsize>7</pointsize>
       <bold>true</bold>
      </font>
     </property>
@@ -1149,7 +974,7 @@ GENERATOR
     </property>
     <property name="font">
      <font>
-      <pointsize>8</pointsize>
+      <pointsize>7</pointsize>
       <bold>true</bold>
      </font>
     </property>
@@ -1210,7 +1035,7 @@ GENERATOR
       <x>300</x>
       <y>220</y>
       <width>221</width>
-      <height>121</height>
+      <height>181</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -1232,7 +1057,7 @@ GENERATOR
       <x>80</x>
       <y>180</y>
       <width>441</width>
-      <height>161</height>
+      <height>221</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -1252,7 +1077,7 @@ GENERATOR
     <property name="geometry">
      <rect>
       <x>9</x>
-      <y>350</y>
+      <y>400</y>
       <width>61</width>
       <height>51</height>
      </rect>
@@ -1261,29 +1086,290 @@ GENERATOR
      <string>LOGO</string>
     </property>
    </widget>
-   <zorder>line_6</zorder>
-   <zorder>line_5</zorder>
+   <widget class="QPushButton" name="btn_load_wl">
+    <property name="geometry">
+     <rect>
+      <x>440</x>
+      <y>9</y>
+      <width>83</width>
+      <height>33</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>LOAD WL`s</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_opt_unlocked">
+    <property name="geometry">
+     <rect>
+      <x>25</x>
+      <y>100</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="opt_wl_label">
+    <property name="geometry">
+     <rect>
+      <x>520</x>
+      <y>112</y>
+      <width>81</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>7</pointsize>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>OPT WLs</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="ref_max_g_label">
+    <property name="geometry">
+     <rect>
+      <x>520</x>
+      <y>80</y>
+      <width>81</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>7</pointsize>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>REF Gs</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="ref_value_max_g_label">
+    <property name="geometry">
+     <rect>
+      <x>520</x>
+      <y>90</y>
+      <width>81</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>7</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>init</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="opt_value_wl_label">
+    <property name="geometry">
+     <rect>
+      <x>520</x>
+      <y>126</y>
+      <width>81</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>7</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>init</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignHCenter|Qt::AlignTop</set>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_settings">
+    <property name="geometry">
+     <rect>
+      <x>12</x>
+      <y>-2</y>
+      <width>55</width>
+      <height>55</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QTextBrowser" name="just_box_2">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>180</y>
+      <width>441</width>
+      <height>221</height>
+     </rect>
+    </property>
+    <property name="mouseTracking">
+     <bool>false</bool>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgba(255, 255, 255, 0);</string>
+    </property>
+   </widget>
+   <widget class="QTextBrowser" name="just_box_3">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>400</y>
+      <width>221</width>
+      <height>49</height>
+     </rect>
+    </property>
+    <property name="mouseTracking">
+     <bool>false</bool>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgba(255, 255, 255, 0);</string>
+    </property>
+   </widget>
+   <widget class="QTextBrowser" name="just_box_4">
+    <property name="geometry">
+     <rect>
+      <x>220</x>
+      <y>80</y>
+      <width>301</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="mouseTracking">
+     <bool>false</bool>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgba(255, 255, 255, 0);</string>
+    </property>
+   </widget>
+   <widget class="QTextBrowser" name="just_box_5">
+    <property name="geometry">
+     <rect>
+      <x>300</x>
+      <y>400</y>
+      <width>221</width>
+      <height>49</height>
+     </rect>
+    </property>
+    <property name="mouseTracking">
+     <bool>false</bool>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgba(255, 255, 255, 0);</string>
+    </property>
+   </widget>
+   <widget class="QTextBrowser" name="just_box_6">
+    <property name="geometry">
+     <rect>
+      <x>530</x>
+      <y>80</y>
+      <width>61</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="mouseTracking">
+     <bool>false</bool>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgba(255, 255, 255, 0);</string>
+    </property>
+   </widget>
+   <widget class="QTextBrowser" name="just_box_7">
+    <property name="geometry">
+     <rect>
+      <x>530</x>
+      <y>220</y>
+      <width>61</width>
+      <height>151</height>
+     </rect>
+    </property>
+    <property name="mouseTracking">
+     <bool>false</bool>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgba(255, 255, 255, 0);</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="export_fail_btn">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>400</y>
+      <width>221</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background: transparent; border: none;</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="export_pass_btn">
+    <property name="geometry">
+     <rect>
+      <x>300</x>
+      <y>400</y>
+      <width>221</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background: transparent; border: none;</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <zorder>just_box_7</zorder>
+   <zorder>just_box_6</zorder>
    <zorder>S_N_label</zorder>
    <zorder>S_N_line</zorder>
    <zorder>start_btn</zorder>
    <zorder>progressBar</zorder>
    <zorder>output_browser</zorder>
-   <zorder>pass_status_label</zorder>
-   <zorder>fail_status_label</zorder>
-   <zorder>line</zorder>
    <zorder>ref_sens_status_label</zorder>
    <zorder>opt_sens_status_label</zorder>
    <zorder>plot_graph_check</zorder>
    <zorder>select_config</zorder>
    <zorder>label_cofnig</zorder>
-   <zorder>line_2</zorder>
-   <zorder>line_3</zorder>
-   <zorder>line_4</zorder>
-   <zorder>line_7</zorder>
-   <zorder>line_8</zorder>
-   <zorder>line_9</zorder>
    <zorder>stop_btn</zorder>
-   <zorder>line_10</zorder>
    <zorder>gen_status_label</zorder>
    <zorder>label_name_start_freq</zorder>
    <zorder>label_start_freq</zorder>
@@ -1299,14 +1385,29 @@ GENERATOR
    <zorder>label_opt_sens_type_label</zorder>
    <zorder>output_browser_2</zorder>
    <zorder>logo_label</zorder>
+   <zorder>btn_load_wl</zorder>
+   <zorder>btn_opt_unlocked</zorder>
+   <zorder>opt_wl_label</zorder>
+   <zorder>ref_max_g_label</zorder>
+   <zorder>ref_value_max_g_label</zorder>
+   <zorder>opt_value_wl_label</zorder>
+   <zorder>btn_settings</zorder>
+   <zorder>fail_status_label</zorder>
+   <zorder>pass_status_label</zorder>
    <zorder>output_browser_3</zorder>
+   <zorder>just_box_2</zorder>
+   <zorder>just_box_3</zorder>
+   <zorder>just_box_4</zorder>
+   <zorder>just_box_5</zorder>
+   <zorder>export_fail_btn</zorder>
+   <zorder>export_pass_btn</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>600</width>
+     <width>602</width>
      <height>21</height>
     </rect>
    </property>
@@ -1332,19 +1433,21 @@ GENERATOR
     <addaction name="menuOpen_Sentinel_D"/>
     <addaction name="actionOpen_Function_Generator"/>
    </widget>
-   <widget class="QMenu" name="menuSettings">
-    <property name="title">
-     <string>Options</string>
-    </property>
-   </widget>
    <widget class="QMenu" name="menuAbout">
     <property name="title">
      <string>About</string>
     </property>
    </widget>
+   <widget class="QMenu" name="menuOperator">
+    <property name="title">
+     <string>Operator</string>
+    </property>
+    <addaction name="actionChange_operator"/>
+    <addaction name="actionAdd_new_operator"/>
+   </widget>
    <addaction name="menuMenu"/>
-   <addaction name="menuSettings"/>
    <addaction name="menuAbout"/>
+   <addaction name="menuOperator"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionOpen_Function_Generator">
@@ -1370,6 +1473,16 @@ GENERATOR
   <action name="actioncalibration_folder">
    <property name="text">
     <string>calibration folder</string>
+   </property>
+  </action>
+  <action name="actionChange_operator">
+   <property name="text">
+    <string>Change operator</string>
+   </property>
+  </action>
+  <action name="actionAdd_new_operator">
+   <property name="text">
+    <string>Add new operator</string>
    </property>
   </action>
  </widget>

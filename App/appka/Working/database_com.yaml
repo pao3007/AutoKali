@@ -1,0 +1,44 @@
+ConnectionKey:
+  InitialCatalog: ISYS
+  DataSource: SYXDBX02\ISYS
+  UserID: peaklogger
+  Password: peaklogger123
+  IntegratedSecurity: False
+  MultipleActiveResultSets: True
+  PersistSecurityInfo: True
+  ConnectTimeout: 1
+LoadWLDatabase: ISYS
+ExportDatabase: DBFOS
+GetWaveLengthQuery: |
+  SELECT 
+    [Zákazky].[ID] AS [Zakazka], 
+    [Výrobky].[ID] AS [Objednavka], 
+    [Výrobky].[Množstvo], 
+    [Výrobky].[Popis], 
+    [Zákazky].[Divízia], 
+    [Zákazky].[Obchodné meno] AS [Zakaznik], 
+    [Výrobky].[Sensor] 
+  FROM 
+    [Zákazky] 
+  INNER JOIN 
+    [Výrobky] ON [Zákazky].[ID] = [Výrobky].[IDZákazky] 
+  LEFT OUTER JOIN 
+    [ČíselníkNálepky] ON [Výrobky].[ČíselníkNálepkyID] = [ČíselníkNálepky].[ID] 
+  LEFT OUTER JOIN 
+    [VýrobkyNálepky] ON [Výrobky].[ID] = [VýrobkyNálepky].[VýrobkyID] 
+  WHERE 
+    [Výrobky].[ID] = ?
+ExportToDatabase: |
+  INSERT INTO tblKalibracia_Accel (SylexON, Customer, SylexSN, ErrorCount, CalibrationNumber, 
+            CalibrationFinal, Sensitivity, CWL1, CWL2, Flatness, Offset, Asymmetry, RawDataLocation, CalibrationProfile, 
+            TempCoef1, TempCoef2, Notes, Timestamp, Operator) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
+            ?, ?)
+FindMostRecentSN: |
+  SELECT TOP 1 *
+  FROM tblKalibracia_Accel
+  WHERE SylexSN = ?
+  ORDER BY Id DESC
+UpdateFinalValues: |
+  UPDATE tblKalibracia_Accel
+  SET CalibrationFinal=0
+  WHERE SylexSN = ? AND CalibrationFinal=1

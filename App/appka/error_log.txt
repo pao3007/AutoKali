@@ -112,3 +112,1424 @@ Aug-16-202309:21:55.916809Traceback (most recent call last):
     self.ui.ref_device_comboBox.addItem(f'{device.name}')
                                            ^^^^^^^^^^^
 AttributeError: 'str' object has no attribute 'name'
+Aug-18-202313:23:01.688007Traceback (most recent call last):
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 862, in showEvent
+    scale_app(self, self.window_scale)
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 70, in scale_app
+    scale_app(child, scale_factor)
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 59, in scale_app
+    font = widget.font()
+           ^^^^^^^^^^^
+AttributeError: 'QLayout' object has no attribute 'font'
+Aug-18-202313:26:52.676746Traceback (most recent call last):
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 862, in showEvent
+    scale_app(self, self.window_scale)
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 70, in scale_app
+    scale_app(child, scale_factor)
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 64, in scale_app
+    if widget.isWindow():
+       ^^^^^^^^^^^^^^^
+AttributeError: 'QLayout' object has no attribute 'isWindow'
+Aug-18-202313:29:06.832003Traceback (most recent call last):
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 862, in showEvent
+    scale_app(self.window(), self.window_scale)
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 70, in scale_app
+    scale_app(child, scale_factor)
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 59, in scale_app
+    font = widget.font()
+           ^^^^^^^^^^^
+AttributeError: 'QLayout' object has no attribute 'font'
+Aug-18-202313:30:30.761172Traceback (most recent call last):
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 862, in showEvent
+    scale_app(self, self.window_scale)
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 70, in scale_app
+    scale_app(child, scale_factor)
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 59, in scale_app
+    font = widget.font()
+           ^^^^^^^^^^^
+AttributeError: 'QLayout' object has no attribute 'font'
+Aug-18-202313:31:32.656642Traceback (most recent call last):
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 864, in showEvent
+    scale_app(self, self.window_scale)
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 71, in scale_app
+    scale_app(child, scale_factor)
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 65, in scale_app
+    if widget.isWindow():
+       ^^^^^^^^^^^^^^^
+AttributeError: 'QLayout' object has no attribute 'isWindow'
+Aug-18-202313:32:10.041605Traceback (most recent call last):
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 866, in showEvent
+    scale_app(self, self.window_scale)
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 59, in scale_app
+    if isinstance(widget, QWidget):
+                          ^^^^^^^
+NameError: name 'QWidget' is not defined
+Aug-18-202313:33:35.022206Traceback (most recent call last):
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 866, in showEvent
+    scale_app(self, self.window_scale)
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 70, in scale_app
+    widget.resize(size.width() * scale_factor, size.height() * scale_factor)
+TypeError: arguments did not match any overloaded call:
+  resize(self, a0: QSize): argument 1 has unexpected type 'float'
+  resize(self, w: int, h: int): argument 1 has unexpected type 'float'
+Aug-18-202313:34:58.490920Traceback (most recent call last):
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 1163, in open_settings_window
+    self.settings_window = MySettingsWindow(True)
+                           ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 1205, in __init__
+    self.load_settings()
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 1412, in load_settings
+    self.ui.slider_win_scale.setValue(window.window_scale*100)
+TypeError: setValue(self, a0: int): argument 1 has unexpected type 'float'
+Aug-18-202313:41:19.613571Traceback (most recent call last):
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 904, in all_dev_connected_signal
+    def all_dev_connected_signal(self, opt_connected, ref_connected, gen_connected):
+    
+KeyboardInterrupt
+Aug-18-202313:43:48.174781Traceback (most recent call last):
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 881, in showEvent
+    self.center_on_screen()
+    ^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'MyStartUpWindow' object has no attribute 'center_on_screen'
+Aug-18-202313:44:36.792756Traceback (most recent call last):
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 881, in showEvent
+    center_on_screen(self)
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 66, in center_on_screen
+    self.move(center_x, center_y)
+TypeError: arguments did not match any overloaded call:
+  move(self, a0: QPoint): argument 1 has unexpected type 'float'
+  move(self, ax: int, ay: int): argument 1 has unexpected type 'float'
+Aug-18-202313:56:09.984494Traceback (most recent call last):
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 882, in showEvent
+    scale_app(self, window.window_scale_delta)
+                    ^^^^^^
+NameError: name 'window' is not defined
+Aug-18-202314:28:20.653270Traceback (most recent call last):
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 1181, in open_settings_window
+    self.settings_window = MySettingsWindow(True)
+                           ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 1223, in __init__
+    self.load_settings()
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 1457, in load_settings
+    _, value = self.slider_scale_get_real_value(window.window_scale)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 1280, in slider_scale_get_real_value
+    return mapping[value], get_key_for_value(mapping, value)
+           ~~~~~~~^^^^^^^
+KeyError: 1.25
+Aug-19-202322:24:29.458864Traceback (most recent call last):
+  File "C:\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 2277, in <module>
+    window = MyStartUpWindow()
+  File "C:\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 854, in __init__
+    self.setup_config()
+  File "C:\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 1029, in setup_config
+    self.create_config_file()
+  File "C:\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 1091, in create_config_file
+    self.load_config_file()
+  File "C:\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 1050, in load_config_file
+    self.calib_optical_sens_tolerance = float(self.config['calibration']['optical_sens_tolerance'])
+KeyError: 'optical_sens_tolerance'
+Aug-21-202307:05:14.112109Traceback (most recent call last):
+  File "C:\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 2277, in <module>
+    window = MyStartUpWindow()
+  File "C:\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 854, in __init__
+    self.setup_config()
+  File "C:\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 1026, in setup_config
+    self.load_config_file()
+  File "C:\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 1050, in load_config_file
+    self.calib_optical_sens_tolerance = float(self.config['calibration']['optical_sens_tolerance'])
+KeyError: 'optical_sens_tolerance'
+Aug-21-202307:08:56.076470Traceback (most recent call last):
+  File "C:\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 684, in run
+    gen = check_function_gen_connected(window.generator_id)
+  File "C:\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 229, in check_function_gen_connected
+    rm = pyvisa_ResourceManager()
+  File "C:\Sylex\AutoKali\App\appka\venv\lib\site-packages\pyvisa\highlevel.py", line 2992, in __new__
+    visa_library = open_visa_library(visa_library)
+  File "C:\Sylex\AutoKali\App\appka\venv\lib\site-packages\pyvisa\highlevel.py", line 2899, in open_visa_library
+    wrapper = _get_default_wrapper()
+  File "C:\Sylex\AutoKali\App\appka\venv\lib\site-packages\pyvisa\highlevel.py", line 2858, in _get_default_wrapper
+    raise ValueError(
+ValueError: Could not locate a VISA implementation. Install either the IVI binary or pyvisa-py.
+Aug-21-202307:10:46.077980Traceback (most recent call last):
+  File "C:\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 922, in all_dev_connected_signal
+    def all_dev_connected_signal(self, opt_connected, ref_connected, gen_connected):
+KeyboardInterrupt
+Aug-21-202307:12:04.586435Traceback (most recent call last):
+  File "C:\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 922, in all_dev_connected_signal
+    def all_dev_connected_signal(self, opt_connected, ref_connected, gen_connected):
+KeyboardInterrupt
+Aug-21-202307:20:49.498188Traceback (most recent call last):
+  File "C:\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 923, in all_dev_connected_signal
+    def all_dev_connected_signal(self, opt_connected, ref_connected, gen_connected):
+KeyboardInterrupt
+Aug-21-202307:28:27.608208Traceback (most recent call last):
+  File "C:\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 684, in run
+    gen = check_function_gen_connected(window.generator_id)
+  File "C:\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 229, in check_function_gen_connected
+    rm = pyvisa_ResourceManager()
+  File "C:\Sylex\AutoKali\App\appka\venv\lib\site-packages\pyvisa\highlevel.py", line 2992, in __new__
+    visa_library = open_visa_library(visa_library)
+  File "C:\Sylex\AutoKali\App\appka\venv\lib\site-packages\pyvisa\highlevel.py", line 2899, in open_visa_library
+    wrapper = _get_default_wrapper()
+  File "C:\Sylex\AutoKali\App\appka\venv\lib\site-packages\pyvisa\highlevel.py", line 2858, in _get_default_wrapper
+    raise ValueError(
+ValueError: Could not locate a VISA implementation. Install either the IVI binary or pyvisa-py.
+Aug-21-202307:31:19.450178Traceback (most recent call last):
+  File "C:\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 922, in all_dev_connected_signal
+    def all_dev_connected_signal(self, opt_connected, ref_connected, gen_connected):
+KeyboardInterrupt
+Aug-21-202307:34:50.592391Traceback (most recent call last):
+  File "C:\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 683, in run
+    gen = check_function_gen_connected(window.generator_id)
+  File "C:\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 229, in check_function_gen_connected
+    with pyvisa_ResourceManager() as rm:
+AttributeError: __enter__
+Aug-21-202307:54:46.062473Traceback (most recent call last):
+  File "C:\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 482, in <module>
+    class ThreadOptAndGenCheckIfReady(QThread):
+  File "C:\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 485, in ThreadOptAndGenCheckIfReady
+    from pyModbusTCP.client import ModbusClient
+ModuleNotFoundError: No module named 'pyModbusTCP'
+Aug-21-202307:55:31.654116Traceback (most recent call last):
+  File "C:\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 685, in run
+    gen = check_function_gen_connected(window.generator_id)
+  File "C:\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 229, in check_function_gen_connected
+    rm = pyvisa_ResourceManager()
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\highlevel.py", line 2992, in __new__
+    visa_library = open_visa_library(visa_library)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\highlevel.py", line 2899, in open_visa_library
+    wrapper = _get_default_wrapper()
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\highlevel.py", line 2858, in _get_default_wrapper
+    raise ValueError(
+ValueError: Could not locate a VISA implementation. Install either the IVI binary or pyvisa-py.
+Aug-21-202310:00:46.602709Traceback (most recent call last):
+  File "C:\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 1242, in start_calib_app
+    self.calib_window.first_sentinel_start()
+  File "C:\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 1748, in first_sentinel_start
+    start_sentinel_s(window.opt_project)
+  File "C:\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 113, in start_sentinel_s
+    os_chdir(sentinel_app)
+FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:/Users/lukac/Desktop/Sylex/Sentinel/Sentinel2_Dynamic_v0_4_1/Sentinel2_Dynamic_v0_4_1'
+Aug-21-202310:02:29.625929Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 1242, in start_calib_app
+    self.calib_window.first_sentinel_start()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 1748, in first_sentinel_start
+    start_sentinel_s(window.opt_project)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 113, in start_sentinel_s
+    os_chdir(sentinel_app)
+FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:/Users/lukac/Desktop/Sylex/Sentinel/Sentinel2_Dynamic_v0_4_1/Sentinel2_Dynamic_v0_4_1'
+Aug-21-202310:35:48.670613Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 1238, in start_calib_app
+    config['general']['export_folder_path'] = self.folder_opt_export
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\configparser.py", line 965, in __getitem__
+    raise KeyError(key)
+KeyError: 'general'
+Aug-21-202310:38:23.487300Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 1237, in start_calib_app
+    with codecs_open(path_config, 'r', encoding='utf-8-sig') as f:
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\codecs.py", line 906, in open
+    file = builtins.open(filename, mode, buffering)
+FileNotFoundError: [Errno 2] No such file or directory: 'C:/Users/PC/Desktop/Sylex/Sentinel/Sentinel2_v1_0_44/Sentinel2_v1_0_44\\config.ini'
+Aug-21-202310:39:37.128993Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 1767, in start_modbus
+    start_sentinel_modbus(window.folder_sentinel_modbus_folder, window.folder_sentinel_D_folder, window.opt_project)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 122, in start_sentinel_modbus
+    os_chdir(sentinel_app)
+FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\lukac\\Desktop\\Sylex\\Sentinel\\Sentinel2_Dynamic_Modbus_v1_0_7'
+Aug-21-202311:12:43.400283Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 715, in run
+    self.task_sin.close()
+AttributeError: 'NoneType' object has no attribute 'close'
+Aug-21-202311:15:47.523189Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 2162, in thread_ref_sens_finished
+    from Working.AC_calibration_1FBG_v3 import ACCalib_1ch
+ModuleNotFoundError: No module named 'Working'
+Aug-21-202311:18:49.366350Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 1499, in save_settings
+    window.generator_sweep_stop_freq = int(self.ui.gen_stop_freq_line.text())
+ValueError: invalid literal for int() with base 10: '4é0'
+Aug-21-202311:45:57.931128Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 1885, in set_s_n
+    set_wavelengths(self.S_N, window.folder_sentinel_D_folder, window.opt_project)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 255, in set_wavelengths
+    wl = ImportWaveLengths.load_sylex_nominal_wavelength(s_n)
+TypeError: ImportWaveLengths.load_sylex_nominal_wavelength() missing 1 required positional argument: 'objednavka_id'
+Aug-21-202311:59:23.651602Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 1889, in set_s_n
+    set_wavelengths(order_id, window.folder_sentinel_D_folder, window.opt_project)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 257, in set_wavelengths
+    wl = iwl.load_sylex_nominal_wavelength(objednavka_id=s_n)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ImportWaveLengths.py", line 54, in load_sylex_nominal_wavelength
+    cursor.execute(query, objednavka_id)
+pyodbc.ProgrammingError: ('Invalid parameter type.  param-index=0 param-type=re.Match', 'HY105')
+Aug-23-202308:41:16.474751Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast3.py", line 45, in <module>
+    from MyStartUpWindow import MyStartUpWindow
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 12, in <module>
+    from MyMainWindow import MyMainWindow
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 10, in <module>
+    from MySettingsWindow import MySettingsWindow
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MySettingsWindow.py", line 6, in <module>
+    from MyStartUpWindow import MyStartUpWindow
+ImportError: cannot import name 'MyStartUpWindow' from partially initialized module 'MyStartUpWindow' (most likely due to a circular import) (C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py)
+Aug-23-202308:43:25.486601Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast3.py", line 45, in <module>
+    from MyStartUpWindow import MyStartUpWindow
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 14, in <module>
+    class MyStartUpWindow(QMainWindow):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 15, in MyStartUpWindow
+    from ThreadCheckDevicesConnected import ThreadCheckDevicesConnected
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadCheckDevicesConnected.py", line 4, in <module>
+    from MyStartUpWindow import MyStartUpWindow
+ImportError: cannot import name 'MyStartUpWindow' from partially initialized module 'MyStartUpWindow' (most likely due to a circular import) (C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py)
+Aug-23-202308:54:20.084747Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 478, in open_settings_window
+    self.settings_window = MySettingsWindow(True, self)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MySettingsWindow.py", line 54, in __init__
+    self.load_settings()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MySettingsWindow.py", line 266, in load_settings
+    _, value = slider_scale_get_real_value(self.window.window_scale)
+AttributeError: 'builtin_function_or_method' object has no attribute 'window_scale'
+Aug-23-202308:57:10.206076Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 478, in open_settings_window
+    self.settings_window = MySettingsWindow(True, self)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MySettingsWindow.py", line 54, in __init__
+    self.load_settings()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MySettingsWindow.py", line 266, in load_settings
+    _, value = slider_scale_get_real_value(self.start_window.window_scale)
+AttributeError: 'MySettingsWindow' object has no attribute 'start_window'
+Aug-23-202308:57:46.696181Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 478, in open_settings_window
+    self.settings_window = MySettingsWindow(True, self)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MySettingsWindow.py", line 99, in __init__
+    scale_app(self, self.self.start_window.window_scale)
+AttributeError: 'MySettingsWindow' object has no attribute 'self'
+Aug-23-202308:58:39.140013Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MySettingsWindow.py", line 428, in showEvent
+    scale_app(self, self.self.start_window.window_scale)
+AttributeError: 'MySettingsWindow' object has no attribute 'self'
+Aug-23-202308:59:52.056266Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MySettingsWindow.py", line 429, in showEvent
+    scale_app(self, self.self.start_window.window_scale)
+AttributeError: 'MySettingsWindow' object has no attribute 'self'
+Aug-23-202309:01:11.259546Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MySettingsWindow.py", line 193, in save_as_settings
+    file_path, _ = QFileDialog.getSaveFileName(self, "Save YAML File", self.self.start_window.subfolderConfig_path,
+AttributeError: 'MySettingsWindow' object has no attribute 'self'
+Aug-23-202309:49:17.237713Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 500, in start_calib_app
+    self.calib_window = MyMainWindow(self)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 54, in __init__
+    self.autoCalib = AutoCalibMain(self)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 294, in __init__
+    self.thread_ref_sens = self.ThreadRefSensDataCollection(self.window, self.window.thcfgs, self.calib_window.s_n,
+AttributeError: 'MyMainWindow' object has no attribute 's_n'
+Aug-23-202310:00:54.311149Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 502, in start_calib_app
+    self.calib_window = MyMainWindow(self)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 54, in __init__
+    self.autoCalib = AutoCalibMain(self)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 294, in __init__
+    self.thread_ref_sens = self.ThreadRefSensDataCollection(self.window, self.window.thcfgs, self.calib_window.s_n,
+AttributeError: 'MyMainWindow' object has no attribute 's_n'
+Aug-23-202310:05:58.717372Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 502, in start_calib_app
+    self.calib_window = MyMainWindow(self)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 54, in __init__
+    self.autoCalib = AutoCalibMain(self)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 295, in __init__
+    self.opt_sentinel_file_name)
+AttributeError: 'AutoCalibMain' object has no attribute 'opt_sentinel_file_name'
+Aug-23-202310:06:51.437359Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 503, in start_calib_app
+    self.calib_window.first_sentinel_start()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 118, in first_sentinel_start
+    self.thread_check_new_file = self.ThreadSentinelCheckNewFile(self.window.folder_opt_export)
+AttributeError: 'MyMainWindow' object has no attribute 'ThreadSentinelCheckNewFile'
+Aug-23-202310:08:18.828817Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 131, in start_modbus
+    if os_path.exists(self.calib_window.autoCalib.opt_sentinel_file_name + '.csv'):
+AttributeError: 'MyMainWindow' object has no attribute 'calib_window'
+Aug-23-202310:11:28.656948Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 135, in start_modbus
+    self.calib_window.show()
+AttributeError: 'MyMainWindow' object has no attribute 'calib_window'
+Aug-23-202310:50:14.289299Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 1852, in check_sensors_ready
+    self.ui.btn_load_wl.setEnabled()
+TypeError: setEnabled(self, a0: bool): not enough arguments
+Aug-23-202310:52:34.392565Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 2040, in on_btn_start_clicked
+    if os_path.exists(os_path.join(window.folder_calibration_export, window.calib_window.s_n + '.csv')):
+AttributeError: 'MyMainWindow' object has no attribute 's_n'
+Aug-23-202310:56:03.072184Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast.py", line 2220, in thread_ref_sens_finished
+    int(window.calib_phase_mark)).start(window.calib_plot,
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\AC_calibration_2FBG_edit.py", line 393, in start
+    manager.start_window.showMaximized()
+AttributeError: 'FigureManagerQT' object has no attribute 'start_window'
+Aug-23-202311:00:14.581497Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Old\appkaMainFast.py", line 518, in <module>
+    class ThreadOptAndGenCheckIfReady(QThread):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Old\appkaMainFast.py", line 522, in ThreadOptAndGenCheckIfReady
+    from RollingAverager import RollingAverager
+ModuleNotFoundError: No module named 'RollingAverager'
+Aug-23-202311:01:59.864354Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Old\appkaMainFast.py", line 2220, in thread_ref_sens_finished
+    int(window.calib_phase_mark)).start(window.calib_plot,
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Old\AC_calibration_2FBG_edit.py", line 393, in start
+    manager.start_window.showMaximized()
+AttributeError: 'FigureManagerQT' object has no attribute 'start_window'
+Aug-23-202311:07:29.095986Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Old\appkaMainFast.py", line 2220, in thread_ref_sens_finished
+    int(window.calib_phase_mark)).start(window.calib_plot,
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Old\AC_calibration_2FBG_edit.py", line 393, in start
+    manager.start_window.showMaximized()
+AttributeError: 'FigureManagerQT' object has no attribute 'start_window'
+Aug-23-202311:25:38.314169Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Old\appkaMainFast.py", line 1791, in check_sensors_ready
+    def check_sensors_ready(self):
+KeyboardInterrupt
+Aug-23-202313:13:13.322315Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Old\appkaMainFast.py", line 2024, in thread_control_gen_finished
+    instrument = rm.open_resource(window.generator_id)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\highlevel.py", line 3284, in open_resource
+    res.open(access_mode, open_timeout)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\resources\resource.py", line 282, in open
+    self.session, status = self._resource_manager.open_bare_resource(
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\highlevel.py", line 3209, in open_bare_resource
+    return self.visalib.open(self.session, resource_name, access_mode, open_timeout)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\ctwrapper\functions.py", line 1851, in open
+    ret = library.viOpen(
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\ctwrapper\highlevel.py", line 226, in _return_handler
+    return self.handle_return_value(session, ret_value)  # type: ignore
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\highlevel.py", line 251, in handle_return_value
+    raise errors.VisaIOError(rv)
+pyvisa.errors.VisaIOError: VI_ERROR_RSRC_NFOUND (-1073807343): Insufficient location information or the requested device or resource is not present in the system.
+Aug-23-202313:13:55.571093Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Old\appkaMainFast.py", line 2024, in thread_control_gen_finished
+    instrument = rm.open_resource(window.generator_id)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\highlevel.py", line 3284, in open_resource
+    res.open(access_mode, open_timeout)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\resources\resource.py", line 282, in open
+    self.session, status = self._resource_manager.open_bare_resource(
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\highlevel.py", line 3209, in open_bare_resource
+    return self.visalib.open(self.session, resource_name, access_mode, open_timeout)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\ctwrapper\functions.py", line 1851, in open
+    ret = library.viOpen(
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\ctwrapper\highlevel.py", line 226, in _return_handler
+    return self.handle_return_value(session, ret_value)  # type: ignore
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\highlevel.py", line 251, in handle_return_value
+    raise errors.VisaIOError(rv)
+pyvisa.errors.VisaIOError: VI_ERROR_RSRC_NFOUND (-1073807343): Insufficient location information or the requested device or resource is not present in the system.
+Aug-24-202311:25:31.315557Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 165, in check_sensors_ready
+    update_status(self.ui.ref_sens_status_label, self.ref_sens_status_mapping, self.sensor_ref_check)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 153, in update_status
+    text, color1, color2 = mapping.get(check_value, ("", "black", "black"))
+ValueError: not enough values to unpack (expected 3, got 2)
+Aug-24-202311:26:34.489837Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 165, in check_sensors_ready
+    update_status(self.ui.ref_sens_status_label, self.ref_sens_status_mapping, self.sensor_ref_check)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 153, in update_status
+    text, color1, color2 = mapping.get(check_value, ("", "black", "black"))
+ValueError: not enough values to unpack (expected 3, got 2)
+Aug-24-202311:27:29.338162Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 164, in check_sensors_ready
+    update_status(self.ui.ref_sens_status_label, self.ref_sens_status_mapping, self.sensor_ref_check)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 152, in update_status
+    text, color1, color2 = mapping.get(check_value, ("", "black", "black"))
+ValueError: not enough values to unpack (expected 3, got 2)
+Aug-24-202311:30:16.155219Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 422, in thread_control_gen_finished
+    instrument = rm.open_resource(self.window.generator_id)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\highlevel.py", line 3284, in open_resource
+    res.open(access_mode, open_timeout)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\resources\resource.py", line 282, in open
+    self.session, status = self._resource_manager.open_bare_resource(
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\highlevel.py", line 3209, in open_bare_resource
+    return self.visalib.open(self.session, resource_name, access_mode, open_timeout)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\ctwrapper\functions.py", line 1851, in open
+    ret = library.viOpen(
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\ctwrapper\highlevel.py", line 226, in _return_handler
+    return self.handle_return_value(session, ret_value)  # type: ignore
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\highlevel.py", line 251, in handle_return_value
+    raise errors.VisaIOError(rv)
+pyvisa.errors.VisaIOError: VI_ERROR_RSRC_NFOUND (-1073807343): Insufficient location information or the requested device or resource is not present in the system.
+Aug-24-202312:12:32.565841Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 422, in thread_control_gen_finished
+    instrument = rm.open_resource(self.window.generator_id)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\highlevel.py", line 3284, in open_resource
+    res.open(access_mode, open_timeout)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\resources\resource.py", line 282, in open
+    self.session, status = self._resource_manager.open_bare_resource(
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\highlevel.py", line 3209, in open_bare_resource
+    return self.visalib.open(self.session, resource_name, access_mode, open_timeout)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\ctwrapper\functions.py", line 1851, in open
+    ret = library.viOpen(
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\ctwrapper\highlevel.py", line 226, in _return_handler
+    return self.handle_return_value(session, ret_value)  # type: ignore
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\highlevel.py", line 251, in handle_return_value
+    raise errors.VisaIOError(rv)
+pyvisa.errors.VisaIOError: VI_ERROR_RSRC_NFOUND (-1073807343): Insufficient location information or the requested device or resource is not present in the system.
+Aug-24-202312:21:31.452389Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 28, in run
+    self.start_ref_sens_data_collection()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 75, in start_ref_sens_data_collection
+    self.thread_ref_sens_finished()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 107, in thread_ref_sens_finished
+    self.make_opt_raw(4)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 197, in make_opt_raw
+    file_path = os_path.join(self.window.folder_opt_export, self.opt_sentinel_file_name)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\ntpath.py", line 143, in join
+    genericpath._check_arg_types('join', path, *paths)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\genericpath.py", line 152, in _check_arg_types
+    raise TypeError(f'{funcname}() argument must be str, bytes, or '
+TypeError: join() argument must be str, bytes, or os.PathLike object, not 'NoneType'
+Aug-24-202313:20:28.078155Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MySettingsWindow.py", line 424, in closeEvent
+    self.my_starting_window.calib_self.my_starting_window.show()
+AttributeError: 'MyStartUpWindow' object has no attribute 'calib_self'
+Aug-25-202309:42:52.273410Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Old\appkaMainFast.py", line 1499, in save_settings
+    window.calib_reference_sensitivity = float(self.ui.calib_ref_sensitivity_line.text())
+ValueError: could not convert string to float: '1/105.532'
+Aug-25-202310:36:31.965020Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Old\appkaMainFast.py", line 452, in run
+    self.start_ref_sens_data_collection()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Old\appkaMainFast.py", line 467, in start_ref_sens_data_collection
+    self.task.ai_channels.add_ai_voltage_chan(window.ref_device_name + '/' + window.ref_channel)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\nidaqmx\_task_modules\ai_channel_collection.py", line 2222, in add_ai_voltage_chan
+    self._interpreter.create_ai_voltage_chan(
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\nidaqmx\_library_interpreter.py", line 1240, in create_ai_voltage_chan
+    self.check_for_error(error_code)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\nidaqmx\_library_interpreter.py", line 6029, in check_for_error
+    raise DaqError(extended_error_info, error_code)
+nidaqmx.errors.DaqError: Specified channel cannot be added to the task, because a channel with the same name is already in the task.
+Channel Name: cDAQ1Mod1/ai2
+
+Task Name: _unnamedTask<2>
+
+Status Code: -200489
+Aug-25-202312:00:17.220989Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Old\appkaMainFast.py", line 2042, in thread_control_gen_finished
+    instrument = rm.open_resource(window.generator_id)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\highlevel.py", line 3284, in open_resource
+    res.open(access_mode, open_timeout)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\resources\resource.py", line 282, in open
+    self.session, status = self._resource_manager.open_bare_resource(
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\highlevel.py", line 3209, in open_bare_resource
+    return self.visalib.open(self.session, resource_name, access_mode, open_timeout)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\ctwrapper\functions.py", line 1851, in open
+    ret = library.viOpen(
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\ctwrapper\highlevel.py", line 226, in _return_handler
+    return self.handle_return_value(session, ret_value)  # type: ignore
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\highlevel.py", line 251, in handle_return_value
+    raise errors.VisaIOError(rv)
+pyvisa.errors.VisaIOError: VI_ERROR_RSRC_NFOUND (-1073807343): Insufficient location information or the requested device or resource is not present in the system.
+Aug-25-202312:01:31.342521Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Old\appkaMainFast.py", line 2042, in thread_control_gen_finished
+    instrument = rm.open_resource(window.generator_id)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\highlevel.py", line 3284, in open_resource
+    res.open(access_mode, open_timeout)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\resources\resource.py", line 282, in open
+    self.session, status = self._resource_manager.open_bare_resource(
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\highlevel.py", line 3209, in open_bare_resource
+    return self.visalib.open(self.session, resource_name, access_mode, open_timeout)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\ctwrapper\functions.py", line 1851, in open
+    ret = library.viOpen(
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\ctwrapper\highlevel.py", line 226, in _return_handler
+    return self.handle_return_value(session, ret_value)  # type: ignore
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\highlevel.py", line 251, in handle_return_value
+    raise errors.VisaIOError(rv)
+pyvisa.errors.VisaIOError: VI_ERROR_RSRC_NFOUND (-1073807343): Insufficient location information or the requested device or resource is not present in the system.
+Aug-25-202312:02:02.209086Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Old\appkaMainFast.py", line 2042, in thread_control_gen_finished
+    instrument = rm.open_resource(window.generator_id)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\highlevel.py", line 3284, in open_resource
+    res.open(access_mode, open_timeout)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\resources\resource.py", line 282, in open
+    self.session, status = self._resource_manager.open_bare_resource(
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\highlevel.py", line 3209, in open_bare_resource
+    return self.visalib.open(self.session, resource_name, access_mode, open_timeout)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\ctwrapper\functions.py", line 1851, in open
+    ret = library.viOpen(
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\ctwrapper\highlevel.py", line 226, in _return_handler
+    return self.handle_return_value(session, ret_value)  # type: ignore
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\highlevel.py", line 251, in handle_return_value
+    raise errors.VisaIOError(rv)
+pyvisa.errors.VisaIOError: VI_ERROR_RSRC_NFOUND (-1073807343): Insufficient location information or the requested device or resource is not present in the system.
+Aug-28-202311:44:32.846635Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MySettingsWindow.py", line 424, in closeEvent
+    self.my_starting_window.calib_self.my_starting_window.show()
+AttributeError: 'MyStartUpWindow' object has no attribute 'calib_self'
+Aug-28-202311:46:43.265912Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 28, in run
+    self.start_ref_sens_data_collection()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 75, in start_ref_sens_data_collection
+    self.thread_ref_sens_finished()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 107, in thread_ref_sens_finished
+    self.make_opt_raw(4)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 198, in make_opt_raw
+    file_path = os_path.join(self.window.folder_opt_export, self.opt_sentinel_file_name)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\ntpath.py", line 143, in join
+    genericpath._check_arg_types('join', path, *paths)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\genericpath.py", line 152, in _check_arg_types
+    raise TypeError(f'{funcname}() argument must be str, bytes, or '
+TypeError: join() argument must be str, bytes, or os.PathLike object, not 'NoneType'
+Aug-28-202311:50:19.923303Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 28, in run
+    self.start_ref_sens_data_collection()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 75, in start_ref_sens_data_collection
+    self.thread_ref_sens_finished()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 107, in thread_ref_sens_finished
+    self.make_opt_raw(4)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 198, in make_opt_raw
+    file_path = os_path.join(self.window.folder_opt_export, self.opt_sentinel_file_name)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\ntpath.py", line 143, in join
+    genericpath._check_arg_types('join', path, *paths)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\genericpath.py", line 152, in _check_arg_types
+    raise TypeError(f'{funcname}() argument must be str, bytes, or '
+TypeError: join() argument must be str, bytes, or os.PathLike object, not 'NoneType'
+Aug-28-202311:52:04.085498Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 28, in run
+    self.start_ref_sens_data_collection()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 75, in start_ref_sens_data_collection
+    self.thread_ref_sens_finished()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 107, in thread_ref_sens_finished
+    self.make_opt_raw(4)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 198, in make_opt_raw
+    file_path = os_path.join(self.window.folder_opt_export, self.opt_sentinel_file_name)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\ntpath.py", line 143, in join
+    genericpath._check_arg_types('join', path, *paths)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\genericpath.py", line 152, in _check_arg_types
+    raise TypeError(f'{funcname}() argument must be str, bytes, or '
+TypeError: join() argument must be str, bytes, or os.PathLike object, not 'NoneType'
+Aug-28-202311:56:14.963578Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 26, in run
+    self.start_ref_sens_data_collection()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 38, in start_ref_sens_data_collection
+    self.task.ai_channels.add_ai_accel_chan(self.window.ref_device_name + '/' + self.window.ref_channel,
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\nidaqmx\_task_modules\ai_channel_collection.py", line 183, in add_ai_accel_chan
+    self._interpreter.create_ai_accel_chan(
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\nidaqmx\_library_interpreter.py", line 559, in create_ai_accel_chan
+    self.check_for_error(error_code)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\nidaqmx\_library_interpreter.py", line 6029, in check_for_error
+    raise DaqError(extended_error_info, error_code)
+nidaqmx.errors.DaqError: Task specified is invalid or does not exist.
+Status Code: -200088
+Aug-28-202311:57:22.583194Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 26, in run
+    self.start_ref_sens_data_collection()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 73, in start_ref_sens_data_collection
+    self.thread_ref_sens_finished()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 166, in thread_ref_sens_finished
+    int(self.window.calib_phase_mark)).start(self.window.calib_plot,
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\AC_calibration_2FBG_edit.py", line 393, in start
+    manager.start_window.showMaximized()
+AttributeError: 'FigureManagerQT' object has no attribute 'start_window'
+Aug-28-202312:17:51.000483Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 27, in run
+    self.start_ref_sens_data_collection()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 74, in start_ref_sens_data_collection
+    self.thread_ref_sens_finished()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 171, in thread_ref_sens_finished
+    True, self.acc_calib[8])
+IndexError: tuple index out of range
+Aug-28-202312:20:35.633353Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 27, in run
+    self.start_ref_sens_data_collection()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 74, in start_ref_sens_data_collection
+    self.thread_ref_sens_finished()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 173, in thread_ref_sens_finished
+    True, self.acc_calib[8])
+IndexError: tuple index out of range
+Aug-28-202312:23:48.380274Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 27, in run
+    self.start_ref_sens_data_collection()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 74, in start_ref_sens_data_collection
+    self.thread_ref_sens_finished()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 173, in thread_ref_sens_finished
+    True, self.acc_calib[8])
+IndexError: tuple index out of range
+Aug-28-202313:09:17.568818Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 566, in thread_ref_sens_finished
+    self.plot_graphs(self.thread_ref_sens.out)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 586, in plot_graphs
+    plt.plot(out[7], out[8], label='Reference')
+IndexError: tuple index out of range
+Aug-28-202313:13:28.888452Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 27, in run
+    self.start_ref_sens_data_collection()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 74, in start_ref_sens_data_collection
+    self.thread_ref_sens_finished()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 170, in thread_ref_sens_finished
+    self.acc_calib[1] / 1000,
+IndexError: invalid index to scalar variable.
+Aug-28-202313:36:57.002784Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 150, in ref_emit
+    def ref_emit(self, is_ready):
+KeyboardInterrupt
+Aug-28-202313:38:11.203444Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 27, in run
+    self.start_ref_sens_data_collection()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 74, in start_ref_sens_data_collection
+    self.thread_ref_sens_finished()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 156, in thread_ref_sens_finished
+    int(self.window.calib_phase_mark)).start(False,
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\AC_calibration_2FBG_edit.py", line 205, in start
+    optical_sensor_data = optical_sensor_data[self.Opt_samp_freq*1.5:len(optical_sensor_data-1)]
+TypeError: slice indices must be integers or None or have an __index__ method
+Aug-28-202314:09:34.042691Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 284, in btn_connect_load_wl
+    set_wavelengths(order_id, self.window.folder_sentinel_D_folder, self.window.opt_project)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\definitions.py", line 206, in set_wavelengths
+    if len(wl) == 2:
+TypeError: object of type 'NoneType' has no len()
+Aug-30-202310:24:46.264625Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 485, in start_calib_app
+    from MyMainWindow import MyMainWindow
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 10, in <module>
+    from CreateCalibrationFigures import FiguresWindow
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\CreateCalibrationFigures.py", line 4, in <module>
+    from MyMainWindow import MyMainWindow
+ImportError: cannot import name 'MyMainWindow' from partially initialized module 'MyMainWindow' (most likely due to a circular import) (C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py)
+Aug-30-202310:29:54.761039Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 566, in thread_ref_sens_finished
+    self.calib_figure.init_ui(self.thread_ref_sens.out)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\CreateCalibrationFigures.py", line 29, in init_ui
+    ax1.title('Resampled and resized data of ' + opt_sentinel_file_name, fontsize=title_font_size)
+TypeError: 'Text' object is not callable
+Aug-30-202310:34:35.634519Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 145, in opt_emit
+    def opt_emit(self, is_ready):
+KeyboardInterrupt
+Aug-30-202311:30:04.331248Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 29, in run
+    self.start_ref_sens_data_collection()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 35, in start_ref_sens_data_collection
+    self.task.ai_channels.add_ai_accel_chan(self.window.ref_device_name + '/' + self.window.ref_channel,
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\nidaqmx\_task_modules\ai_channel_collection.py", line 183, in add_ai_accel_chan
+    self._interpreter.create_ai_accel_chan(
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\nidaqmx\_library_interpreter.py", line 559, in create_ai_accel_chan
+    self.check_for_error(error_code)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\nidaqmx\_library_interpreter.py", line 6029, in check_for_error
+    raise DaqError(extended_error_info, error_code)
+nidaqmx.errors.DaqError: Task specified is invalid or does not exist.
+Status Code: -200088
+Aug-30-202311:38:20.263859Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 536, in on_btn_start_clicked
+    self.thread_ref_sens = self.ThreadRefSensDataCollection(self.window, self.window.thcfgs,
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 20, in __init__
+    self.task = nidaqmx_Task(new_task_name='RefMeasuring')
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\nidaqmx\task.py", line 92, in __init__
+    self._handle, self._close_on_exit = self._interpreter.create_task(new_task_name)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\nidaqmx\_library_interpreter.py", line 1779, in create_task
+    self.check_for_error(error_code)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\nidaqmx\_library_interpreter.py", line 6029, in check_for_error
+    raise DaqError(extended_error_info, error_code)
+nidaqmx.errors.DaqError: Task name specified conflicts with an existing task name.
+Task Name: RefMeasuring
+
+Status Code: -200089
+Aug-31-202310:13:30.178022Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 162, in ref_emit
+    def ref_emit(self, is_ready):
+KeyboardInterrupt
+Aug-31-202310:18:12.116293Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 162, in ref_emit
+    def ref_emit(self, is_ready):
+KeyboardInterrupt
+Aug-31-202310:21:10.240421Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 162, in ref_emit
+    def ref_emit(self, is_ready):
+KeyboardInterrupt
+Aug-31-202310:21:25.953172Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 162, in ref_emit
+    def ref_emit(self, is_ready):
+KeyboardInterrupt
+Aug-31-202310:34:56.648185Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 161, in ref_emit
+    def ref_emit(self, is_ready):
+KeyboardInterrupt
+Aug-31-202311:04:13.717866Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 161, in ref_emit
+    def ref_emit(self, is_ready):
+KeyboardInterrupt
+Aug-31-202311:05:19.177128Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 173, in check_sensors_ready
+    def check_sensors_ready(self):
+KeyboardInterrupt
+Aug-31-202311:10:30.629095Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 173, in check_sensors_ready
+    def check_sensors_ready(self):
+KeyboardInterrupt
+Aug-31-202311:18:07.140427Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 29, in run
+    self.start_ref_sens_data_collection()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 71, in start_ref_sens_data_collection
+    self.thread_ref_sens_finished()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 135, in thread_ref_sens_finished
+    True, self.acc_calib[8])
+IndexError: tuple index out of range
+Aug-31-202311:20:51.399126Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 29, in run
+    self.start_ref_sens_data_collection()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 71, in start_ref_sens_data_collection
+    self.thread_ref_sens_finished()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 136, in thread_ref_sens_finished
+    True, self.acc_calib[8])
+IndexError: tuple index out of range
+Aug-31-202311:21:55.758165Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 161, in ref_emit
+    def ref_emit(self, is_ready):
+KeyboardInterrupt
+Aug-31-202311:37:15.869690Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 161, in ref_emit
+    def ref_emit(self, is_ready):
+KeyboardInterrupt
+Aug-31-202311:53:19.234347Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 161, in ref_emit
+    def ref_emit(self, is_ready):
+KeyboardInterrupt
+Aug-31-202313:33:28.434467Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 157, in start_modbus
+    def start_modbus(self):
+KeyboardInterrupt
+Aug-31-202313:40:25.769460Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 167, in ref_emit
+    def ref_emit(self, is_ready):
+KeyboardInterrupt
+Aug-31-202313:43:07.095488Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 244, in all_dev_connected_signal
+    def all_dev_connected_signal(self, opt_connected, ref_connected, gen_connected, gen_error):
+KeyboardInterrupt
+Aug-31-202313:49:06.513360Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 244, in all_dev_connected_signal
+    def all_dev_connected_signal(self, opt_connected, ref_connected, gen_connected, gen_error):
+KeyboardInterrupt
+Aug-31-202313:55:09.096869Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 244, in all_dev_connected_signal
+    def all_dev_connected_signal(self, opt_connected, ref_connected, gen_connected, gen_error):
+KeyboardInterrupt
+Aug-31-202314:03:22.016407Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 244, in all_dev_connected_signal
+    def all_dev_connected_signal(self, opt_connected, ref_connected, gen_connected, gen_error):
+KeyboardInterrupt
+Aug-31-202314:04:37.307355Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 108, in eventFilter
+    QApplication.postEvent(self.lineEdit, event)
+AttributeError: 'MyMainWindow' object has no attribute 'lineEdit'
+Aug-31-202314:08:30.296164Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 244, in all_dev_connected_signal
+    def all_dev_connected_signal(self, opt_connected, ref_connected, gen_connected, gen_error):
+KeyboardInterrupt
+Aug-31-202314:33:08.552996Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 339, in btn_connect_load_wl
+    order_id = re_search(r'(\b\d+(\.\d+)?\b)', self.s_n).group(1)
+AttributeError: 'NoneType' object has no attribute 'group'
+Aug-31-202314:34:20.276759Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 339, in btn_connect_load_wl
+    order_id = re_search(r'(\b\d+(\.\d+)?\b)', self.s_n).group(1)
+AttributeError: 'NoneType' object has no attribute 'group'
+Sep-04-202310:12:46.104080Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast3.py", line 102, in <module>
+    window = MyStartUpWindow(splash)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 73, in __init__
+    self.config_file_path = self.check_config_if_selected()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 208, in check_config_if_selected
+    yaml_files = self.return_all_configs()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 197, in return_all_configs
+    yaml_files = glob(os_path.join(self.subfolderConfig_path, '*.yaml'))
+AttributeError: 'MyStartUpWindow' object has no attribute 'subfolderConfig_path'
+Sep-04-202310:13:24.553934Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast3.py", line 102, in <module>
+    window = MyStartUpWindow(splash)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 73, in __init__
+    self.config_file_path = self.check_config_if_selected()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 208, in check_config_if_selected
+    yaml_files = self.return_all_configs()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 197, in return_all_configs
+    yaml_files = glob(os_path.join(self.subfolderConfig_path, '*.yaml'))
+AttributeError: 'MyStartUpWindow' object has no attribute 'subfolderConfig_path'
+Sep-04-202310:23:09.956722Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast3.py", line 105, in <module>
+    window = MyStartUpWindow(splash)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 73, in __init__
+    self.config_file_path = self.check_config_if_selected()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 208, in check_config_if_selected
+    yaml_files = self.return_all_configs()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 197, in return_all_configs
+    yaml_files = glob(os_path.join(self.subfolderConfig_path, '*.yaml'))
+AttributeError: 'MyStartUpWindow' object has no attribute 'subfolderConfig_path'
+Sep-04-202310:26:48.156478Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadCheckDevicesConnected.py", line 21, in run
+    gen, gen_error = check_function_gen_connected(self.window.my_settings.generator_id, True)
+TypeError: cannot unpack non-iterable NoneType object
+Sep-04-202311:12:46.196100Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 280, in open_settings_window
+    self.settings_window = MySettingsWindow(True, self)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MySettingsWindow.py", line 56, in __init__
+    self.load_settings()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MySettingsWindow.py", line 278, in load_settings
+    self.ui.opt_loaded_project_line.setText(self.my_starting_window.my_settings.opt_project)
+TypeError: setText(self, a0: str): argument 1 has unexpected type 'int'
+Sep-04-202311:18:40.846427Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 280, in open_settings_window
+    self.settings_window = MySettingsWindow(True, self)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MySettingsWindow.py", line 56, in __init__
+    self.load_settings()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MySettingsWindow.py", line 280, in load_settings
+    self.ui.calib_gain_mark_line.setText(str(self.my_starting_window.calib_gain_mark))
+AttributeError: 'MyStartUpWindow' object has no attribute 'calib_gain_mark'
+Sep-04-202311:20:42.340211Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 280, in open_settings_window
+    self.settings_window = MySettingsWindow(True, self)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MySettingsWindow.py", line 56, in __init__
+    self.load_settings()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MySettingsWindow.py", line 326, in load_settings
+    self.my_starting_window.opt_sensor_type, self.my_starting_window.subfolderConfig_path)
+AttributeError: 'MyStartUpWindow' object has no attribute 'subfolderConfig_path'
+Sep-04-202311:22:58.161381Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadSettingsCheckNew.py", line 29, in run
+    current_configs = return_all_configs(self.window.opt_sensor_type, self.window.subfolderConfig_path)
+AttributeError: 'MyStartUpWindow' object has no attribute 'opt_sensor_type'
+Sep-04-202311:34:49.494855Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 301, in start_calib_app
+    self.calib_window = MyMainWindow(self)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 91, in __init__
+    self.change_sens_type_label()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 131, in change_sens_type_label
+    self.ui.label_opt_sens_type_label.setText(self.window.opt_sensor_type + "\'s")
+AttributeError: 'MyStartUpWindow' object has no attribute 'opt_sensor_type'
+Sep-04-202311:35:58.898435Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 301, in start_calib_app
+    self.calib_window = MyMainWindow(self)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 100, in __init__
+    self.prev_opt_channel = self.window.my_settings.my_settings.opt_channels
+AttributeError: 'MySettings' object has no attribute 'my_settings'
+Sep-04-202311:36:54.358697Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 161, in start_modbus
+    start_sentinel_modbus(self.window.folder_sentinel_modbus_folder, self.window.my_settings.folder_sentinel_D_folder,
+AttributeError: 'MyStartUpWindow' object has no attribute 'folder_sentinel_modbus_folder'
+Sep-04-202311:38:40.493501Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 161, in start_modbus
+    start_sentinel_modbus(self.window.my_settings.folder_sentinel_modbus_folder, self.window.my_settings.folder_sentinel_D_folder,
+AttributeError: 'MySettings' object has no attribute 'folder_sentinel_modbus_folder'
+Sep-04-202311:40:39.667230Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 125, in plot_check_changed
+    self.window.save_config_file(True)
+AttributeError: 'MyStartUpWindow' object has no attribute 'save_config_file'
+Sep-04-202311:45:06.625417Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Old\appkaMainFast.py", line 1816, in ref_emit
+    def ref_emit(self, is_ready):
+KeyboardInterrupt
+Sep-04-202313:12:21.166656Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 125, in plot_check_changed
+    self.window.save_config_file(True)
+AttributeError: 'MyStartUpWindow' object has no attribute 'save_config_file'
+Sep-04-202313:13:54.411606Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 371, in showEvent
+    self.window.subfolderConfig_path)
+AttributeError: 'MyStartUpWindow' object has no attribute 'subfolderConfig_path'
+Sep-04-202313:15:03.481710Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 370, in showEvent
+    load_all_config_files(self.ui.select_config, self.window.my_settings.config_file_path, self.window.my_settings.opt_sensor_type,
+AttributeError: 'MySettings' object has no attribute 'config_file_path'
+Sep-04-202313:17:30.348910Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 327, in config_changed
+    self.config_file_path = os_path.join(self.window.subfolderConfig_path, self.config_file)
+AttributeError: 'MyStartUpWindow' object has no attribute 'subfolderConfig_path'
+Sep-04-202313:18:11.245946Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MySettingsWindow.py", line 370, in select_config_file_combobox_changed
+    self.config_file_path = os_path.join(self.my_starting_window.subfolderConfig_path, self.config_file)
+AttributeError: 'MyStartUpWindow' object has no attribute 'subfolderConfig_path'
+Sep-05-202310:00:07.123749Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 279, in open_settings_window
+    self.settings_window = MySettingsWindow(True, self)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MySettingsWindow.py", line 72, in __init__
+    self.ui.opt_modbus_fold_btn.clicked.connect()
+TypeError: connect() missing required argument 'slot' (pos 1)
+Sep-05-202310:01:28.472158Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 166, in start_modbus
+    start_sentinel_modbus(self.window.my_settings.folder_sentinel_modbus_folder,
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\definitions.py", line 61, in start_sentinel_modbus
+    os_chdir(sentinel_app)
+FileNotFoundError: [WinError 2] The system cannot find the file specified: 'pls'
+Sep-05-202310:02:08.497690Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 126, in plot_check_changed
+    if self.calib_output:
+AttributeError: 'MyMainWindow' object has no attribute 'calib_output'
+Sep-05-202310:08:23.605668Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 791, in thread_prog_bar_finished
+    self.thread_ref_sens.wait()
+AttributeError: 'Task' object has no attribute 'wait'
+Sep-05-202310:11:11.232679Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 29, in run
+    self.start_ref_sens_data_collection()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 53, in start_ref_sens_data_collection
+    data = self.task.read(number_of_samples_per_channel=self.window.my_settings.ref_number_of_samples,
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\nidaqmx\task.py", line 552, in read
+    _, samples_read = self._interpreter.read_analog_f64(
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\nidaqmx\_library_interpreter.py", line 3898, in read_analog_f64
+    self.check_for_error(error_code, samps_per_chan_read=samps_per_chan_read.value)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\nidaqmx\_library_interpreter.py", line 6025, in check_for_error
+    raise DaqReadError(extended_error_info, error_code, samps_per_chan_read)
+nidaqmx.errors.DaqReadError: Some or all of the samples requested have not yet been acquired.
+To wait for the samples to become available use a longer read timeout or read later in your program. To make the samples available sooner, increase the sample rate. If your task uses a start trigger,  make sure that your start trigger is configured correctly. It is also possible that you configured the task for external timing, and no clock was supplied. If this is the case, supply an external clock.
+Property: DAQmx_Read_RelativeTo
+Corresponding Value: DAQmx_Val_CurrReadPos
+Property: DAQmx_Read_Offset
+Corresponding Value: 0
+
+Task Name: RefMeasuring
+
+Status Code: -200284
+Sep-05-202310:27:08.329594Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 127, in plot_check_changed
+    self.autoCalib.plot_graphs(self.autoCalib.calib_output)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 763, in plot_graphs
+    mng.window.state('zoomed')
+AttributeError: 'MainWindow' object has no attribute 'state'
+Sep-05-202310:34:23.390203Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 127, in plot_check_changed
+    self.autoCalib.plot_graphs(self.autoCalib.calib_output)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 762, in plot_graphs
+    mng.window.state('zoomed')
+AttributeError: 'MainWindow' object has no attribute 'state'
+Sep-05-202310:46:58.432786Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 132, in plot_check_changed
+    self.autoCalib.plot_graphs(self.autoCalib.calib_output)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 764, in plot_graphs
+    mng.window.resize(mng.window.width() + mng.window.width()*0.1, screen.height())
+TypeError: arguments did not match any overloaded call:
+  resize(self, a0: QSize): argument 1 has unexpected type 'float'
+  resize(self, w: int, h: int): argument 1 has unexpected type 'float'
+Sep-05-202310:54:06.957983Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 602, in on_btn_start_clicked
+    os_path.join(self.start_window.my_settings.folder_calibration_export, self.calib_window.s_n + '.csv')):
+TypeError: unsupported operand type(s) for +: 'NoneType' and 'str'
+Sep-05-202311:35:33.928834Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 107, in eventFilter
+    def eventFilter(self, obj, event):
+KeyboardInterrupt
+Sep-05-202313:45:19.307010Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MySettingsWindow.py", line 193, in save_as_settings
+    file_path, _ = QFileDialog.getSaveFileName(self, "Save YAML File", self.my_starting_window.subfolderConfig_path,
+AttributeError: 'MyStartUpWindow' object has no attribute 'subfolderConfig_path'
+Sep-05-202314:04:29.814653Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 316, in showEvent
+    self.setFixedSize(int(self.width()*self.my_starting_window.window_scale_delta),
+AttributeError: 'MyStartUpWindow' object has no attribute 'my_starting_window'
+Sep-05-202314:40:26.627646Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 511, in ref_check_finished
+    self.thread_ref_sens.task.ai_channels.add_ai_accel_chan(
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\nidaqmx\_task_modules\ai_channel_collection.py", line 183, in add_ai_accel_chan
+    self._interpreter.create_ai_accel_chan(
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\nidaqmx\_library_interpreter.py", line 559, in create_ai_accel_chan
+    self.check_for_error(error_code)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\nidaqmx\_library_interpreter.py", line 6029, in check_for_error
+    raise DaqError(extended_error_info, error_code)
+nidaqmx.errors.DaqError: Physical channel specified does not exist on this device.
+Refer to the documentation for channels available on this device.
+Device: cDAQ1
+Physical Channel Name: ai2
+
+Task Name: RefMeasuring
+
+Status Code: -200170
+Sep-05-202314:45:18.539642Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 30, in run
+    self.start_ref_sens_data_collection()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 46, in start_ref_sens_data_collection
+    self.task.start()
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\nidaqmx\task.py", line 894, in start
+    self._interpreter.start_task(self._handle)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\nidaqmx\_library_interpreter.py", line 5403, in start_task
+    self.check_for_error(error_code)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\nidaqmx\_library_interpreter.py", line 6029, in check_for_error
+    raise DaqError(extended_error_info, error_code)
+nidaqmx.errors.DaqError: Task specified is invalid or does not exist.
+Status Code: -200088
+Sep-05-202315:06:42.268414Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 126, in eventFilter
+    return super().eventFilter(obj, event)
+RuntimeError: wrapped C/C++ object of type MyMainWindow has been deleted
+Sep-05-202315:16:49.486282Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 115, in eventFilter
+    def eventFilter(self, obj, event):
+KeyboardInterrupt
+Sep-06-202309:36:16.704810Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 305, in start_calib_app
+    self.calib_window = MyMainWindow(self)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 110, in __init__
+    self.native_keyboard_layout = win32api.GetKeyboardLayout(win32api.GetForegroundWindow())
+AttributeError: module 'win32api' has no attribute 'GetForegroundWindow'
+Sep-06-202309:38:42.461455Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 30, in run
+    self.start_ref_sens_data_collection()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 46, in start_ref_sens_data_collection
+    data.extend(self.task.read(number_of_samples_per_channel=self.num_of_samples_per_cycle,
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\nidaqmx\task.py", line 551, in read
+    data = numpy.zeros(array_shape, dtype=numpy.float64)
+TypeError: expected a sequence of integers or a single integer, got '1280.0'
+Sep-06-202309:41:29.305346Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 117, in eventFilter
+    def eventFilter(self, obj, event):
+KeyboardInterrupt
+Sep-06-202309:43:22.522865Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 117, in eventFilter
+    def eventFilter(self, obj, event):
+KeyboardInterrupt
+Sep-06-202309:46:55.311787Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 117, in eventFilter
+    def eventFilter(self, obj, event):
+KeyboardInterrupt
+Sep-06-202309:48:22.684710Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 110, in all_dev_connected_signal
+    def all_dev_connected_signal(self, opt_connected, ref_connected, gen_connected, gen_error):
+KeyboardInterrupt
+Sep-06-202309:49:36.281015Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 448, in closeEvent
+    win32api.LoadKeyboardLayout(self.native_keyboard_layout, win32con.KLF_ACTIVATE)
+TypeError: Objects of type 'int' can not be converted to Unicode.
+Sep-06-202310:00:03.988647Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 117, in eventFilter
+    def eventFilter(self, obj, event):
+KeyboardInterrupt
+Sep-06-202310:00:08.177732Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 110, in all_dev_connected_signal
+    def all_dev_connected_signal(self, opt_connected, ref_connected, gen_connected, gen_error):
+KeyboardInterrupt
+Sep-06-202310:01:42.931541Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 117, in eventFilter
+    def eventFilter(self, obj, event):
+KeyboardInterrupt
+Sep-06-202310:12:26.152420Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 305, in start_calib_app
+    self.calib_window = MyMainWindow(self)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 113, in __init__
+    user32 = ctypes_windll('user32', use_last_error=True)
+TypeError: 'LibraryLoader' object is not callable
+Sep-06-202310:29:57.516760Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 384, in config_changed
+    start_sentinel_modbus(self.window.my_settings.folder_sentinel_modbus_folder,
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\definitions.py", line 61, in start_sentinel_modbus
+    os_chdir(sentinel_app)
+FileNotFoundError: [WinError 2] The system cannot find the file specified: 'pls'
+Sep-06-202310:44:20.349852Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadSensorsCheckIfReady.py", line 16, in run
+    self.auto_calib.thread_check_sin_ref.isRunning()):
+RuntimeError: wrapped C/C++ object of type ThreadRefCheckIfReady has been deleted
+Sep-06-202311:09:08.175752Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadSensorsCheckIfReady.py", line 15, in run
+    while (not self.termination and self.auto_calib.thread_check_sin_opt.isRunning() and
+RuntimeError: wrapped C/C++ object of type ThreadOptAndGenCheckIfReady has been deleted
+Sep-06-202311:16:22.699141Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadSensorsCheckIfReady.py", line 15, in run
+    if not self.auto_calib.thcfgs.get_start_measuring():
+AttributeError: 'AutoCalibMain' object has no attribute 'thcfgs'
+Sep-06-202311:20:37.421333Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadSensorsCheckIfReady.py", line 16, in run
+    while (not self.termination and self.auto_calib.thread_check_sin_opt.isRunning() and
+RuntimeError: wrapped C/C++ object of type ThreadOptAndGenCheckIfReady has been deleted
+Sep-06-202311:22:39.853651Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadSensorsCheckIfReady.py", line 16, in run
+    while (not self.termination and self.auto_calib.thread_check_sin_opt.isRunning() and
+RuntimeError: wrapped C/C++ object of type ThreadOptAndGenCheckIfReady has been deleted
+Sep-06-202312:22:57.026043Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadSensorsCheckIfReady.py", line 16, in run
+    self.auto_calib.thread_check_sin_ref.isRunning()):
+RuntimeError: wrapped C/C++ object of type ThreadRefCheckIfReady has been deleted
+Sep-07-202310:45:47.062723Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 665, in on_btn_start_clicked
+    os_path.join(self.start_window.my_settings.folder_calibration_export, self.calib_window.s_n + '.csv')):
+TypeError: unsupported operand type(s) for +: 'NoneType' and 'str'
+Sep-07-202311:01:22.697841Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 30, in run
+    self.start_ref_sens_data_collection()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 64, in start_ref_sens_data_collection
+    self.save_data(data, elapsed_time)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 76, in save_data
+    file_path = os_path.join(self.window.my_settings.folder_ref_export, self.s_n + '.csv')
+TypeError: unsupported operand type(s) for +: 'NoneType' and 'str'
+Sep-07-202311:42:38.379561Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 427, in open_settings_window
+    self.settings_window = MySettingsWindow(False, self.window)
+TypeError: MySettingsWindow.__init__() missing 1 required positional argument: 'my_settings'
+Sep-07-202311:42:58.643149Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 406, in open_settings_window
+    self.settings_window = MySettingsWindow(True, self)
+TypeError: MySettingsWindow.__init__() missing 1 required positional argument: 'my_settings'
+Sep-07-202312:06:38.614929Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 556, in ref_check_finished
+    self.thread_ref_sens.task = nidaqmx_Task(new_task_name='RefMeasuring')
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\nidaqmx\task.py", line 92, in __init__
+    self._handle, self._close_on_exit = self._interpreter.create_task(new_task_name)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\nidaqmx\_library_interpreter.py", line 1779, in create_task
+    self.check_for_error(error_code)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\nidaqmx\_library_interpreter.py", line 6029, in check_for_error
+    raise DaqError(extended_error_info, error_code)
+nidaqmx.errors.DaqError: Task name specified conflicts with an existing task name.
+Task Name: RefMeasuring
+
+Status Code: -200089
+Sep-07-202312:08:31.808769Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 755, in thread_ref_sens_finished
+    sens_diff = np_abs(self.my_settings.calib_optical_sensitivity - acc_calib[1])
+TypeError: 'NoneType' object is not subscriptable
+Sep-07-202312:11:14.874477Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefCheckIfReady.py", line 42, in run
+    self.task_sin = nidaqmx_Task(new_task_name='RefCheck')
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\nidaqmx\task.py", line 92, in __init__
+    self._handle, self._close_on_exit = self._interpreter.create_task(new_task_name)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\nidaqmx\_library_interpreter.py", line 1779, in create_task
+    self.check_for_error(error_code)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\nidaqmx\_library_interpreter.py", line 6029, in check_for_error
+    raise DaqError(extended_error_info, error_code)
+nidaqmx.errors.DaqError: Task name specified conflicts with an existing task name.
+Task Name: RefCheck
+
+Status Code: -200089
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefCheckIfReady.py", line 97, in run
+    self.task_sin.close()
+AttributeError: 'NoneType' object has no attribute 'close'
+Sep-07-202312:13:37.916911Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 225, in all_dev_connected_signal
+    def all_dev_connected_signal(self, opt_connected, ref_connected, gen_connected, gen_error):
+KeyboardInterrupt
+Sep-07-202313:31:14.992710Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 657, in thread_control_gen_finished
+    self.thread_ref_sens.task.close()
+AttributeError: 'NoneType' object has no attribute 'close'
+Sep-07-202313:31:39.331781Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 409, in start_calib_app
+    from MyMainWindow import MyMainWindow
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 659
+    except
+          ^
+SyntaxError: expected ':'
+Sep-07-202313:40:23.904487Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 133, in eventFilter
+    def eventFilter(self, obj, event):
+KeyboardInterrupt
+Sep-07-202314:16:59.915675Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 410, in btn_connect_load_wl
+    order_id = re_search(r'(-?\d+(\.\d+)?)', self.s_n).group(1)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\re.py", line 200, in search
+    return _compile(pattern, flags).search(string)
+TypeError: expected string or bytes-like object
+Sep-07-202314:22:31.331427Traceback (most recent call last):
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\psutil\_pswindows.py", line 948, in create_time
+    user, system, created = cext.proc_times(self.pid)
+PermissionError: [WinError 5] Access is denied: '(originated from OpenProcess)'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\psutil\_common.py", line 474, in wrapper
+    ret = self._cache[fun]
+AttributeError: 'Process' object has no attribute '_cache'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 417, in btn_connect_load_wl
+    kill_sentinel(False, True)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\definitions.py", line 90, in kill_sentinel
+    kill_process(app_name)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\definitions.py", line 80, in kill_process
+    for process in psutil.process_iter(attrs=['pid', 'name']):
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\psutil\__init__.py", line 1450, in process_iter
+    if proc.is_running():
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\psutil\__init__.py", line 584, in is_running
+    self._pid_reused = self != Process(self.pid)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\psutil\__init__.py", line 332, in __init__
+    self._init(pid)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\psutil\__init__.py", line 361, in _init
+    self.create_time()
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\psutil\__init__.py", line 719, in create_time
+    self._create_time = self._proc.create_time()
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\psutil\_pswindows.py", line 694, in wrapper
+    return fun(self, *args, **kwargs)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\psutil\_pswindows.py", line 952, in create_time
+    return self._proc_info()[pinfo_map['create_time']]
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\psutil\_common.py", line 478, in wrapper
+    return fun(self)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\psutil\_pswindows.py", line 751, in _proc_info
+    ret = cext.proc_info(self.pid)
+KeyboardInterrupt
+Sep-08-202309:38:06.035218Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 33, in run
+    self.start_ref_sens_data_collection()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 67, in start_ref_sens_data_collection
+    self.save_data(data, elapsed_time)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 81, in save_data
+    with open(file_path, 'w') as file:
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\PC/Documents\\Sylex_sensors_export\\reference\\123/0123.csv'
+Sep-08-202310:15:16.228969TypeError: MyMainWindow.set_s_n() missing 1 required positional argument: 'text'
+Sep-08-202313:45:33.437689Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 673, in thread_control_gen_finished
+    instrument = rm.open_resource(self.my_settings.generator_id)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\highlevel.py", line 3284, in open_resource
+    res.open(access_mode, open_timeout)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\resources\resource.py", line 282, in open
+    self.session, status = self._resource_manager.open_bare_resource(
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\highlevel.py", line 3209, in open_bare_resource
+    return self.visalib.open(self.session, resource_name, access_mode, open_timeout)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\ctwrapper\functions.py", line 1851, in open
+    ret = library.viOpen(
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\ctwrapper\highlevel.py", line 226, in _return_handler
+    return self.handle_return_value(session, ret_value)  # type: ignore
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\highlevel.py", line 251, in handle_return_value
+    raise errors.VisaIOError(rv)
+pyvisa.errors.VisaIOError: VI_ERROR_RSRC_NFOUND (-1073807343): Insufficient location information or the requested device or resource is not present in the system.
+Sep-11-202310:27:47.195850Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 172, in exp_btn_clicked
+    self.autoCalib.export_to_database(text_input.text())
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 992, in export_to_database
+    params = get_params(self.calib_window.s_n)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\definitions.py", line 227, in get_params
+    arr = [info[0], info[6]]
+TypeError: 'int' object is not subscriptable
+Sep-11-202310:34:10.433147Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 172, in exp_btn_clicked
+    self.autoCalib.export_to_database(text_input.text())
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 993, in export_to_database
+    params = get_params(self.calib_window.s_n)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\definitions.py", line 227, in get_params
+    arr = [str(info[0]), str(info[6])]
+TypeError: 'int' object is not subscriptable
+Sep-11-202310:38:05.378017Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 172, in exp_btn_clicked
+    self.autoCalib.export_to_database(text_input.text())
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 993, in export_to_database
+    params = get_params(self.calib_window.s_n)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\definitions.py", line 228, in get_params
+    print(info[0],info[6])
+TypeError: 'int' object is not subscriptable
+Sep-11-202310:43:19.046020Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 172, in exp_btn_clicked
+    self.autoCalib.export_to_database(text_input.text())
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 994, in export_to_database
+    add = [self.calib_window.s_n_export, None, None, None, self.acc_calib[1],   self.acc_calib[0],
+TypeError: 'NoneType' object is not subscriptable
+Sep-11-202310:47:04.443783Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 172, in exp_btn_clicked
+    self.autoCalib.export_to_database(text_input.text())
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 994, in export_to_database
+    params = get_params(self.calib_window.s_n)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\definitions.py", line 227, in get_params
+    info = iwl.load_sylex_nominal_wavelength(objednavka_id=re_search(r'(-?\d+(\.\d+)?)', s_n).group(1), all_info=True)
+AttributeError: 'NoneType' object has no attribute 'group'
+Sep-11-202310:54:22.282360Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 139, in eventFilter
+    def eventFilter(self, obj, event):
+KeyboardInterrupt
+Sep-11-202310:56:28.402374Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 139, in eventFilter
+    def eventFilter(self, obj, event):
+KeyboardInterrupt
+Sep-11-202311:03:37.788818Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 164, in eventFilter
+    if event.type() == Qt.QEvent.Enter:
+AttributeError: type object 'Qt' has no attribute 'QEvent'
+Sep-11-202311:16:19.747149Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 143, in eventFilter
+    def eventFilter(self, obj, event):
+KeyboardInterrupt
+Sep-12-202310:35:32.237032Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast3.py", line 107, in <module>
+    window = MyStartUpWindow(splash)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 79, in __init__
+    self.setup_config()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 347, in setup_config
+    self.config_contains_none = self.my_settings.load_config_file(self.config_file_path)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\SettingsParams.py", line 100, in load_config_file
+    self.folder_db_export_folder = self.config['save_data']['db_folder']
+KeyError: 'db_folder'
+Sep-12-202311:24:33.408654Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 225, in all_dev_connected_signal
+    def all_dev_connected_signal(self, opt_connected, ref_connected, gen_connected, gen_error):
+KeyboardInterrupt
+Sep-12-202311:48:23.134730Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 34, in run
+    self.start_ref_sens_data_collection()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 68, in start_ref_sens_data_collection
+    self.save_data(data, elapsed_time)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 82, in save_data
+    with open(file_path, 'w') as file:
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\PC/Documents\\Sylex_sensors_export\\reference\\242354/0009.csv'
+Sep-12-202311:58:09.311011Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 141, in eventFilter
+    def eventFilter(self, obj, event):
+KeyboardInterrupt
+Sep-12-202312:10:22.500112Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadCheckDevicesConnected.py", line 30, in run
+    self.all_connected.emit(opt, ref, gen, gen_error, False)
+TypeError: ThreadCheckDevicesConnected.all_connected[bool, bool, bool, bool] signal has 4 argument(s) but 5 provided
+Sep-12-202312:11:31.706948Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 225, in all_dev_connected_signal
+    def all_dev_connected_signal(self, opt_connected, ref_connected, gen_connected, gen_error, check_status):
+KeyboardInterrupt
+Sep-12-202312:13:19.811723Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadCheckDevicesConnected.py", line 30, in run
+    self.all_connected.emit(opt, ref, gen, gen_error, False)
+UnboundLocalError: local variable 'opt' referenced before assignment
+Sep-12-202312:14:16.785674Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 225, in all_dev_connected_signal
+    def all_dev_connected_signal(self, opt_connected, ref_connected, gen_connected, gen_error, check_status):
+KeyboardInterrupt
+Sep-12-202312:21:15.818614Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 225, in all_dev_connected_signal
+    def all_dev_connected_signal(self, opt_connected, ref_connected, gen_connected, gen_error, check_status):
+KeyboardInterrupt
+Sep-12-202312:27:38.852519Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 225, in all_dev_connected_signal
+    def all_dev_connected_signal(self, opt_connected, ref_connected, gen_connected, gen_error, check_status):
+KeyboardInterrupt
+Sep-12-202313:27:14.041176Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 205, in config_combobox_changed
+    if self.config['opt_measurement']['sensor_type'] == config_check['opt_measurement']['sensor_type']:
+TypeError: 'NoneType' object is not subscriptable
+Sep-12-202313:27:39.033599Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 205, in config_combobox_changed
+    if self.config['opt_measurement']['sensor_type'] == config_check['opt_measurement']['sensor_type']:
+TypeError: 'NoneType' object is not subscriptable
+Sep-12-202313:28:57.412032Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 205, in config_combobox_changed
+    if self.config['opt_measurement']['sensor_type'] is None:
+TypeError: 'NoneType' object is not subscriptable
+Sep-12-202313:29:14.476872Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 207, in config_combobox_changed
+    if self.config['opt_measurement']['sensor_type'] == config_check['opt_measurement']['sensor_type']:
+TypeError: 'NoneType' object is not subscriptable
+Sep-12-202313:29:29.741334Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 207, in config_combobox_changed
+    if self.config['opt_measurement']['sensor_type'] == config_check['opt_measurement']['sensor_type']:
+TypeError: 'NoneType' object is not subscriptable
+Sep-12-202314:14:30.596532Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 35, in run
+    self.start_ref_sens_data_collection()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 50, in start_ref_sens_data_collection
+    data.extend(self.task.read(number_of_samples_per_channel=self.num_of_samples_per_cycle,
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\nidaqmx\task.py", line 552, in read
+    _, samples_read = self._interpreter.read_analog_f64(
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\nidaqmx\_library_interpreter.py", line 3898, in read_analog_f64
+    self.check_for_error(error_code, samps_per_chan_read=samps_per_chan_read.value)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\nidaqmx\_library_interpreter.py", line 6025, in check_for_error
+    raise DaqReadError(extended_error_info, error_code, samps_per_chan_read)
+nidaqmx.errors.DaqReadError: The specified operation cannot be performed because a task is in the process of being aborted or a device is in the process of being removed from the system. Wait until the abort operation is complete and attempt to perform the operation again.
+Task Name: RefMeasuring
+
+Status Code: -88710
+Sep-13-202312:13:23.959908TypeError: accept(self): first argument of unbound method must have type 'QDialog'
+Sep-13-202312:17:05.853160Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MySettingsWindow.py", line 127, in login_into_settings
+    password = pswd_dialog.password_input.text()
+AttributeError: 'QDialog' object has no attribute 'password_input'

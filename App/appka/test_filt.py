@@ -1,6 +1,6 @@
 import os
 
-from AC_calibration_2FBG_edit import ACCalib_2ch
+from Working.AC_calibration_2FBG_edit import ACCalib_2ch
 
 acc_yeet = ACCalib_2ch('242358_05_autoCalib',os.getcwd(),r'C:\Users\lukac\Documents\Sylex_sensors_export',
                   r'C:\Users\lukac\Documents\Sylex_sensors_export\optical_raw',

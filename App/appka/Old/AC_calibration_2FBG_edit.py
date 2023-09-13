@@ -119,13 +119,13 @@ class ACCalib_2ch:
         # %% Data loading
         opt_file_name = self.ref_opt_name
         ref_file_name = self.ref_opt_name
-        display(['Analysing: ' + str(opt_file_name)])
+        # display(['Analysing: ' + str(opt_file_name)])
         # If csv of data is present it will be loaded, otherwise data file will be analyzed and csv file with wavelengths will be created
         # Adjust functions depending on used interrogator software
         os_chdir(self.Opt_path)
         if os_path_isfile(opt_file_name + '.csv') is True:
             DataOptRel = np.loadtxt(opt_file_name + '.csv')
-            display(['Optical .csv file found'])
+            # display(['Optical .csv file found'])
         else:
             # if self.Enlight == 1:
             #     display(['Optical .csv file not found. Creating .csv file ...'])
@@ -138,22 +138,22 @@ class ACCalib_2ch:
             #     np.savetxt(opt_file_name + '.csv', DataOptRel)
             #     display(['.csv file complete'])
             if self.Else == 1:
-                display(['Optical .csv file not found. Creating .csv file ...'])
+                # display(['Optical .csv file not found. Creating .csv file ...'])
                 DataOptRel = fun.read_txt_file_AC(opt_file_name, self.skiprows)
                 np.savetxt(opt_file_name + '.csv', DataOptRel)
-                display(['.csv file complete'])
+                # display(['.csv file complete'])
 
         # Loading of reference data, same as optical data
 
         os_chdir(self.Ref_path)
         if os_path_isfile(ref_file_name + '.csv') is True:
             DataRefRel = np.loadtxt(ref_file_name + '.csv')
-            display(['Reference .csv file found'])
+            # display(['Reference .csv file found'])
         else:
-            display(['Reference .csv file not found. Creating .csv file ...'])
+            # display(['Reference .csv file not found. Creating .csv file ...'])
             DataRefRel = fun.read_txt_file(ref_file_name, 23)
             np.savetxt(ref_file_name + '.csv', DataRefRel)
-            display(['Reference .csv file done'])
+            # # display(['Reference .csv file done'])
         # %% Data Selection
         # Loads saved sensitivity for analyzing and adjusting
         if Set_sensitivity != 0:
@@ -169,7 +169,7 @@ class ACCalib_2ch:
         # acc_kalib.append(round(np.mean(DataOptRel[0:100]), 5))
 
         acc_kalib.append(round(np.mean(DataOptRel[50:100, 0]), 5))
-        display(['Center wavelength = ' + str(acc_kalib[0]) + ' and ' + str(round(np.mean(DataOptRel[50:100, 1]), 5)) + ' nm'])
+        # display(['Center wavelength = ' + str(acc_kalib[0]) + ' and ' + str(round(np.mean(DataOptRel[50:100, 1]), 5)) + ' nm'])
         # Calculate acceleration from optical data and previously determined sensitivity
 
         optical_sensor_data = fun.calculateAC(-(DataOptRel[:, 0] -
@@ -184,8 +184,11 @@ class ACCalib_2ch:
         # optical_sensor_data = fun.calculateAC(((DataOptRel[:,0]-acc_kalib[0])+(DataOptRel[:,1]-round(np.mean(DataOptRel[0:800, 1]), 5)))/2,
         #     Sensitivity_opt)
         # Calculate acceleration from reference data and corresponsing sensitivity for reference sensor
-        reference_sensor_data = DataRefRel / self.Ref_sensitivity
+
+        # reference_sensor_data = DataRefRel / self.Ref_sensitivity
         # DataRefRel[:, 1] / Ref_sensitivity
+
+        reference_sensor_data = DataRefRel
 
         def detect_max_in_first_second(data, sampling_rate):
             data_in_first_second = data[:int(sampling_rate)]
@@ -277,7 +280,7 @@ class ACCalib_2ch:
             TimeRefSensResized = np.linspace(1 / self.Ref_samp_freq, len(RefSensResized) / self.Ref_samp_freq, num=len(RefSensResized))
             BodeSampFreq = self.Ref_samp_freq
         # %% Fourier analysis
-        display(['Computing Fourier Analisis...'])
+        # display(['Computing Fourier Analisis...'])
         # Estimating power spectral density through periodogram function
         if self.Do_spectrum == 1:
             FreqOptPSD, OptPSD = signal_periodogram(OptSensResized, BodeSampFreq)
@@ -313,10 +316,10 @@ class ACCalib_2ch:
             sensitivities[0] = Sensitivity_opt * GainAtMark
             Sensitivity_opt = sensitivities[0]
             acc_kalib.append(sensitivities[0] * 1000.0)
-            display(['Sensitivity of ' + str(acc_kalib[1]) + ' pm/g' + ' at ' + str(self.GainMark) + ' Hz'])
+            # display(['Sensitivity of ' + str(acc_kalib[1]) + ' pm/g' + ' at ' + str(self.GainMark) + ' Hz'])
         else:
             acc_kalib.append(sensitivities[0] * 1000.0)
-            display(['Sensitivity of ' + str(acc_kalib[1]) + ' pm/g' + ' at ' + str(self.GainMark) + ' Hz'])
+            # display(['Sensitivity of ' + str(acc_kalib[1]) + ' pm/g' + ' at ' + str(self.GainMark) + ' Hz'])
         # %% Calcualating flatness of sensitivity between edge-frequencies, these can be adjusted as desired
         flatness_edge_l = self.l_flatness  # Left flatness edge frequency
         flatness_edge_r = self.r_flatness  # Right flatness edge frequency
@@ -327,13 +330,13 @@ class ACCalib_2ch:
                                             flatness_edge_l) - fun.interp1_for_remco(FreqTransfer,
                                             20 * np.log(abs(SmoothTransfer)),flatness_edge_r)), 1))
 
-        display(['Sensitivity flatness between ' + str(flatness_edge_l) + ' Hz and ' + str(flatness_edge_r) + ' Hz is: ' + str(acc_kalib[4])])
+        # display(['Sensitivity flatness between ' + str(flatness_edge_l) + ' Hz and ' + str(flatness_edge_r) + ' Hz is: ' + str(acc_kalib[4])])
 
         acc_kalib.append(round(max(opt_sens_filtered), 3))
         acc_kalib.append(round(min(opt_sens_filtered), 4))
         acc_kalib.append(round(((max(opt_sens_filtered) - abs(min(opt_sens_filtered))) / max(opt_sens_filtered)) * 100, 4))
-        display(['Maximum acceleration = ' + str(acc_kalib[5]) + ' g and ' + 'minimum acceleration = ' + str(acc_kalib[6])])
-        display(['Difference in symmetry = ' + str(acc_kalib[7]) + '%'])
+        # display(['Maximum acceleration = ' + str(acc_kalib[5]) + ' g and ' + 'minimum acceleration = ' + str(acc_kalib[6])])
+        # display(['Difference in symmetry = ' + str(acc_kalib[7]) + '%'])
         # %% Make Phase Array and determine phase difference
         AngleSetFreq = self.AngleSetFreq
         phase_difference = np.unwrap(np.angle(Transfer)) * 180 / np.pi
@@ -350,17 +353,19 @@ class ACCalib_2ch:
         acc_kalib.append(TimeCorrection)
 
         acc_kalib.append(round(np.mean(DataOptRel[0:100, 1]), 5))
-        display(['Calculated TimeCorrection is: ' + str(acc_kalib[8])])
+        # display(['Calculated TimeCorrection is: ' + str(acc_kalib[8])])
         # Saving of time correction for further use
         if (self.Adjust_time_correction == 1) and Adjust_gain:
             if abs(TimeCorrection) > 0.001 / BodeSampFreq:
-                display(['Time correction used'])
+                # display(['Time correction used'])
                 time_corrections[0] = time_corrections[0] + (1 / 0.9) * TimeCorrection
                 # time_corrections[0] = 0
             else:
-                display(['TimeCorrection not used'])
+                pass
+                # display(['TimeCorrection not used'])
         else:
-            display(['TimeCorrection not used'])
+            pass
+            # display(['TimeCorrection not used'])
         # %% Save timecorrections and sensitivities
         os_chdir(self.Main_folder_path)
         # np.savetxt('time_corrections.csv', time_corrections)
@@ -380,32 +385,30 @@ class ACCalib_2ch:
         #                                       (round(np.mean(DataOptRel[100:200, 0]), 5) -
         #                                        round(np.mean(DataOptRel[100:200, 1]), 5)), Sensitivity_opt)
         if make_plots:
-            plt.figure(num='Raw data')
-            plt.plot(TimeOpt, optical_sensor_data, label='Optical')
-            plt.plot(TimeRefShifted, reference_sensor_data, label='Reference')
-            plt.legend(prop={"size": 12})
-            plt.title('Shifted data', fontsize=TitleFontSize)
-            plt.ylabel('Acceleration [g]', fontsize=LabelFontSize)
-            plt.xlabel('Time[s]', fontsize=LabelFontSize)
-            plt.grid(which='both')
-            plt.minorticks_on()
-            manager = plt.get_current_fig_manager()
-            manager.window.showMaximized()
-            plt.show()
-
-            if self.Filter_on:
-                plt.figure(num='Filtered data')
-                plt.plot(TimeOpt, opt_sens_filtered, label='Optical')
-                plt.plot(TimeRefShifted, ref_sens_filtered, label='Reference')
-                plt.legend()
-                plt.title('Filtered data', fontsize=TitleFontSize)
-                plt.ylabel('Acceleration [g]', fontsize=LabelFontSize)
-                plt.xlabel('Time[s]', fontsize=LabelFontSize)
-                plt.grid(which='both')
-                plt.minorticks_on()
-                manager = plt.get_current_fig_manager()
-                manager.window.showMaximized()
-                plt.show()
+            # plt.figure(num='Raw data')
+            # plt.plot(TimeOpt, optical_sensor_data, label='Optical')
+            # plt.plot(TimeRefShifted, reference_sensor_data, label='Reference')
+            # plt.legend(prop={"size": 12})
+            # plt.title('Shifted data', fontsize=TitleFontSize)
+            # plt.ylabel('Acceleration [g]', fontsize=LabelFontSize)
+            # plt.xlabel('Time[s]', fontsize=LabelFontSize)
+            # plt.grid(which='both')
+            # plt.minorticks_on()
+            # plt.show()
+            #
+            # if self.Filter_on:
+            #     plt.figure(num='Filtered data')
+            #     plt.plot(TimeOpt, opt_sens_filtered, label='Optical')
+            #     plt.plot(TimeRefShifted, ref_sens_filtered, label='Reference')
+            #     plt.legend()
+            #     plt.title('Filtered data', fontsize=TitleFontSize)
+            #     plt.ylabel('Acceleration [g]', fontsize=LabelFontSize)
+            #     plt.xlabel('Time[s]', fontsize=LabelFontSize)
+            #     plt.grid(which='both')
+            #     plt.minorticks_on()
+            #     # manager = plt.get_current_fig_manager()
+            #     # manager.start_window.showMaximized()
+            #     plt.show()
 
             plt.figure(num='Resized filtered data')
             plt.plot(TimeOptSensResized, OptSensResized, label='Optical')
@@ -416,11 +419,12 @@ class ACCalib_2ch:
             plt.xlabel('Time[s]', fontsize=LabelFontSize)
             plt.grid(which='both')
             plt.minorticks_on()
-            manager = plt.get_current_fig_manager()
-            manager.window.showMaximized()
+            # manager = plt.get_current_fig_manager()
+            # manager.start_window.showMaximized()
             plt.show()
 
             if self.Do_spectrum:
+                plt.figure(num='Power spectrum')
                 plt.figure(num='Power spectrum')
                 plt.plot(FreqOptPSD, 20 * np.log(abs(SmoothOptPSD)), label='Optical')
                 plt.plot(FreqRefPSD, 20 * np.log(abs(SmoothRefPSD)), label='Reference')
@@ -430,48 +434,48 @@ class ACCalib_2ch:
                 plt.xlabel('Frequency [Hz]', fontsize=LabelFontSize)
                 plt.grid(which='both')
                 plt.minorticks_on()
-                manager = plt.get_current_fig_manager()
-                manager.window.showMaximized()
+                # manager = plt.get_current_fig_manager()
+                # manager.start_window.showMaximized()
                 plt.xlim(5, 200)
                 plt.show()
 
-            plt.figure(num='Bode analysis')
-            plt.plot(FreqTransfer, 20 * np.log(abs(SmoothTransfer)), linewidth=BodeLineWidth)
-            plt.title('Bode Analysis of ' + self.ref_opt_name, fontsize=TitleFontSize)
-            plt.ylim(-10, 10)
-            plt.xlabel('Frequency [Hz]', fontsize=LabelFontSize)
-            plt.ylabel('Gain [dB]', fontsize=LabelFontSize)
-            plt.xlim(self.xScaleTransfer)
-            plt.grid(which='both')
-            plt.minorticks_on()
-            manager = plt.get_current_fig_manager()
-            manager.window.showMaximized()
-            plt.show()
-
-            fig, axs = plt.subplots(2, num='Frequency response')
-            axs[0].plot(FreqTransfer, 20 * np.log(abs(SmoothTransfer)), linewidth=BodeLineWidth)
-            axs[0].set_title('Bode')
-            axs[0].set_xticks(x_tick)
-            axs[0].set_xlim(self.xScale)
-            axs[0].set_ylim(yScaleBode)
-            axs[0].set_xlabel('Frequency [Hz]', fontsize=LabelFontSize)
-            axs[0].set_ylabel('Gain [dB]', fontsize=LabelFontSize)
-            axs[0].grid(which='both')
-            axs[0].minorticks_on()
-            axs[1].plot(FreqTransfer, phase_difference_shifted, linewidth=BodeLineWidth)
-            axs[1].set_title('Phase')
-            axs[1].set_xticks(x_tick)
-            axs[1].set_xlim(self.xScale)
-            axs[1].set_ylim(yScalePhase)
-            # axs[1].set_ylim(-150, 150)
-            axs[1].set_xlabel('Frequency [Hz]', fontsize=LabelFontSize)
-            axs[1].set_ylabel('Phase [°]', fontsize=LabelFontSize)
-            axs[1].grid(which='both')
-            axs[1].minorticks_on()
-            plt.xscale('log')
-            plt.tight_layout()
-            manager = plt.get_current_fig_manager()
-            manager.window.showMaximized()
-            plt.show()
+            # plt.figure(num='Bode analysis')
+            # plt.plot(FreqTransfer, 20 * np.log(abs(SmoothTransfer)), linewidth=BodeLineWidth)
+            # plt.title('Bode Analysis of ' + self.ref_opt_name, fontsize=TitleFontSize)
+            # plt.ylim(-10, 10)
+            # plt.xlabel('Frequency [Hz]', fontsize=LabelFontSize)
+            # plt.ylabel('Gain [dB]', fontsize=LabelFontSize)
+            # plt.xlim(self.xScaleTransfer)
+            # plt.grid(which='both')
+            # plt.minorticks_on()
+            # # manager = plt.get_current_fig_manager()
+            # # manager.start_window.showMaximized()
+            # plt.show()
+            #
+            # fig, axs = plt.subplots(2, num='Frequency response')
+            # axs[0].plot(FreqTransfer, 20 * np.log(abs(SmoothTransfer)), linewidth=BodeLineWidth)
+            # axs[0].set_title('Bode')
+            # axs[0].set_xticks(x_tick)
+            # axs[0].set_xlim(self.xScale)
+            # axs[0].set_ylim(yScaleBode)
+            # axs[0].set_xlabel('Frequency [Hz]', fontsize=LabelFontSize)
+            # axs[0].set_ylabel('Gain [dB]', fontsize=LabelFontSize)
+            # axs[0].grid(which='both')
+            # axs[0].minorticks_on()
+            # axs[1].plot(FreqTransfer, phase_difference_shifted, linewidth=BodeLineWidth)
+            # axs[1].set_title('Phase')
+            # axs[1].set_xticks(x_tick)
+            # axs[1].set_xlim(self.xScale)
+            # axs[1].set_ylim(yScalePhase)
+            # # axs[1].set_ylim(-150, 150)
+            # axs[1].set_xlabel('Frequency [Hz]', fontsize=LabelFontSize)
+            # axs[1].set_ylabel('Phase [°]', fontsize=LabelFontSize)
+            # axs[1].grid(which='both')
+            # axs[1].minorticks_on()
+            # plt.xscale('log')
+            # plt.tight_layout()
+            # # manager = plt.get_current_fig_manager()
+            # # manager.start_window.showMaximized()
+            # plt.show()
 
         return acc_kalib
