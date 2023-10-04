@@ -3,19 +3,22 @@ import win32api
 import win32con
 from PyQt5.QtGui import QFont, QIcon, QPixmap
 from PyQt5.QtWidgets import QMainWindow, QMessageBox, QApplication, QDesktopWidget, QDialog, QVBoxLayout, QLabel, \
-    QLineEdit, QDialogButtonBox
-from PyQt5.QtCore import QThread, QEvent, Qt
+    QLineEdit, QDialogButtonBox, QComboBox
+from PyQt5.QtCore import QThread, QEvent, Qt, QTimer
 from os import chdir as os_chdir, path as os_path, remove as os_remove
 
 from matplotlib import pyplot as plt
+
+from acc.ThreadCheckDevicesConnected import ThreadCheckDevicesConnected
 from definitions import (kill_sentinel, start_sentinel_modbus, start_sentinel_d, scale_app, center_on_screen,
-                         load_all_config_files, set_wavelengths, get_params, copy_files, save_statistics_to_csv)
-from MySettingsWindow import MySettingsWindow
+                         load_all_config_files, set_wavelengths, get_params, copy_files, save_statistics_to_csv,
+                         show_add_dialog, open_folder_in_explorer)
+from acc.MySettingsWindow import MySettingsWindow
 from matplotlib.pyplot import close as pyplot_close
 import ctypes
 from ctypes import wintypes, byref as ctypes_byref
-from SettingsParams import MySettings
-from ThreadControlFuncGenStatements import ThreadControlFuncGenStatements
+from acc.SettingsParams import MySettings
+from acc.ThreadControlFuncGenStatements import ThreadControlFuncGenStatements
 from re import search as re_search
 from DatabaseCom import DatabaseCom
 
@@ -25,11 +28,12 @@ class MyMainWindow(QMainWindow):
 
     def __init__(self, window: MyStartUpWindow, my_settings: MySettings, thcfgs: ThreadControlFuncGenStatements):
         super().__init__()
+        self.first_show = True
         self.block_write = False
         self.s_n_export = None
         self.opt_force = False
         self.sensor_gen_error = False
-        from autoCalibration import Ui_AutoCalibration
+        from gui.autoCalibration import Ui_AutoCalibration
 
         self.thcfgs = thcfgs
         self.my_settings = my_settings
@@ -54,6 +58,8 @@ class MyMainWindow(QMainWindow):
         self.ui.just_box_6.setEnabled(False)
         self.ui.just_box_7.setEnabled(False)
 
+        self.orig_wid_gen_pos_x = self.ui.widget_gen.pos().x()
+        self.orig_wid_gen_pos_y = self.ui.widget_gen.pos().y()
         # open_action = QAction("Options", self)
         # open_action.triggered.connect(self.open_settings_window)
         # self.ui.menuSettings.addAction(open_action)
@@ -62,8 +68,6 @@ class MyMainWindow(QMainWindow):
         self.ui.logo_label.setPixmap(QPixmap("images/logo.png"))
 
         self.ui.S_N_line.editingFinished.connect(self.set_s_n)
-
-        self.ui.S_N_line.setPlaceholderText("Scan barcode or input SN...")
 
         self.ui.start_btn.clicked.connect(self.autoCalib.on_btn_start_clicked)
         self.ui.stop_btn.clicked.connect(self.emergency_stop_clicked)
@@ -77,6 +81,22 @@ class MyMainWindow(QMainWindow):
         self.ui.export_pass_btn.installEventFilter(self)
 
         self.ui.menuOperator.setTitle(f"Operator: {self.window.operator}")
+
+        self.ui.actionwith_project.triggered.connect(self.open_sentinel_app_with_proj)
+        self.ui.actionwithout_project.triggered.connect(self.open_sentinel_app_no_proj)
+
+        self.ui.actionmain_folder.triggered.connect(self.open_main_folder)
+        self.ui.actioncalibration_folder.triggered.connect(self.open_calib_folder)
+        self.ui.actionraw_opt.triggered.connect(self.open_folder_opt_raw)
+        self.ui.actionraw_ref.triggered.connect(self.open_folder_opt)
+        self.ui.actionwith_header_opt.triggered.connect(self.open_folder_opt)
+        self.ui.actionwith_header_ref.triggered.connect(self.open_folder_ref)
+
+        self.ui.actionAdd_new_operator.triggered.connect(self.add_new_operator)
+        self.ui.actionChange_operator.triggered.connect(self.change_operator)
+
+        self.ui.actionopen.triggered.connect(self.open_help)
+
         self.ui.progressBar.setValue(0)
         self.ui.start_btn.setEnabled(False)
         font = QFont("Arial", 10)
@@ -84,16 +104,10 @@ class MyMainWindow(QMainWindow):
         self.ui.output_browser_2.setFont(font)
         self.ui.output_browser.setFont(font)
         self.ui.output_browser_3.setFont(font2)
-        self.ui.output_browser_3.setText("Work flow: \n1. CONNECT and TURN ON ALL device\n"
-                                         "2. Properly mount optical sensor\n3. Properly mount reference sensor on top "
-                                         "of the optical sensor\n"
-                                         "4. Connect optical sensor to the interrogator\n5. Connect reference"
-                                         " sensor to the NI USB device's 2nd channel\n"
-                                         "6. Start calibration")
 
         if my_settings is None or my_settings.check_if_none():
-            self.ui.output_browser_3.setText("Restart APP, error while loading settings")
-
+            self.ui.output_browser_3.setText(self.window.translations[self.window.lang]["load_error"])
+        self.ui.widget_help.setHidden(True)
         self.ui.stop_btn.setHidden(True)
         self.ui.gen_status_label.setHidden(False)
         self.ui.gen_status_label_2.setHidden(True)
@@ -110,9 +124,7 @@ class MyMainWindow(QMainWindow):
         self.ui.btn_settings.setIcon(icon)
         self.ui.btn_settings.setIconSize(self.ui.btn_opt_unlocked.size())
         self.ui.btn_settings.setStyleSheet("background: transparent; border: none; text-align: center;")
-        self.setFixedSize(self.width(), int(self.height() * 1))
 
-        scale_app(self, self.window.window_scale)
         self.prev_opt_channel = self.my_settings.opt_channels
         # Load the User32.dll
         user32 = ctypes.WinDLL('user32', use_last_error=True)
@@ -121,6 +133,8 @@ class MyMainWindow(QMainWindow):
         user32.GetForegroundWindow.restype = wintypes.HWND
         user32.GetKeyboardLayout.argtypes = [wintypes.DWORD]
         user32.GetKeyboardLayout.restype = wintypes.HKL
+        self.start_width = self.width()
+        self.start_height = self.height()
 
         def get_current_keyboard_layout():
             hwnd = user32.GetForegroundWindow()
@@ -133,8 +147,7 @@ class MyMainWindow(QMainWindow):
 
         self.native_keyboard_layout = get_current_keyboard_layout()
         if not win32api.LoadKeyboardLayout('00000409', win32con.KLF_ACTIVATE):
-            self.ui.output_browser_3.setText("Please install US English keyboard layout so bar code scanners can work "
-                                             "properly, then manually switch to US English layout or restart app.")
+            self.ui.output_browser_3.setText(self.window.translations[self.window.lang]["key_board_err"])
 
         QApplication.instance().installEventFilter(self)
 
@@ -166,6 +179,80 @@ class MyMainWindow(QMainWindow):
                 return True
         return super().eventFilter(obj, event)
 
+    def open_help(self):
+        print("Open help --------------------------------------------")
+        if self.ui.widget_help.isHidden():
+            self.ui.widget_gen.move(-22, self.ui.widget_gen.pos().y())
+            self.ui.widget_help.setHidden(False)
+            self.setFixedSize(int(self.width()*1.434), self.height())
+            self.ui.actionopen.setText(self.window.translations[self.window.lang]["actionopen_close"])
+        else:
+            self.setFixedSize(int(self.start_width*self.window.window_scale), self.height())
+            self.ui.widget_help.setHidden(True)
+            self.ui.widget_gen.move(int(self.orig_wid_gen_pos_x*self.window.window_scale),
+                                    int(self.orig_wid_gen_pos_y*self.window.window_scale))
+            self.ui.actionopen.setText(self.window.translations[self.window.lang]["actionopen_open"])
+
+    def open_folder_opt_raw(self):
+        open_folder_in_explorer(self.my_settings.folder_opt_export_raw)
+
+    def open_folder_opt(self):
+        open_folder_in_explorer(self.my_settings.folder_opt_export)
+
+    def open_folder_ref_raw(self):
+        open_folder_in_explorer(self.my_settings.folder_ref_export_raw)
+
+    def open_folder_ref(self):
+        open_folder_in_explorer(self.my_settings.folder_ref_export)
+
+    def open_main_folder(self):
+        open_folder_in_explorer(self.my_settings.folder_main)
+
+    def open_calib_folder(self):
+        open_folder_in_explorer(self.my_settings.folder_calibration_export)
+
+    def open_sentinel_app_with_proj(self):
+        start_sentinel_d(self.my_settings.opt_project, self.my_settings.folder_sentinel_D_folder, self.my_settings.subfolder_sentinel_project, no_log=True)
+
+    def open_sentinel_app_no_proj(self):
+        start_sentinel_d(self.my_settings.opt_project, self.my_settings.folder_sentinel_D_folder,self.my_settings.subfolder_sentinel_project, no_log=True,
+                         no_proj=True)
+
+    def change_operator(self):
+        dialog = QDialog(self)
+        dialog.setWindowTitle(self.window.translations[self.window.lang]["choose_op"])
+
+        vbox = QVBoxLayout()
+
+        label = QLabel(self.window.translations[self.window.lang]["sel_op"])
+        vbox.addWidget(label)
+
+        combo_box = QComboBox()
+        for operator in self.window.operators:
+            combo_box.addItem(operator)
+        vbox.addWidget(combo_box)
+
+        button_box = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        button_box.accepted.connect(dialog.accept)
+        button_box.rejected.connect(dialog.reject)
+        vbox.addWidget(button_box)
+
+        dialog.setLayout(vbox)
+
+        result = dialog.exec_()
+        if result == QDialog.Accepted:
+            self.window.operator = combo_box.currentText()
+            self.ui.menuOperator.setTitle(f"Operator: {self.window.operator}")
+
+    def add_new_operator(self):
+        self.block_write = True
+        operator = show_add_dialog(self, self.window.starting_folder, start=False)
+        if operator:
+            self.window.operators.append(operator)
+            self.window.operator = operator
+            self.ui.menuOperator.setTitle(f"Operator: {self.window.operator}")
+        self.block_write = False
+
     def exp_btn_clicked(self):
         self.block_write = True
         dialog = QDialog(self)
@@ -173,7 +260,7 @@ class MyMainWindow(QMainWindow):
 
         dialog_layout = QVBoxLayout()
 
-        label = QLabel("Do you want to add note?")
+        label = QLabel(self.window.translations[self.window.lang]["add_note"])
         dialog_layout.addWidget(label)
 
         text_input = QLineEdit()
@@ -225,18 +312,24 @@ class MyMainWindow(QMainWindow):
             self.ui.output_browser_3.setText(text)
 
     def change_sens_type_label(self):
-        self.ui.label_opt_sens_type_label.setText(self.my_settings.opt_sensor_type + "\'s")
+        self.ui.label_opt_sens_type_label.setText(self.my_settings.opt_sensor_type + f" {self.window.translations[self.window.lang]['config']}")
 
     def emergency_stop_clicked(self):
         print("STOP")
-        self.ui.output_browser_3.setText("EMERGENCY STOP ENGAGED")
+        self.ui.output_browser_3.setText(self.window.translations[self.window.lang]["emergency_stop_engaged"])
         self.thcfgs.set_emergency_stop(True)
         kill_sentinel(True, False)
         self.measure = False
+        if not self.thcfgs.get_start_measuring():
+            self.ui.S_N_line.setEnabled(True)
+            self.ui.btn_settings.setEnabled(True)
+            self.ui.select_config.setEnabled(True)
+            self.ui.plot_graph_check.setEnabled(True)
+            self.ui.menubar.setEnabled(True)
 
     def first_sentinel_start(self):
-        from ThreadSentinelCheckNewFile import ThreadSentinelCheckNewFile
-        start_sentinel_d(self.my_settings.opt_project, self.my_settings.folder_sentinel_D_folder)
+        from acc.ThreadSentinelCheckNewFile import ThreadSentinelCheckNewFile
+        start_sentinel_d(self.my_settings.opt_project, self.my_settings.folder_sentinel_D_folder, self.my_settings.subfolder_sentinel_project)
         self.thread_check_new_file = ThreadSentinelCheckNewFile(self.my_settings.folder_opt_export)
         self.thread_check_new_file.finished.connect(self.start_modbus)
         self.thread_check_new_file.start()
@@ -246,7 +339,7 @@ class MyMainWindow(QMainWindow):
         kill_sentinel(True, False)
         QThread.msleep(100)
         start_sentinel_modbus(self.my_settings.folder_sentinel_modbus_folder,
-                              self.my_settings.folder_sentinel_D_folder,
+                              self.my_settings.subfolder_sentinel_project,
                               self.my_settings.opt_project, self.my_settings.opt_channels)
 
         os_chdir(self.my_settings.folder_opt_export)
@@ -254,7 +347,7 @@ class MyMainWindow(QMainWindow):
         if os_path.exists(opt_sentinel_file_name + '.csv'):
             os_remove(opt_sentinel_file_name + '.csv')
         QThread.msleep(100)
-        self.show()
+        self.show_back()
         self.window.hide()
         QThread.msleep(100)
 
@@ -280,7 +373,7 @@ class MyMainWindow(QMainWindow):
 
     def check_sensors_ready(self, check_status):
         if self.my_settings.opt_channels != 0 and self.ui.S_N_line.text().strip():
-            if self.my_settings.opt_channels >= 2 and self.ui.start_btn.isEnabled():
+            if self.my_settings.opt_channels >= 2 and self.ui.stop_btn.isHidden():
                 self.ui.btn_load_wl.setEnabled(True)
             else:
                 self.ui.btn_load_wl.setEnabled(False)
@@ -304,11 +397,11 @@ class MyMainWindow(QMainWindow):
             if self.sensor_opt_check != 0:
                 if self.sensor_opt_check == 1 or self.sensor_opt_check == 11:
                     self.ui.btn_opt_unlocked.setHidden(True)
-                    self.ui.opt_sens_status_label.setText("OPT. SENSOR IS CONNECTED")
+                    self.ui.opt_sens_status_label.setText(self.window.translations[self.window.lang]["opt_sens_status_label"]["connected"])
                     self.ui.opt_sens_status_label.setStyleSheet("color: blue;")
                 elif self.sensor_opt_check == 3:
                     self.ui.btn_opt_unlocked.setHidden(True)
-                    self.ui.opt_sens_status_label.setText("OPT. USB DEVICE DISCONNECTED!")
+                    self.ui.opt_sens_status_label.setText(self.window.translations[self.window.lang]["opt_sens_status_label"]["usb_disconnected"])
                     if self.ui.opt_sens_status_label.isEnabled():
                         self.ui.opt_sens_status_label.setStyleSheet("color: red;")
                         self.ui.opt_sens_status_label.setEnabled(False)
@@ -320,75 +413,75 @@ class MyMainWindow(QMainWindow):
                         self.ui.btn_opt_unlocked.setHidden(False)
                         self.check_cnt += 1
                         if self.ui.opt_sens_status_label.isEnabled() and self.check_cnt >= 3:
-                            self.ui.opt_sens_status_label.setText("OPT. SENSOR IS NOT READY")
+                            self.ui.opt_sens_status_label.setText(self.window.translations[self.window.lang]["opt_sens_status_label"]["not_ready"])
                             self.ui.opt_sens_status_label.setStyleSheet("color: red;")
                             self.ui.opt_sens_status_label.setEnabled(False)
                             self.check_cnt = 0
                         elif self.check_cnt >= 3:
-                            self.ui.opt_sens_status_label.setText("PLEASE UNLOCK THE SENSOR")
+                            self.ui.opt_sens_status_label.setText(self.window.translations[self.window.lang]["opt_sens_status_label"]["unlock"])
                             self.ui.opt_sens_status_label.setStyleSheet("color: red;")
                             self.ui.opt_sens_status_label.setEnabled(True)
                             self.check_cnt = 0
                     else:
-                        self.ui.opt_sens_status_label.setText("OPT. SENSOR IS NOT READY")
+                        self.ui.opt_sens_status_label.setText(self.window.translations[self.window.lang]["opt_sens_status_label"]["not_ready"])
                         self.ui.opt_sens_status_label.setStyleSheet("color: red;")
                 elif self.sensor_opt_check == 5 or self.opt_force:
                     self.ui.btn_opt_unlocked.setHidden(True)
-                    self.ui.opt_sens_status_label.setText("OPT. SENSOR IS READY")
+                    self.ui.opt_sens_status_label.setText(self.window.translations[self.window.lang]["opt_sens_status_label"]["ready"])
                     self.ui.opt_sens_status_label.setStyleSheet("color: green;")
                 elif self.sensor_opt_check == 10:
                     self.ui.btn_opt_unlocked.setHidden(True)
                     if self.my_settings.opt_channels == 2:
                         self.check_cnt += 1
                         if self.ui.opt_sens_status_label.isEnabled() and self.check_cnt >= 3:
-                            self.ui.opt_sens_status_label.setText("OPT. SENSOR IS CONNECTED")
+                            self.ui.opt_sens_status_label.setText(self.window.translations[self.window.lang]["opt_sens_status_label"]["connected"])
                             self.ui.opt_sens_status_label.setStyleSheet("color: orange;")
                             self.ui.opt_sens_status_label.setEnabled(False)
                             self.check_cnt = 0
                         elif self.check_cnt >= 3:
-                            self.ui.opt_sens_status_label.setText("LOAD PROPER WAVELENGTHS")
+                            self.ui.opt_sens_status_label.setText(self.window.translations[self.window.lang]["opt_sens_status_label"]["load_wl"])
                             self.ui.opt_sens_status_label.setStyleSheet("color: orange;")
                             self.ui.opt_sens_status_label.setEnabled(True)
                             self.check_cnt = 0
                     else:
                         self.ui.btn_opt_unlocked.setHidden(True)
-                        self.ui.opt_sens_status_label.setText("OPT. SENSOR IS DISCONNECTED")
+                        self.ui.opt_sens_status_label.setText(self.window.translations[self.window.lang]["opt_sens_status_label"]["not_connected"])
                         self.ui.opt_sens_status_label.setStyleSheet("color: orange;")
                 elif self.sensor_opt_check == -1:
                     self.ui.btn_opt_unlocked.setHidden(True)
-                    self.ui.opt_sens_status_label.setText("OPT. SENSOR INITIALIZATION")
+                    self.ui.opt_sens_status_label.setText(self.window.translations[self.window.lang]["opt_sens_status_label"]["init"])
                     self.ui.opt_sens_status_label.setStyleSheet("color: black;")
             else:
                 if self.my_settings.opt_channels == 2:
                     self.ui.btn_opt_unlocked.setHidden(True)
                     self.check_cnt += 1
                     if self.ui.opt_sens_status_label.isEnabled() and self.check_cnt >= 3:
-                        self.ui.opt_sens_status_label.setText("OPT. SENSOR IS DISCONNECTED")
+                        self.ui.opt_sens_status_label.setText(self.window.translations[self.window.lang]["opt_sens_status_label"]["not_connected"])
                         self.ui.opt_sens_status_label.setStyleSheet("color: orange;")
                         self.ui.opt_sens_status_label.setEnabled(False)
                         self.check_cnt = 0
                     elif self.check_cnt >= 3:
-                        self.ui.opt_sens_status_label.setText("OR TRY LOAD WAVELENGTHS")
+                        self.ui.opt_sens_status_label.setText(self.window.translations[self.window.lang]["opt_sens_status_label"]["try_load_wl"])
                         self.ui.opt_sens_status_label.setStyleSheet("color: orange;")
                         self.ui.opt_sens_status_label.setEnabled(True)
                         self.check_cnt = 0
                 else:
                     self.ui.btn_opt_unlocked.setHidden(True)
-                    self.ui.opt_sens_status_label.setText("OPT. SENSOR IS DISCONNECTED")
+                    self.ui.opt_sens_status_label.setText(self.window.translations[self.window.lang]["opt_sens_status_label"]["not_connected"])
                     self.ui.opt_sens_status_label.setStyleSheet("color: orange;")
 
             if self.sensor_ref_check != 0:
                 if self.sensor_ref_check == 1:
-                    self.ui.ref_sens_status_label.setText("REF. SENSOR IS CONNECTED")
+                    self.ui.ref_sens_status_label.setText(self.window.translations[self.window.lang]["ref_sens_status_label"]["connected"])
                     self.ui.ref_sens_status_label.setStyleSheet("color: blue;")
                 elif self.sensor_ref_check == 2:
-                    self.ui.ref_sens_status_label.setText("REF. SENSOR IS READY")
+                    self.ui.ref_sens_status_label.setText(self.window.translations[self.window.lang]["ref_sens_status_label"]["ready"])
                     self.ui.ref_sens_status_label.setStyleSheet("color: green;")
                 elif self.sensor_ref_check == 6:
-                    self.ui.ref_sens_status_label.setText("REF. SENSOR IS NOT READY")
+                    self.ui.ref_sens_status_label.setText(self.window.translations[self.window.lang]["ref_sens_status_label"]["not_ready"])
                     self.ui.ref_sens_status_label.setStyleSheet("color: red;")
                 elif self.sensor_ref_check == 3:
-                    self.ui.ref_sens_status_label.setText("REF. USB DEVICE DISCONNECTED!")
+                    self.ui.ref_sens_status_label.setText(self.window.translations[self.window.lang]["ref_sens_status_label"]["usb_disconnected"])
                     if self.ui.ref_sens_status_label.isEnabled():
                         self.ui.ref_sens_status_label.setStyleSheet("color: red;")
                         self.ui.ref_sens_status_label.setEnabled(False)
@@ -396,21 +489,21 @@ class MyMainWindow(QMainWindow):
                         self.ui.ref_sens_status_label.setStyleSheet("color: black;")
                         self.ui.ref_sens_status_label.setEnabled(True)
                 elif self.sensor_ref_check == -1:
-                    self.ui.ref_sens_status_label.setText("REF. SENSOR INITIALIZATION")
+                    self.ui.ref_sens_status_label.setText(self.window.translations[self.window.lang]["ref_sens_status_label"]["init"])
                     self.ui.ref_sens_status_label.setStyleSheet("color: black;")
             else:
-                self.ui.ref_sens_status_label.setText("REF. SENSOR IS NOT CONNECTED")
+                self.ui.ref_sens_status_label.setText(self.window.translations[self.window.lang]["ref_sens_status_label"]["not_connected"])
                 self.ui.ref_sens_status_label.setStyleSheet("color: orange;")
 
             if not self.sensor_gen_check:
                 self.ui.gen_status_label_2.setHidden(False)
                 if self.ui.gen_status_label.isEnabled():
-                    self.ui.gen_status_label_2.setText("DISCONNECTED")
+                    self.ui.gen_status_label_2.setText(self.window.translations[self.window.lang]["gen_status_label"]["disconnected"])
                     self.ui.gen_status_label.setStyleSheet("color: red;")
                     self.ui.gen_status_label_2.setStyleSheet("color: red;")
                     self.ui.gen_status_label.setEnabled(False)
                 else:
-                    self.ui.gen_status_label_2.setText("CONNECTED IT !")
+                    self.ui.gen_status_label_2.setText(self.window.translations[self.window.lang]["gen_status_label"]["connect_it"])
                     self.ui.gen_status_label.setStyleSheet("color: black;")
                     self.ui.gen_status_label_2.setStyleSheet("color: black;")
                     self.ui.gen_status_label.setEnabled(True)
@@ -418,12 +511,12 @@ class MyMainWindow(QMainWindow):
                 if self.sensor_gen_error:
                     self.ui.gen_status_label_2.setHidden(False)
                     if self.ui.gen_status_label.isEnabled():
-                        self.ui.gen_status_label_2.setText("DISCONNECTED")
+                        self.ui.gen_status_label_2.setText(self.window.translations[self.window.lang]["gen_status_label"]["disconnected"])
                         self.ui.gen_status_label.setStyleSheet("color: red;")
                         self.ui.gen_status_label_2.setStyleSheet("color: red;")
                         self.ui.gen_status_label.setEnabled(False)
                     else:
-                        self.ui.gen_status_label_2.setText("RESTART IT !")
+                        self.ui.gen_status_label_2.setText(self.window.translations[self.window.lang]["gen_status_label"]["restart"])
                         self.ui.gen_status_label.setStyleSheet("color: black;")
                         self.ui.gen_status_label_2.setStyleSheet("color: black;")
                         self.ui.gen_status_label.setEnabled(True)
@@ -445,7 +538,7 @@ class MyMainWindow(QMainWindow):
         self.ui.plot_graph_check.setChecked(self.my_settings.calib_plot)
         kill_sentinel(False, True)
         start_sentinel_modbus(self.my_settings.folder_sentinel_modbus_folder,
-                              self.my_settings.folder_sentinel_D_folder,
+                              self.my_settings.subfolder_sentinel_project,
                               self.my_settings.opt_project,
                               self.my_settings.opt_channels)
         if self.my_settings.opt_channels >= 2:
@@ -478,36 +571,36 @@ class MyMainWindow(QMainWindow):
     def btn_connect_load_wl(self):
         attempt_count = 0
         max_attempts = 10
-        self.ui.output_browser_3.setText("Loading wavelengths")
+        self.ui.output_browser_3.setText(self.window.translations[self.window.lang]["load_wl_inter"])
         while attempt_count < max_attempts:
             try:
                 order_id = re_search(r'(-?\d+(\.\d+)?)', self.s_n).group(1)
                 if self.my_settings.opt_channels not in [0, 1]:
                     kill_sentinel(False, True)
                     result = set_wavelengths(order_id, self.my_settings.folder_sentinel_D_folder,
-                                             self.my_settings.opt_project)
+                                             self.my_settings.opt_project, self.my_settings.starting_folder)
                     if result == 0:
-                        self.ui.output_browser_3.setText("Could not extract wavelengths from received data")
+                        self.ui.output_browser_3.setText(self.window.translations[self.window.lang]["load_wl_error_1"])
                     elif result == -1:
-                        self.ui.output_browser_3.setText("Error connecting to the database")
+                        self.ui.output_browser_3.setText(self.window.translations[self.window.lang]["load_wl_error_2"])
                     elif result == -2:
-                        self.ui.output_browser_3.setText("Error while setting wavelengths")
+                        self.ui.output_browser_3.setText(self.window.translations[self.window.lang]["load_wl_error_3"])
                     else:
-                        self.ui.output_browser_3.setText("Wavelengths were successfully loaded")
+                        self.ui.output_browser_3.setText(self.window.translations[self.window.lang]["load_wl_success"])
                     start_sentinel_modbus(self.my_settings.folder_sentinel_modbus_folder,
-                                          self.my_settings.folder_sentinel_D_folder,
+                                          self.my_settings.subfolder_sentinel_project,
                                           self.my_settings.opt_project, self.my_settings.opt_channels)
                     break
             except Exception as e:
                 attempt_count += 1
                 if attempt_count >= max_attempts:
-                    self.ui.output_browser_3.setText(f"Error occurred while loading SN :\n{e}")
+                    self.ui.output_browser_3.setText(f"{self.window.translations[self.window.lang]['load_wl_error_4']}\n{e}")
                     break
 
     def open_settings_window(self):
         self.settings_window = MySettingsWindow(False, self.window, self.my_settings)
         self.hide()
-        self.settings_window.show()
+        self.settings_window.show_back()
 
     def update_progress_bar(self, value):
         progress_sec = value
@@ -530,16 +623,12 @@ class MyMainWindow(QMainWindow):
         self.ui.label_sweep_type.setText(self.my_settings.generator_sweep_type)
         self.ui.label_sweep_time.setText(str(self.my_settings.generator_sweep_time) + " s")
 
-    def showEvent(self, event):
+    def show_back(self):
+        self.set_language()
         if self.my_settings.opt_channels >= 2:
             self.ui.btn_load_wl.setHidden(False)
         else:
             self.ui.btn_load_wl.setHidden(True)
-        self.setFixedSize(int(self.width() * self.window.window_scale_delta),
-                          int(self.height() * self.window.window_scale_delta))
-        scale_app(self, self.window.window_scale_delta)
-        self.window.window_scale_delta = 1
-        center_on_screen(self)
         self.ui.plot_graph_check.setChecked(self.my_settings.calib_plot)
         load_all_config_files(self.ui.select_config, self.window.config_file_path,
                               self.my_settings.opt_sensor_type,
@@ -551,12 +640,31 @@ class MyMainWindow(QMainWindow):
         if self.prev_opt_channel != self.my_settings.opt_channels:
             kill_sentinel(False, True)
             start_sentinel_modbus(self.my_settings.folder_sentinel_modbus_folder,
-                                  self.my_settings.folder_sentinel_D_folder,
+                                  self.my_settings.subfolder_sentinel_project,
                                   self.my_settings.opt_project, self.my_settings.opt_channels)
+        if self.first_show:
+            self.window.window_scale_delta = self.window.window_scale
+            self.first_show = False
+        self.setFixedSize(int(self.width() * self.window.window_scale_delta),
+                          int(self.height() * self.window.window_scale_delta))
+        scale_app(self, self.window.window_scale_delta)
+
+        def bad_scales():
+            font = self.ui.btn_load_wl.font()
+            font.setPointSize(int(9 * self.window.window_scale))
+            self.ui.btn_load_wl.setFont(font)
+
+            font = self.ui.plot_graph_check.font()
+            font.setPointSize(int(9 * self.window.window_scale))
+            self.ui.plot_graph_check.setFont(font)
+
+        QTimer.singleShot(0, lambda: bad_scales())
+        self.window.window_scale_delta = 1
+        QTimer.singleShot(0, lambda: center_on_screen(self))
 
     def closeEvent(self, event):
-        reply = QMessageBox.question(self, 'Confirmation',
-                                     "Are you sure you want to exit?",
+        reply = QMessageBox.question(self, self.window.translations[self.window.lang]["close_event_a"],
+                                     self.window.translations[self.window.lang]["close_event_b"],
                                      QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
 
         if reply == QMessageBox.Yes:
@@ -574,31 +682,89 @@ class MyMainWindow(QMainWindow):
         else:
             event.ignore()
 
+    def set_language(self):
+        trans = self.window.translations
+        lang = self.window.lang
+        self.ui.ref_sens_status_label.setText(trans[lang]["ref_sens_status_label"]["init"])
+        self.ui.opt_sens_status_label.setText(trans[lang]["opt_sens_status_label"]["init"])
+        self.ui.label_name_sweep_type.setText(trans[lang]["label_name_sweep_type"])
+        self.ui.label_name_sweep_time.setText(trans[lang]["label_name_sweep_time"])
+        self.ui.label_name_stop_freq.setText(trans[lang]["label_name_stop_freq"])
+        self.ui.label_name_vpp.setText(trans[lang]["label_name_vpp"])
+        self.ui.label_name_start_freq.setText(trans[lang]["label_name_start_freq"])
+        self.ui.start_btn.setText(trans[lang]["start_btn"])
+        self.ui.plot_graph_check.setText(trans[lang]["plot_graph_check"])
+        self.ui.actionAdd_new_operator.setText(trans[lang]["actionAdd_new_operator"])
+        self.ui.actionChange_operator.setText(trans[lang]["actionChange_operator"])
+        self.ui.menuOperator.setTitle(trans[lang]["menuOperator"])
+        self.ui.label_opt_sens_type_label.setText(self.my_settings.opt_sensor_type + f" {self.window.translations[self.window.lang]['config']}")
+        if self.ui.widget_help.isHidden():
+            self.ui.actionopen.setText(trans[lang]["actionopen_open"])
+        else:
+            self.ui.actionopen.setText(trans[lang]["actionopen_close"])
+        self.ui.menuHelp.setTitle(trans[lang]["menuHelp"])
+        self.ui.menuAbout.setTitle(trans[lang]["menuAbout"])
+
+        self.ui.actioncalibration_folder.setText(trans[lang]["actioncalibration_folder"])
+        self.ui.actionmain_folder.setText(trans[lang]["actionmain_folder"])
+        self.ui.menuOpen_export_folder.setTitle(trans[lang]["menuOpen_export_folder"])
+
+        self.ui.actionwith_project.setText(trans[lang]["actionwith_project"])
+        self.ui.actionwithout_project.setText(trans[lang]["actionwithout_project"])
+        self.ui.menuOpen_Sentinel_D.setTitle(trans[lang]["menuOpen_Sentinel_D"])
+
+        self.ui.menuoptical_folder_2.setTitle(trans[lang]["menuoptical_folder_2"])
+        self.ui.actionraw_opt.setText(trans[lang]["actionraw_opt"])
+        self.ui.actionwith_header_opt.setText(trans[lang]["actionwith_header_opt"])
+
+        self.ui.menureference_folder.setTitle(trans[lang]["menureference_folder"])
+        self.ui.actionraw_ref.setText(trans[lang]["actionraw_ref"])
+        self.ui.actionwith_header_ref.setText(trans[lang]["actionwith_header_ref"])
+
+        self.ui.S_N_line.setPlaceholderText(trans[lang]["S_N_line_placeholder"])
+
+        self.ui.help_text_browser.setText(f"<font><b>{trans[lang]['help_browser']['0']}</b></font>"
+                                          f"<font><b>1.</b></font>{trans[lang]['help_browser']['1']}"
+                                          f"<font><b>2.</b></font>{trans[lang]['help_browser']['2']}"
+                                          f"<font><b>3.</b></font>{trans[lang]['help_browser']['3']}"
+                                          f"<font><b>4.</b></font>{trans[lang]['help_browser']['4']}"
+                                          f"<font><b>5.</b></font>{trans[lang]['help_browser']['5']}"
+                                          f"<font><b>6.</b></font>{trans[lang]['help_browser']['6']}"
+                                          f"<font><b>7.</b></font>{trans[lang]['help_browser']['7']}"
+                                          f"<font><b>{trans[lang]['help_browser']['a']}</b></font>"
+                                          f"<span style='color:green; font-style:italic;'>PASS</span>"
+                                          f"{trans[lang]['help_browser']['b']}"
+                                          f"<span style='color:red; font-style:italic;'>FAIL</span>"
+                                          f"{trans[lang]['help_browser']['c']}"
+                                          )
+
 
 #  meranie + kalibrácia
 class AutoCalibMain:
-    from ThreadControlFuncGen import ThreadControlFuncGen
-    from ThreadRefSensDataCollection import ThreadRefSensDataCollection
-    from ThreadProgressBar import ThreadProgressBar
-    from ThreadOptAndGenCheckIfReady import ThreadOptAndGenCheckIfReady
-    from ThreadSentinelCheckNewFile import ThreadSentinelCheckNewFile
-    from ThreadSensorsCheckIfReady import ThreadSensorsCheckIfReady
-    from ThreadRefCheckIfReady import ThreadRefCheckIfReady
+    from acc.ThreadControlFuncGen import ThreadControlFuncGen
+    from acc.ThreadRefSensDataCollection import ThreadRefSensDataCollection
+    from acc.ThreadProgressBar import ThreadProgressBar
+    from acc.ThreadOptAndGenCheckIfReady import ThreadOptAndGenCheckIfReady
+    from acc.ThreadSentinelCheckNewFile import ThreadSentinelCheckNewFile
+    from acc.ThreadSensorsCheckIfReady import ThreadSensorsCheckIfReady
+    from acc.ThreadRefCheckIfReady import ThreadRefCheckIfReady
 
     def __init__(self, calib_window: MyMainWindow, my_settings: MySettings, thcfgs: ThreadControlFuncGenStatements):
+        self.wl_slopes = None
         self.offset = None
         self.last_s_n_export = None
         self.last_s_n = None
         self.export_folder = None
         self.calib_result = True
         self.export_status = True
-        self.database = DatabaseCom()
+        self.my_settings = my_settings
+        self.database = DatabaseCom(self.my_settings.starting_folder)
         self.time_stamp = None
         self.calibration_profile = None
         self.calib_output = None
-        self.my_settings = my_settings
-        self.start_window = calib_window.window
         self.calib_window = calib_window
+        self.start_window = calib_window.window
+
         self.thcfgs = thcfgs
         # self.calib_figure = self.FiguresWindow(self.calib_window)
         self.acc_calib = None
@@ -606,6 +772,9 @@ class AutoCalibMain:
         self.current_date = None
         self.time_string = None
         self.opt_sentinel_file_name = None
+        self.thread_check_opt_usb = ThreadCheckDevicesConnected(self.start_window.opt_dev_vendor,
+                                                                self.start_window.ref_dev_vendor,
+                                                                self.my_settings, True)
         self.thread_control_gen = self.ThreadControlFuncGen(self.my_settings.generator_id,
                                                             self.my_settings.generator_sweep_time,
                                                             self.my_settings.generator_sweep_start_freq,
@@ -615,7 +784,9 @@ class AutoCalibMain:
                                                             self.thcfgs,
                                                             self.my_settings.opt_project,
                                                             self.my_settings.opt_channels,
-                                                            self.my_settings.folder_sentinel_D_folder)
+                                                            self.my_settings.folder_sentinel_D_folder,
+                                                            self.start_window,
+                                                            self.my_settings)
         self.thread_check_new_file = self.ThreadSentinelCheckNewFile(self.my_settings.folder_opt_export)
         self.thread_ref_sens = self.ThreadRefSensDataCollection(self.start_window, self.thcfgs,
                                                                 self.calib_window.s_n, self.my_settings,
@@ -723,16 +894,10 @@ class AutoCalibMain:
 
     def opt_finished(self):
         self.calib_window.ui.opt_value_wl_label.setText("-")
-        # print("END -------> OPT CHECK")
-
-    # def thread_end_check_sens(self):
-    #     self.calib_window.ui.start_btn.setEnabled(False)
-    #     print("END ------> CHECK SENS")
-    #     self.start()
 
     def thread_control_gen_finished(self):
         print("END -------> CONTROL GEN")
-
+        self.thread_check_opt_usb.termination = True
         if self.thcfgs.get_emergency_stop():
             self.calib_window.ui.start_btn.setEnabled(False)
             self.calib_window.ui.start_btn.setHidden(False)
@@ -749,7 +914,7 @@ class AutoCalibMain:
             self.thcfgs.set_end_sens_test(False)
             self.thcfgs.set_start_measuring(False)
         else:
-            self.calib_window.ui.output_browser_3.setText("Calibration ...")
+            self.calib_window.ui.output_browser_3.setText(self.start_window.translations[self.start_window.lang]["out_brow_calib"])
 
     def terminate_measure_threads(self):
         self.thread_ref_sens.terminate()
@@ -776,8 +941,8 @@ class AutoCalibMain:
                         self.calib_window.setEnabled(False)
                         msg_box = QMessageBox()
                         msg_box.setIcon(QMessageBox.Information)
-                        msg_box.setText("You have not exported calibration result, do you want to continue anyway?")
-                        msg_box.setWindowTitle("Proceed?")
+                        msg_box.setText(self.start_window.translations[self.start_window.lang]["forgot_export"])
+                        msg_box.setWindowTitle(self.start_window.translations[self.start_window.lang]["export_proceed"])
                         msg_box.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
                         export_button = msg_box.addButton("Export", QMessageBox.ActionRole)
                         return_value = msg_box.exec()
@@ -795,8 +960,8 @@ class AutoCalibMain:
                         self.calib_window.setEnabled(False)
                         msg_box = QMessageBox()
                         msg_box.setIcon(QMessageBox.Information)
-                        msg_box.setText("Do you want to re-calibrate this sensor?")
-                        msg_box.setWindowTitle("Re-calibrate Sensor?")
+                        msg_box.setText(self.start_window.translations[self.start_window.lang]["recalibrate"])
+                        msg_box.setWindowTitle(self.start_window.translations[self.start_window.lang]["recalibrate_2"])
                         msg_box.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
                         return_value = msg_box.exec()
                         if return_value == QMessageBox.Yes:
@@ -812,7 +977,7 @@ class AutoCalibMain:
                         msg_box.close()
                     if attempt_count >= max_attempts:
                         self.calib_window.ui.output_browser_3.setText(
-                            f"Error occurred, (try again or restart app) :\n{e}")
+                            f"{self.start_window.translations[self.start_window.lang]['rand_error']}\n{e}")
                         return
 
             if start_calibration:
@@ -835,6 +1000,10 @@ class AutoCalibMain:
                 self.calib_window.ui.plot_graph_check.setEnabled(False)
                 self.calib_window.ui.menubar.setEnabled(False)
                 self.calib_window.ui.start_btn.setEnabled(False)
+                self.thread_check_opt_usb = ThreadCheckDevicesConnected(self.start_window.opt_dev_vendor,
+                                                                        self.start_window.ref_dev_vendor,
+                                                                        self.my_settings, True)
+                self.thread_check_opt_usb.opt_connected.connect(self.check_usb_opt)
 
                 self.thread_control_gen = self.ThreadControlFuncGen(self.my_settings.generator_id,
                                                                     self.my_settings.generator_sweep_time,
@@ -845,7 +1014,9 @@ class AutoCalibMain:
                                                                     self.thcfgs,
                                                                     self.my_settings.opt_project,
                                                                     self.my_settings.opt_channels,
-                                                                    self.my_settings.folder_sentinel_D_folder)
+                                                                    self.my_settings.folder_sentinel_D_folder,
+                                                                    self.start_window,
+                                                                    self.my_settings)
 
                 self.thread_control_gen.connected_status.connect(self.calib_window.gen_emit)
                 self.thread_control_gen.step_status.connect(self.calib_window.write_to_output_browser)
@@ -868,6 +1039,7 @@ class AutoCalibMain:
                 self.thread_prog_bar.progress_signal.connect(self.calib_window.update_progress_bar)
                 self.thread_ref_sens.finished.connect(self.thread_ref_sens_finished)
                 self.thread_control_gen.start()
+                self.thread_check_opt_usb.start()
                 self.calib_window.ui.stop_btn.setHidden(False)
                 self.calib_window.ui.start_btn.setHidden(True)
                 self.calib_window.ui.start_btn.setEnabled(False)
@@ -875,10 +1047,15 @@ class AutoCalibMain:
         except Exception as e:
             self.calib_window.ui.output_browser_3.setText(f"Error occurred, (try again) :\n{e}")
 
+    def check_usb_opt(self, opt):
+        if not opt:
+            self.thcfgs.set_emergency_stop(True)
+
     def thread_ref_sens_finished(self):
         print("END -------> REF MEASURE")
         # print("EMERGENCY STOP : " + str(self.thcfgs.get_emergency_stop()))
         if not self.thcfgs.get_emergency_stop():
+            self.wl_slopes = self.thread_ref_sens.wl_slopes
             acc_calib = self.thread_ref_sens.acc_calib
             sens_diff = np_abs(self.my_settings.calib_optical_sensitivity - acc_calib[1])
             strike = 0
@@ -892,33 +1069,51 @@ class AutoCalibMain:
                 sens_color = "red"
                 strike += 2
 
-            if np_abs(acc_calib[7]) < 1.0:
-                diff_color = "black"
+            if np_abs(acc_calib[7]) < 1.8:
+                symm_color = "black"
             elif np_abs(acc_calib[7]) < 2.0:
-                diff_color = "orange"
+                symm_color = "orange"
                 strike += 1
             else:
-                diff_color = "red"
+                symm_color = "red"
                 strike += 2
 
+            if np_abs(self.wl_slopes[1]) < 0.85:
+                diff1_color = "black"
+            elif np_abs(self.wl_slopes[1]) < 1.0:
+                diff1_color = "orange"
+                strike += 0.5 if (self.my_settings.opt_channels >= 2) else 1
+            else:
+                diff1_color = "red"
+                strike += 2
+            if self.my_settings.opt_channels >= 2:
+                if np_abs(self.wl_slopes[4]) < 0.95:
+                    diff2_color = "black"
+                elif np_abs(self.wl_slopes[4]) < 1.0:
+                    diff2_color = "orange"
+                    strike += 0.5
+                else:
+                    diff2_color = "red"
+                    strike += 2
+
             fltnss_color = "black"
-
-            # self.calib_window.ui.output_browser_3.setText("Calibration results: ")
-
-            self.calib_window.ui.output_browser_2.setText(f"<font><b>{self.calib_window.s_n_export}</b></font>")
-            self.calib_window.ui.output_browser.setText("# SN :")
+            self.calib_window.ui.output_browser_2.setText(":")
+            self.calib_window.ui.output_browser_2.append(f"<font><b>{self.calib_window.s_n_export}</b></font>")
+            self.calib_window.ui.output_browser.setText(f"{self.start_window.translations[self.start_window.lang]['out_cal_res']}")
+            self.calib_window.ui.output_browser.append("# SN :")
+            self.calib_window.ui.output_browser.append(
+            self.start_window.translations[self.start_window.lang]["center_wl"])
 
             if len(acc_calib) <= 9:
-                self.calib_window.ui.output_browser.append("# Center wavelength :")
                 self.calib_window.ui.output_browser_2.append(str(acc_calib[0]) + ' nm')
             else:
-                self.calib_window.ui.output_browser.append("# Center wavelengths :")
                 self.calib_window.ui.output_browser_2.append(str(acc_calib[0]) + '; ' + str(acc_calib[9]) +
                                                               ' nm')
 
-            self.calib_window.ui.output_browser.append("# Sensitivity : " + '\n' +
-                                                       "# Sensitivity flatness : " + '\n' +
-                                                       "# Difference in symmetry : ")
+            self.calib_window.ui.output_browser.append(f"{self.start_window.translations[self.start_window.lang]['sens']}" + '\n' +
+                                                       f"{self.start_window.translations[self.start_window.lang]['flatness']}" + '\n' +
+                                                       f"{self.start_window.translations[self.start_window.lang]['symm']}" + '\n' +
+                                                       f"{self.start_window.translations[self.start_window.lang]['slope_check']}")
 
             self.calib_window.ui.output_browser_2.append(
                 f"<font color='{sens_color}'>{str(round(acc_calib[1], 3))} pm/g at {str(self.my_settings.calib_gain_mark)} Hz</font>"
@@ -928,9 +1123,13 @@ class AutoCalibMain:
                 f"<font color='{fltnss_color}'>{str(acc_calib[4])} between {str(acc_calib[2])} Hz and  {str(acc_calib[3])} Hz</font>"
             )
 
-            self.calib_window.ui.output_browser_2.append(
-                f"<font color='{diff_color}'>{acc_calib[7]} %</font>"
-            )
+            self.calib_window.ui.output_browser_2.append(f"<font color='{symm_color}'>{str(acc_calib[7])} %</font>")
+
+            text_to_append = f"<font color='{diff1_color}'>{str(self.wl_slopes[1])}</font>"
+            if self.my_settings.opt_channels >= 2:
+                text_to_append += f", <font color='{diff2_color}'>{str(self.wl_slopes[4])}</font>"
+
+            self.calib_window.ui.output_browser_2.append(text_to_append)
 
             self.check_if_calib_is_valid(strike)
 
@@ -948,39 +1147,75 @@ class AutoCalibMain:
                 self.plot_graphs(self.calib_output)
                 # self.calib_figure.init_ui(self.thread_ref_sens.out)
                 # self.calib_figure.show()
+            if self.my_settings.auto_export:
+                self.export_to_database()
+            else:
+                self.calib_window.ui.output_browser_3.setText(
+                    self.start_window.translations[self.start_window.lang]["auto_export_off"])
         else:
-            self.calib_window.ui.output_browser_3.setText("EMERGENCY SHUTDOWN FINISHED")
+            self.calib_window.ui.output_browser_3.setText(self.start_window.translations[self.start_window.lang]["emergency_finished"])
             start_sentinel_modbus(self.my_settings.folder_sentinel_modbus_folder,
-                                  self.my_settings.folder_sentinel_D_folder,
+                                  self.my_settings.subfolder_sentinel_project,
                                   self.my_settings.opt_project, self.my_settings.opt_channels)
         self.start()
-        self.export_to_database()
 
     def plot_graphs(self, out):
         title_font_size = 12
         label_font_size = 16
-        plt.figure("Calibration figures")
+
+        plt.figure(f"slope, {self.calib_window.s_n_export}")
+        if self.my_settings.opt_channels >= 2:
+            plt.subplot(2, 1, 1)
+
+        plt.plot(self.wl_slopes[0], self.wl_slopes[3], label='WL1')
+        plt.plot(self.wl_slopes[0], self.wl_slopes[2], color='red',
+                 label=f'slope*10e6 = {self.wl_slopes[1]}')
+        plt.xlabel(self.start_window.translations[self.start_window.lang]['Index'], fontsize=label_font_size)
+        plt.ylabel(self.start_window.translations[self.start_window.lang]['slope_y'], fontsize=label_font_size)
+        plt.grid(which='both')
+        plt.minorticks_on()
+        plt.title("WL1")
+        plt.legend()
+        if len(self.wl_slopes) > 4:
+            plt.subplot(2, 1, 2)
+            plt.plot(self.wl_slopes[0], self.wl_slopes[6], label='WL2')
+            plt.plot(self.wl_slopes[0], self.wl_slopes[5], color='red',
+                     label=f'slope*10e6 = {self.wl_slopes[4]}')
+            plt.xlabel(self.start_window.translations[self.start_window.lang]['Index'], fontsize=label_font_size)
+            plt.ylabel(self.start_window.translations[self.start_window.lang]['slope_y'], fontsize=label_font_size)
+            plt.title("WL2")
+            plt.legend()
+            plt.grid(which='both')
+            plt.minorticks_on()
+        plt.tight_layout()
+        mng = plt.get_current_fig_manager()
+
+        screen = QDesktopWidget().screenGeometry()
+        mng.window.resize(int(mng.window.width() + mng.window.width() * 0.1), screen.height() if self.my_settings.opt_channels >= 2 else int(screen.height()/2))
+        mng.window.move(0, 0)
+
+        plt.figure(self.start_window.translations[self.start_window.lang]["calib_fig"])
 
         # Plot for Resized filtered data
         plt.subplot(2, 1, 1)  # 1 row, 2 columns, first plot
-        plt.plot(out[1], out[2], label='Optical')
-        plt.plot(out[3], out[4], label='Reference')
+        plt.plot(out[1], out[2], label=self.start_window.translations[self.start_window.lang]['fig_opt'])
+        plt.plot(out[3], out[4], label=self.start_window.translations[self.start_window.lang]['fig_ref'])
         plt.legend()
-        plt.title('Resampled and resized data of ' + self.opt_sentinel_file_name, fontsize=title_font_size)
-        plt.ylabel('Acceleration [g]', fontsize=label_font_size)
-        plt.xlabel('Time[s]', fontsize=label_font_size)
+        plt.title(f"{self.start_window.translations[self.start_window.lang]['fig_resampled']} {self.calib_window.s_n_export}", fontsize=title_font_size)
+        plt.ylabel(self.start_window.translations[self.start_window.lang]['fig_acc'], fontsize=label_font_size)
+        plt.xlabel(self.start_window.translations[self.start_window.lang]['fig_time'], fontsize=label_font_size)
         plt.grid(which='both')
         plt.minorticks_on()
 
         # Plot for Power spectrum
         if self.my_settings.calib_do_spectrum:
             plt.subplot(2, 1, 2)  # 1 row, 2 columns, second plot
-            plt.plot(out[5], out[6], label='Optical')
-            plt.plot(out[7], out[8], label='Reference')
+            plt.plot(out[5], out[6], label=self.start_window.translations[self.start_window.lang]['fig_opt'])
+            plt.plot(out[7], out[8], label=self.start_window.translations[self.start_window.lang]['fig_ref'])
             plt.legend()
-            plt.title('Spectrum of ' + self.opt_sentinel_file_name, fontsize=title_font_size)
-            plt.ylabel('Spectral Density [dB]', fontsize=label_font_size)
-            plt.xlabel('Frequency [Hz]', fontsize=label_font_size)
+            plt.title(f"{self.start_window.translations[self.start_window.lang]['fig_spektrum']} {self.calib_window.s_n_export}", fontsize=title_font_size)
+            plt.ylabel(self.start_window.translations[self.start_window.lang]['fig_dens'], fontsize=label_font_size)
+            plt.xlabel(self.start_window.translations[self.start_window.lang]['fig_freq'], fontsize=label_font_size)
             plt.grid(which='both')
             plt.minorticks_on()
             plt.xlim(self.my_settings.generator_sweep_start_freq,
@@ -992,6 +1227,7 @@ class AutoCalibMain:
         screen = QDesktopWidget().screenGeometry()
         mng.window.resize(int(mng.window.width() + mng.window.width() * 0.1), screen.height())
         fig_width = mng.window.width()
+        mng.window.move(0, 0)
         # Move your parent window (self.window) flush to the right of the Matplotlib window
         current_y = self.calib_window.y()
         self.calib_window.move(fig_width, current_y)
@@ -1012,13 +1248,16 @@ class AutoCalibMain:
             print("KILL SENTINEL START MODBUS")
             kill_sentinel(True, True)
             start_sentinel_modbus(self.my_settings.folder_sentinel_modbus_folder,
-                                  self.my_settings.folder_sentinel_D_folder, self.my_settings.opt_project,
+                                  self.my_settings.subfolder_sentinel_project, self.my_settings.opt_project,
                                   self.my_settings.opt_channels)
 
     def check_if_calib_is_valid(self, acc_calib):
         if acc_calib <= 1:
             self.calib_window.ui.pass_status_label.setStyleSheet("color: green;")
-            self.calib_window.ui.fail_status_label.setText("NOTE")
+            if self.my_settings.auto_export:
+                self.calib_window.ui.fail_status_label.setText("NOTE")
+            else:
+                self.calib_window.ui.fail_status_label.setText("EXPORT")
             self.calib_window.ui.fail_status_label.setStyleSheet("color: grey;")
             self.calib_window.ui.export_pass_btn.setEnabled(True)
             self.calib_window.ui.export_fail_btn.setEnabled(False)
@@ -1030,39 +1269,45 @@ class AutoCalibMain:
             self.calib_window.ui.pass_status_label.setStyleSheet("color: grey;")
             self.calib_window.ui.export_fail_btn.setEnabled(True)
             self.calib_window.ui.export_pass_btn.setEnabled(False)
-            self.export_status = True
+            self.export_status = False
             self.calib_result = False
 
     def export_to_database(self, notes="", btn=False):
         if self.calib_result or btn:
-            try:
-                params = get_params(self.last_s_n)
-                add = [self.last_s_n_export, None, None, True, self.acc_calib[1],   self.acc_calib[0],
-                       self.acc_calib[9] if (len(self.acc_calib) >= 10) else None, self.acc_calib[4],
-                       self.acc_calib[10] if (len(self.acc_calib) >= 10) else None,
-                       self.acc_calib[7], self.export_folder,
-                       self.calibration_profile, None, None, notes, self.time_stamp, self.start_window.operator,
-                       "PASS" if self.calib_result else "FAIL"]
-                params.extend(add)
-                if not self.export_status:
-                    res = self.database.export_to_database(params=params)
-                    #     self.export_to_local_db(str(params[0]))
+            # try:
+            print(f"time stamp: {self.time_stamp}")
+            params, params2 = get_params(self.last_s_n, self.my_settings.starting_folder)
+            add = [self.last_s_n_export, None, None, True, self.acc_calib[1],   self.acc_calib[0],
+                   self.acc_calib[9] if (len(self.acc_calib) >= 10) else None, self.acc_calib[4],
+                   self.acc_calib[10] if (len(self.acc_calib) >= 10) else None,
+                   self.acc_calib[7], self.export_folder,
+                   self.calibration_profile, None, None, notes, self.time_stamp, self.start_window.operator, ]
+            params.extend(add)
+            params.extend(params2)
+            params.append("PASS" if self.calib_result else "FAIL")
+            if not self.export_status:
+                self.calib_window.ui.output_browser_3.clear()
+                res = self.database.export_to_database(params=params)
+                if self.my_settings.export_local_server:
+                    self.export_to_local_db(str(params[0]))
                 else:
-                    res = self.database.update_export_note(self.last_s_n_export, notes)
-                if res == 0:
-                    self.calib_window.ui.output_browser_3.append("Export to the database was successful!")
-                    self.export_status = True
-                elif res == 1:
-                    self.calib_window.ui.output_browser_3.setText("Note was added successfully!\n"
-                                                                  "Calibration result :")
-                elif res == -1:
-                    self.calib_window.ui.output_browser_3.setText("Error connecting to the database!")
-                else:
-                    self.calib_window.ui.output_browser_3.setText("Unexpected error!")
-            except Exception as e:
-                self.calib_window.ui.output_browser_3.setText(f"Unexpected error!\n{e}")
-                self.calib_window.ui.output_browser.clear()
-                self.calib_window.ui.output_browser_2.clear()
+                    self.calib_window.ui.output_browser_3.setText(f"{self.start_window.translations[self.start_window.lang]['export_to_local_server']}")
+            else:
+                res = self.database.update_export_note(self.last_s_n_export, notes)
+            if res == 0:
+                self.calib_window.ui.output_browser_3.append(f"{self.start_window.translations[self.start_window.lang]['out_export']}\n")
+                self.export_status = True
+            elif res == 1:
+                self.calib_window.ui.output_browser_3.setText(f"{self.start_window.translations[self.start_window.lang]['out_note_succ']}\n")
+            elif res == -1:
+                self.calib_window.ui.output_browser_3.setText(self.start_window.translations[self.start_window.lang]['load_wl_error_2'])
+            else:
+                self.calib_window.ui.output_browser_3.setText("Unexpected error!")
+            # except Exception as e:
+            #     print(e)
+            #     self.calib_window.ui.output_browser_3.setText(f"Unexpected error!\n{e}")
+            #     self.calib_window.ui.output_browser.clear()
+            #     self.calib_window.ui.output_browser_2.clear()
 
     def export_to_local_db(self, idcko):
         source_folders = {'optical': self.my_settings.folder_opt_export,
@@ -1078,9 +1323,14 @@ class AutoCalibMain:
 
         file_name_with_extension = os_path.basename(self.start_window.config_file_path)
         file_name = os_path.splitext(file_name_with_extension)[0]
-        res = save_statistics_to_csv(self.my_settings.folder_statistics, file_name, self.time_stamp,
-                                     self.last_s_n, self.acc_calib[1], self.acc_calib[0], self.acc_calib[9])
+        if self.my_settings.opt_channels >= 2:
+            res = save_statistics_to_csv(self.my_settings.folder_statistics, file_name, self.time_stamp,
+                                         self.last_s_n_export, self.acc_calib[1], self.acc_calib[0], self.acc_calib[9])
+        else:
+            res = save_statistics_to_csv(self.my_settings.folder_statistics, file_name, self.time_stamp,
+                                         self.last_s_n_export, self.acc_calib[1], self.acc_calib[0])
         if res != 0:
             self.calib_window.ui.output_browser_3.setText(res)
             self.calib_window.ui.output_browser.clear()
             self.calib_window.ui.output_browser_2.clear()
+

@@ -15,7 +15,7 @@ def excepthook(exc_type, exc_value, exc_tb):
     tb = "".join(format_exception(exc_type, exc_value, exc_tb))
     current_time = datetime.now().time().strftime("%H:%M:%S.%f")
     today = datetime.today().strftime("%b-%d-%Y")
-    with open("../error_log.txt", "a") as f:  # Open the file in append mode
+    with open("error_log.txt", "a") as f:  # Open the file in append mode
         f.write(today)
         f.write(current_time)
         f.write(tb)  # Write the traceback to the file
@@ -32,7 +32,7 @@ sys.excepthook = excepthook
 def read_version():
     from yaml import safe_load as yaml_safe_load
     try:
-        with open('version_info.yaml', 'r') as f:
+        with open('global_settings.yaml', 'r') as f:
             data = yaml_safe_load(f)
             return float(data['version'])
     except FileNotFoundError:
@@ -41,14 +41,12 @@ def read_version():
 
 def write_version(new_version):
     from yaml import safe_dump as yaml_safe_dump
-    with open('version.yaml', 'w') as f:
+    with open('global_settings.yaml', 'w') as f:
         yaml_safe_dump({'version': new_version}, f)
 
 
 def check_for_updates(self):
     from PyQt5.QtWidgets import QMessageBox
-    from requests import get as requests_get
-    from json import loads as json_loads
 
     # url = "https://api.github.com/repos/your_username/your_repository/releases/latest"
     #

@@ -12,7 +12,7 @@ from scipy.signal import filtfilt as signal_filtfilt, butter as signal_butter, p
     coherence as signal_coherence
 import matplotlib.pyplot as plt
 # from IPython.display import display
-import AC_functions_1FBG_v2 as fun
+import acc.AC_functions_1FBG_v2 as fun
 
 
 class ACCalib_1ch:

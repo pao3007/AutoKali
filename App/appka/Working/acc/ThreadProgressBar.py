@@ -1,5 +1,5 @@
 from PyQt5.QtCore import QThread, pyqtSignal
-from ThreadControlFuncGenStatements import ThreadControlFuncGenStatements
+from acc.ThreadControlFuncGenStatements import ThreadControlFuncGenStatements
 
 
 class ThreadProgressBar(QThread):
@@ -13,8 +13,11 @@ class ThreadProgressBar(QThread):
 
     def run(self):
         i = 1
+        j = 0
         while (i < self.duration) and not self.thcfgs.get_emergency_stop() and not self.auto_calib.thread_check_sin_ref.isRunning():
-            # print("PROGRESS BAR : " + str(self.thcfgs.get_emergency_stop()))
-            QThread.msleep(1000)
-            self.progress_signal.emit(i)
-            i = i + 1
+            j += 1
+            QThread.msleep(50)
+            if j > 20:
+                self.progress_signal.emit(i)
+                i = i + 1
+                j = 0

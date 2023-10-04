@@ -1,13 +1,15 @@
+import numpy as np
 from PyQt5.QtCore import QThread, pyqtSignal
 from nidaqmx import Task as nidaqmx_Task
 from nidaqmx.constants import AcquisitionType, WAIT_INFINITELY
 from definitions import kill_sentinel, start_sentinel_modbus
-from ThreadControlFuncGenStatements import ThreadControlFuncGenStatements
+from acc.ThreadControlFuncGenStatements import ThreadControlFuncGenStatements
 from MyStartUpWindow import MyStartUpWindow
 from os import path as os_path, remove as os_remove, rename as os_rename, chdir as os_chdir
 from time import time as time_time
 from datetime import datetime, date
-from SettingsParams import MySettings
+from acc.SettingsParams import MySettings
+from numpy import array as np_array, sum as np_sum
 
 
 class ThreadRefSensDataCollection(QThread):
@@ -15,6 +17,10 @@ class ThreadRefSensDataCollection(QThread):
     def __init__(self, window: MyStartUpWindow, thcfgs: ThreadControlFuncGenStatements, s_n: str, 
                  my_settings: MySettings, s_n_export: str):
         super().__init__()
+        self.extracted_column2 = []
+        self.extracted_column1 = []
+        self.wl_slopes = None
+        self.extracted_columns = None
         self.s_n_export = s_n_export
         self.opt_time = None
         self.out = None
@@ -46,9 +52,13 @@ class ThreadRefSensDataCollection(QThread):
         # data = self.task.read(number_of_samples_per_channel=self.my_settings.ref_number_of_samples,
         #                       timeout=float(self.my_settings.generator_sweep_time+10))
         data = []
-        while len(data) < self.my_settings.ref_number_of_samples and not self.thcfgs.get_emergency_stop():
-            data.extend(self.task.read(number_of_samples_per_channel=self.num_of_samples_per_cycle,
-                              timeout=WAIT_INFINITELY))
+        try:
+            while len(data) < self.my_settings.ref_number_of_samples and not self.thcfgs.get_emergency_stop():
+                data.extend(self.task.read(number_of_samples_per_channel=self.num_of_samples_per_cycle,
+                                  timeout=WAIT_INFINITELY))
+        except Exception:
+            self.thcfgs.set_emergency_stop(True)
+            self.msleep(100)
 
         end_time = time_time()
         self.task.close()
@@ -69,7 +79,7 @@ class ThreadRefSensDataCollection(QThread):
         self.save_data(data, elapsed_time)
         # self.refData = data
         start_sentinel_modbus(self.my_settings.folder_sentinel_modbus_folder,
-                              self.my_settings.folder_sentinel_D_folder,
+                              self.my_settings.subfolder_sentinel_project,
                               self.my_settings.opt_project, self.my_settings.opt_channels)
         self.thread_ref_sens_finished()
 
@@ -115,7 +125,7 @@ class ThreadRefSensDataCollection(QThread):
             if os_path.exists(file_path):
                 os_remove(file_path)
             if self.my_settings.opt_channels == 1:
-                from AC_calibration_1FBG_v3 import ACCalib_1ch
+                from acc.AC_calibration_1FBG_v3 import ACCalib_1ch
                 self.out = ACCalib_1ch(self.s_n, self.window.starting_folder, self.my_settings.folder_main,
                                        self.my_settings.folder_opt_export_raw,
                                        self.my_settings.folder_ref_export_raw,
@@ -154,7 +164,7 @@ class ThreadRefSensDataCollection(QThread):
                 # [3]>flatness_edge_r,[4]>sens. flatness,[5]>MAX acc,[6]>MIN acc,[7]>DIFF symmetry,[8]>TimeCorrection,
                 # [9]>wavelength 2
             elif self.my_settings.opt_channels == 2:
-                from AC_calibration_2FBG_edit import ACCalib_2ch
+                from acc.AC_calibration_2FBG_edit import ACCalib_2ch
 
                 self.out = ACCalib_2ch(self.s_n, self.window.starting_folder, self.my_settings.folder_main,
                                        self.my_settings.folder_opt_export_raw, self.my_settings.folder_ref_export_raw,
@@ -185,7 +195,8 @@ class ThreadRefSensDataCollection(QThread):
 
                 # [3]>flatness_edge_r,[4]>sens. flatness,[5]>MAX acc,[6]>MIN acc,[7]>DIFF symmetry,[8]>TimeCorrection,
                 # [9]>wavelength 2
-            self.time_stamp = datetime.now().strftime('%d-%m-%Y %H:%M:%S')
+            self.time_stamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            self.lin_reg()
             self.save_calib_data()
 
     def save_calib_data(self):
@@ -198,13 +209,18 @@ class ThreadRefSensDataCollection(QThread):
                 file.write("# Center wavelength : " + '\n' + '\t\t' + str(self.acc_calib[0]) + '\n')
             else:
                 file.write("# Channels : " + '\n' + '\t\t' "2 \n")
-                file.write("# Center wavelength : " + '\n' + '\t\t' + str(self.acc_calib[0]) + ';' +
+                file.write("# Center wavelengths : " + '\n' + '\t\t' + str(self.acc_calib[0]) + ';' +
                            str(self.acc_calib[9]) + '\n')
             file.write("# Sensitivity : " + '\n' + '\t\t' + str(self.acc_calib[1]) + " pm/g at " + str(
                 self.my_settings.calib_gain_mark) + " Hz" + '\n')
             file.write("# Sensitivity flatness : " + '\n' + '\t\t' + str(self.acc_calib[4]) + " between " + str(
                 self.acc_calib[2]) + " Hz and " + str(self.acc_calib[3]) + " Hz" + '\n')
             file.write("# Difference in symmetry : " + '\n' + '\t\t' + str(self.acc_calib[7]) + " % " + '\n')
+
+            text_to_append = str(self.wl_slopes[1])
+            if self.my_settings.opt_channels >= 2:
+                text_to_append += f", {self.wl_slopes[4]}"
+            file.write("# Slope check : " + '\n' + '\t\t' + text_to_append + '\n')
 
     def make_opt_raw(self, num_lines_to_skip):
         opt_sentinel_file_name = self.window.calib_window.autoCalib.opt_sentinel_file_name
@@ -243,15 +259,28 @@ class ThreadRefSensDataCollection(QThread):
 
             # Determine the number of lines to read (excluding the last line)
             lines_to_read = total_lines - num_lines_to_skip - 1  # int(window.my_settings.opt_sampling_rate*0.15)
-
-            for _ in range(lines_to_read):
-                line = file.readline()
-                columns = line.strip().split(';')
-
-                if self.my_settings.opt_channels == 1 and len(columns) >= 3:
+            if self.my_settings.opt_channels == 1:
+                for _ in range(lines_to_read):
+                    line = file.readline()
+                    columns = line.strip().split(';')
                     extracted_columns.append(columns[2].lstrip())
-                elif self.my_settings.opt_channels == 2 and len(columns) >= 4:
+                    self.extracted_column1.append(columns[2].lstrip())
+            elif self.my_settings.opt_channels == 2:
+                for _ in range(lines_to_read):
+                    line = file.readline()
+                    columns = line.strip().split(';')
                     extracted_columns.append(columns[2].lstrip() + ' ' + columns[3].lstrip())
+                    self.extracted_column1.append(columns[2].lstrip())
+                    self.extracted_column2.append(columns[3].lstrip())
+
+            # for _ in range(lines_to_read):
+            #     line = file.readline()
+            #     columns = line.strip().split(';')
+            #
+            #     if self.my_settings.opt_channels == 1 and len(columns) >= 3:
+            #         extracted_columns.append(columns[2].lstrip())
+            #     elif self.my_settings.opt_channels == 2 and len(columns) >= 4:
+            #         extracted_columns.append(columns[2].lstrip() + ' ' + columns[3].lstrip())
 
         with open(file_path_raw, 'w') as output_file:
             output_file.write('\n'.join(extracted_columns))
@@ -262,3 +291,25 @@ class ThreadRefSensDataCollection(QThread):
             os_remove(self.s_n + '.csv')
 
         os_rename(opt_sentinel_file_name, self.s_n + '.csv')
+
+    def lin_reg(self):
+        
+        def linear_regression(x, y):
+            n = len(x)
+            m = (n * np_sum(x * y) - np_sum(x) * np_sum(y)) / (n * np_sum(x ** 2) - (np_sum(x)) ** 2)
+            b = (np_sum(y) - m * np_sum(x)) / n
+            return m, b
+        wl1 = np.array(self.extracted_column1[800:len(self.extracted_column1)-250], dtype=float) - self.acc_calib[0]  # dtype=float
+        index_values = np_array(range(len(wl1)), dtype=float)  # Convert range to NumPy array
+        slope1, intercept1 = linear_regression(index_values, wl1)
+        check_wl1 = abs(slope1)*10e6
+        slope_samp1 = [slope1 * x + intercept1 for x in index_values]
+        self.wl_slopes = [index_values, round(check_wl1, 3), slope_samp1, wl1]
+
+        if self.my_settings.opt_channels == 2:
+            wl2 = np.array(self.extracted_column2[800:len(self.extracted_column1)-250], dtype=float) - self.acc_calib[9]
+            # Linear regression for the second column against index
+            slope2, intercept2 = linear_regression(index_values, wl2)
+            check_wl2 = abs(slope2)*10e6
+            slope_samp2 = [slope2 * x + intercept2 for x in index_values]
+            self.wl_slopes.extend([round(check_wl2, 3), slope_samp2, wl2])

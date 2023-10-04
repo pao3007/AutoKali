@@ -2,17 +2,17 @@ import numpy as np
 from PyQt5.QtCore import QThread, pyqtSignal
 from nidaqmx import Task as nidaqmx_Task
 from nidaqmx.constants import AcquisitionType, WAIT_INFINITELY
-from ThreadControlFuncGenStatements import ThreadControlFuncGenStatements
+from acc.ThreadControlFuncGenStatements import ThreadControlFuncGenStatements
 from MyStartUpWindow import MyStartUpWindow
 from definitions import dominant_frequency
-from SettingsParams import MySettings
+from acc.SettingsParams import MySettings
 
 
 class ThreadRefCheckIfReady(QThread):
     finished_signal = pyqtSignal()
     check_ready = pyqtSignal(int)
     out_value = pyqtSignal(str)
-    from RollingAverager import RollingAverager
+    from acc.RollingAverager import RollingAverager
 
     def __init__(self, thcfgs: ThreadControlFuncGenStatements, window: MyStartUpWindow, my_settings: MySettings):
         super().__init__()

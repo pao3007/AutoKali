@@ -1,7 +1,8 @@
 from PyQt5.QtCore import QThread, pyqtSignal
 from pyvisa import ResourceManager as pyvisa_ResourceManager, errors as visa_errors
-from ThreadControlFuncGenStatements import ThreadControlFuncGenStatements
-from definitions import kill_sentinel, start_sentinel_d, check_function_gen_connected
+from acc.ThreadControlFuncGenStatements import ThreadControlFuncGenStatements
+from definitions import kill_sentinel, start_sentinel_d
+from MyStartUpWindow import MyStartUpWindow
 
 
 class ThreadControlFuncGen(QThread):
@@ -11,7 +12,8 @@ class ThreadControlFuncGen(QThread):
 
     def __init__(self, generator_id: str, generator_sweep_time: int, generator_sweep_start_freq: int,
                  generator_sweep_stop_freq: int, generator_sweep_type: str, generator_max_mvpp: int,
-                 thcfgs: ThreadControlFuncGenStatements, opt_project: str, opt_channels: int, sentinel_s_folder: str):
+                 thcfgs: ThreadControlFuncGenStatements, opt_project: str, opt_channels: int, sentinel_s_folder: str,
+                 start_win: MyStartUpWindow, my_settings):
         super().__init__()
         self.generator_id = generator_id
         self.generator_sweep_time = generator_sweep_time
@@ -26,6 +28,8 @@ class ThreadControlFuncGen(QThread):
         self.sentinel_s_folder = sentinel_s_folder
         self.rm = None
         self.instrument = None
+        self.start_win = start_win
+        self.my_settings = my_settings
 
     def run(self):
         self.run_gen()
@@ -37,10 +41,10 @@ class ThreadControlFuncGen(QThread):
             print(e)
 
     def run_gen(self):
-        self.step_status.emit("Starting the sensors test ")
+        self.step_status.emit(self.start_win.translations[self.start_win.lang]["gen_start_sens_test"])
         self.msleep(200)
         try:
-            self.rm = pyvisa_ResourceManager()
+            self.rm = pyvisa_ResourceManager(r"C:\Windows\System32\visa64.dll")
             self.instrument = self.rm.open_resource(self.generator_id)
             self.instrument.write('OUTPut1:STATe OFF')
             self.instrument.write('SOURce1:FUNCtion SINusoid')
@@ -55,7 +59,7 @@ class ThreadControlFuncGen(QThread):
             self.instrument.write('OUTPut1:STATe ON')
             i = 0
             while not self.thcfgs.get_end_sens_test():
-                self.step_status.emit("Testing sensors ")
+                self.step_status.emit(self.start_win.translations[self.start_win.lang]["gen_testing"])
                 if self.thcfgs.get_emergency_stop() or not self.generator_check:
                     self.thcfgs.set_emergency_stop(True)
                     return
@@ -67,7 +71,7 @@ class ThreadControlFuncGen(QThread):
 
             i = 0
             while i < 10:
-                self.step_status.emit("Starting quick sweep test ")
+                self.step_status.emit(self.start_win.translations[self.start_win.lang]["gen_sweep_test_start"])
                 i += 1
                 if self.thcfgs.get_emergency_stop() or not self.generator_check:
                     self.thcfgs.set_emergency_stop(True)
@@ -86,16 +90,16 @@ class ThreadControlFuncGen(QThread):
             self.instrument.write('TRIGger1')
             i = 0
             while i < 100:
-                self.step_status.emit("Quick sweep test ")
+                self.step_status.emit(self.start_win.translations[self.start_win.lang]["gen_sweep_test"])
                 i += 1
                 if self.thcfgs.get_emergency_stop() or not self.generator_check:
                     self.thcfgs.set_emergency_stop(True)
                     return
                 self.msleep(50)
-            self.step_status.emit("Waiting for sentinel to start ")
+            self.step_status.emit(self.start_win.translations[self.start_win.lang]["gen_sentinel_wait"])
 
             kill_sentinel(False, True)
-            start_sentinel_d(self.opt_project, self.sentinel_s_folder)
+            start_sentinel_d(self.opt_project, self.sentinel_s_folder, self.my_settings.subfolder_sentinel_project)
             # self.thcfgs.set_sentinel_started(True)
             i = 0
             while i < 10:
@@ -108,7 +112,7 @@ class ThreadControlFuncGen(QThread):
             self.instrument.write('SOURce1:SWEep:TIME ' + str(self.generator_sweep_time))
 
             while not self.thcfgs.get_start_measuring():
-                self.step_status.emit("Waiting for sentinel to start ")
+                self.step_status.emit(self.start_win.translations[self.start_win.lang]["gen_sentinel_wait"])
                 if self.thcfgs.get_emergency_stop():
                     self.thcfgs.set_emergency_stop(True)
                     return
@@ -117,7 +121,7 @@ class ThreadControlFuncGen(QThread):
             i = 0
 
             while i < 10:
-                self.step_status.emit("Measuring central wavelength ")
+                self.step_status.emit(self.start_win.translations[self.start_win.lang]["gen_start_measure"])
                 if self.thcfgs.get_emergency_stop():
                     self.thcfgs.set_emergency_stop(True)
                     return
@@ -128,7 +132,7 @@ class ThreadControlFuncGen(QThread):
 
             i = 0
             while i < 20:
-                self.step_status.emit("Starting the measurement ")
+                self.step_status.emit(self.start_win.translations[self.start_win.lang]["gen_start_measure"])
                 if self.thcfgs.get_emergency_stop():
                     self.thcfgs.set_emergency_stop(True)
                     return
@@ -137,13 +141,13 @@ class ThreadControlFuncGen(QThread):
             self.instrument.write('TRIGger1')
 
             while not self.thcfgs.get_finished_measuring():
-                self.step_status.emit("Measuring sensors responses for sweeping ")
+                self.step_status.emit(self.start_win.translations[self.start_win.lang]["gen_response_sweep"])
                 if self.thcfgs.get_emergency_stop():
                     return
                 self.msleep(50)
-            self.step_status.emit("Calibration ...")
-        except visa_errors:
-            self.step_status.emit("A VISA I/O error occurred. \nConnect or restart function generator")
+            self.step_status.emit(self.start_win.translations[self.start_win.lang]["out_brow_calib"])
+        except visa_errors.VisaIOError:
+            self.step_status.emit(self.start_win.translations[self.start_win.lang]["gen_visa_error"])
             self.thcfgs.set_emergency_stop(True)
         except Exception as e:
             self.step_status.emit("Error occured : \n" + str(e))

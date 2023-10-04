@@ -1,5 +1,5 @@
 from PyQt5.QtCore import QThread, pyqtSignal
-from ThreadControlFuncGenStatements import ThreadControlFuncGenStatements
+from acc.ThreadControlFuncGenStatements import ThreadControlFuncGenStatements
 
 
 class ThreadSensorsCheckIfReady(QThread):

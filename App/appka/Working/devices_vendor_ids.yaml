@@ -1,3 +1,4 @@
+# Here add USB IDs for devices, so we can check if they are connected
 optical:
   - BA8C
 reference:

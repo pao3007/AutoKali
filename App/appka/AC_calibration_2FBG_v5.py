@@ -19,9 +19,9 @@ Scriptpath = os.getcwd()
 
 # Main path is where the sensitivities.csv and time_corrections.csv will be saved.
 # If sensitivities.csv and time_corrections.csv do not exist, they will be automatically generated
-Main_folder_path = (r"C:\Users\lukac\Documents\Sylex_sensors_export")
-Opt_path = (r"C:\Users\lukac\Documents\Sylex_sensors_export\optical_raw")
-Ref_path = (r"C:\Users\lukac\Documents\Sylex_sensors_export\reference_raw")
+Main_folder_path = (r"C:\Users\PC\Documents\Sylex_sensors_export")
+Opt_path = (r"C:\Users\PC\Documents\Sylex_sensors_export\optical_raw")
+Ref_path = (r"C:\Users\PC\Documents\Sylex_sensors_export\reference_raw")
 
 # Changes dir to where the scripts are saved. This way cells can be run without issue
 os.chdir(Scriptpath)
@@ -30,7 +30,7 @@ os.chdir(Scriptpath)
 #%% Reference values
 # Ref_sensitivity = 1.048689
 # Ref_sensitivity = 1.054050                                                   # Old sensitivity
-Ref_sensitivity = 1.0795
+Ref_sensitivity = 105.532/102
 # Ref_sensitivity = 0.009975789                                                  #0.010061
 
 # Sampling frequencies of optical and reference signal
@@ -176,6 +176,7 @@ display(['Center wavelength = ' + str(round(DataOptRel[0,0],5)) + ' and ' + str(
 optical_sensor_data = fun.calculateAC(-(DataOptRel[:,0] - DataOptRel[:,1]) + (DataOptRel[0,0] - DataOptRel[0,1]), Sensitivity_opt)
 #Calculate acceleration from reference data and corresponsing sensitivity for reference sensor
 reference_sensor_data= DataRefRel/Ref_sensitivity
+# reference_sensor_data= DataRefRel
 #%% Time Syncing
 # Creating time arrays for optical and reference signal according to sampling frequency
 TimeOpt = np.linspace(1/Opt_samp_freq,len(optical_sensor_data)/Opt_samp_freq,num=len(optical_sensor_data))

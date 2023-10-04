@@ -1,12 +1,15 @@
+from PyQt5.QtCore import QTimer
 from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QFileDialog, QDialog, QVBoxLayout, QLabel, QLineEdit, QPushButton, QMessageBox
-from yaml import dump as yaml_dump, safe_load as yaml_safe_load
+from yaml import safe_dump as yaml_dump, safe_load as yaml_safe_load
 from nidaqmx import system as nidaqmx_system
-from os import path as os_path
+from os import path as os_path, chdir as os_chdir
 from MyStartUpWindow import MyStartUpWindow
-from definitions import center_on_screen, scale_app, load_all_config_files, disable_ui_elements, enable_ui_elements
+from definitions import center_on_screen, scale_app, load_all_config_files, enable_ui_elements
 from pyvisa import ResourceManager as pyvisa_ResourceManager
-from SettingsParams import MySettings
+from acc.SettingsParams import MySettings
+from subprocess import run as subprocess_run
+from json import load as json_load
 
 
 def set_style_sheet_btn_clicked(btn, font_size, right_border):
@@ -43,13 +46,14 @@ def slider_scale_get_real_value(value):
 class MySettingsWindow(QMainWindow):
     def __init__(self, start, window: MyStartUpWindow, my_settings: MySettings):
         super().__init__()
-        from ThreadSettingsCheckNew import ThreadSettingsCheckNew
+        self.logged_in = False
+        from acc.ThreadSettingsCheckNew import ThreadSettingsCheckNew
         self.my_settings = my_settings
         self.all_configs = None
         self.resources = None
         self.my_starting_window = window
         self.slider_value = self.my_starting_window.window_scale
-        from settings import Ui_Settings
+        from gui.settings import Ui_Settings
         self.config_file_path = None
         self.nidaq_devices = None
         self.start = start
@@ -57,6 +61,7 @@ class MySettingsWindow(QMainWindow):
         self.ui.setupUi(self)
         self.load_settings()
         self.config_file = None
+        self.local_lang = None
 
         # btns
         self.ui.save_btn.clicked.connect(self.save_settings)
@@ -68,19 +73,22 @@ class MySettingsWindow(QMainWindow):
         self.ui.ref_exp_fold_btn.clicked.connect(self.ref_export_folder_path_select)
         self.ui.ref_export_fold_raw_btn.clicked.connect(self.ref_export_raw_folder_path_select)
 
+        self.ui.combo_box_lang.currentTextChanged.connect(self.lang_changed)
+
         self.ui.opt_exp_fold_btn.clicked.connect(self.opt_export_folder_path_select)
         self.ui.opt_exp_fold_raw_btn.clicked.connect(self.opt_export_raw_folder_path_select)
-        self.ui.opt_sentinel_fold_btn.clicked.connect(self.opt_sentinel_d_folder_path_select)
         self.ui.opt_loaded_project_btn.clicked.connect(self.opt_sentinel_load_proj)
-        self.ui.opt_modbus_fold_btn.clicked.connect(self.opt_modbus_folder_path_select)
         self.ui.calib_databse_export_btn.clicked.connect(self.calib_local_db_export_folder_path_select)
         self.ui.calib_statistics_btn.clicked.connect(self.stats_btn_clicked)
+        self.ui.db_btn.clicked.connect(self.open_db_yaml)
+        self.ui.vendors_btn.clicked.connect(self.open_vendor_yaml)
 
         self.ui.btn_ref_tab.clicked.connect(self.clicked_btn_reference)
         self.ui.btn_opt_tab.clicked.connect(self.clicked_btn_optical)
         self.ui.btn_calib_tab.clicked.connect(self.clicked_btn_calib)
         self.ui.btn_gen_tab.clicked.connect(self.clicked_btn_gen)
         self.ui.btn_db_others_tab.clicked.connect(self.clicked_btn_db_others)
+        self.ui.btn_ref_calib_done.clicked.connect(self.ref_calib_done_clicked)
 
         self.ui.slider_win_scale.setRange(1, 5)
         self.ui.slider_win_scale.valueChanged.connect(self.slider_scale_changed)
@@ -104,13 +112,38 @@ class MySettingsWindow(QMainWindow):
         self.thread_check_new.start()
         self.setWindowIcon(QIcon('images/logo_icon.png'))
         self.setFixedSize(self.width(), int(self.height()*0.96))
-        self.show()
+        if self.my_starting_window.check_last_calib(get_bool=True):
+            self.ui.label_recalib.setText(f"<span style='color:red;'>{self.my_starting_window.translations[self.my_starting_window.lang]['label_recalib_old']}{str(self.my_starting_window.last_ref_calib)}</span>")
+        else:
+            self.ui.label_recalib.setText(
+                f"{self.my_starting_window.translations[self.my_starting_window.lang]['label_recalib_ok']}{str(self.my_starting_window.last_ref_calib)}")
+        self.show_back()
+
+    def lang_changed(self, text):
+        self.set_language(lang=text)
+        self.local_lang = text
+
+    def open_file_using_notepad(self, yaml_file_path):
+        if os_path.exists(yaml_file_path):
+            # Open the .yaml file using Windows Notepad
+            subprocess_run(["notepad.exe", yaml_file_path])
+        else:
+            print(f"File {yaml_file_path} does not exist.")
+
+    def open_vendor_yaml(self):
+        yaml_file_path = self.my_starting_window.yaml_devices_vendor
+        self.open_file_using_notepad(yaml_file_path)
+
+    def open_db_yaml(self):
+        yaml_file_path = self.my_starting_window.yaml_database_com
+        self.open_file_using_notepad(yaml_file_path)
 
     def login_into_settings(self):
         pswd_dialog = QDialog(self)
         layout = QVBoxLayout()
+        lang = self.local_lang if self.local_lang is not None else self.my_starting_window.lang
 
-        password_label = QLabel("Password:")
+        password_label = QLabel(self.my_starting_window.translations[lang]["password_label"])
         password_label.setStyleSheet("color: rgb(208, 208, 208);")
         layout.addWidget(password_label)
 
@@ -132,12 +165,15 @@ class MySettingsWindow(QMainWindow):
             password = password_input.text()
             if password == "heslo":
                 enable_ui_elements(self.make_list_of_elements_to_enable())
-                self.ui.label_login_warning.setText("You are logged in")
+                enable_ui_elements(self.make_list_of_elements_to_enable())
+                self.ui.label_login_warning.setText(self.my_starting_window.translations[lang]["label_login_warning_ok"])
                 self.ui.login_btn.setEnabled(False)
+                self.ui.login_btn.setText(self.my_starting_window.translations[lang]["change_login_btn"])
+                self.logged_in = True
             else:
                 msg = QMessageBox()
                 msg.setIcon(QMessageBox.Warning)
-                msg.setText("Bad Password")
+                msg.setText(self.my_starting_window.translations[lang]["bad_psd"])
                 msg.setWindowTitle("Error")
                 msg.exec_()
 
@@ -264,14 +300,15 @@ class MySettingsWindow(QMainWindow):
 
     def save_as_settings(self):
         options = QFileDialog.Options()
-        file_path, _ = QFileDialog.getSaveFileName(self, "Save YAML File", self.my_starting_window.subfolderConfig_path,
+        file_path, _ = QFileDialog.getSaveFileName(self, "Save YAML File", self.my_settings.subfolderConfig_path,
                                                    "YAML Files (*.yaml);;All Files (*)",
                                                    options=options)
+        print(file_path)
         if file_path:
             self.my_starting_window.current_conf = False
             self.my_starting_window.none = self.my_settings.save_config_file(False, self.my_starting_window.config_file_path)
             with open(file_path, 'w') as file:
-                yaml_dump(self.my_starting_window.def_config, file)
+                yaml_dump(self.my_settings.default_config(self.my_settings.opt_sensor_type), file)
             with open(file_path, 'r') as file:
                 self.my_starting_window.config = yaml_safe_load(file)
             self.my_starting_window.current_conf = True
@@ -302,8 +339,6 @@ class MySettingsWindow(QMainWindow):
         self.my_settings.folder_opt_export = self.ui.opt_exp_folder_line.text()
         self.my_settings.folder_opt_export_raw = self.ui.opt_exp_folder_raw_line.text()
         self.my_settings.folder_calibration_export = self.ui.calib_export_folder_line.text()
-        self.my_settings.folder_sentinel_D_folder = self.ui.opt_sentinel_fold_line.text()
-        self.my_settings.folder_sentinel_modbus_folder = self.ui.opt_modbus_fold_line.text()
         self.my_settings.folder_db_export_folder = self.ui.calib_database_export_folder_line.text()
         self.my_settings.calib_reference_sensitivity = float(self.ui.calib_ref_sensitivity_line.text())
         self.my_settings.calib_l_flatness = int(self.ui.calib_flatness_left_line.text())
@@ -311,6 +346,8 @@ class MySettingsWindow(QMainWindow):
         self.my_settings.calib_angle_set_freq = int(self.ui.calib_agnelsetfreq_line.text())
         self.my_settings.calib_phase_mark = int(self.ui.calib_phase_mark_line.text())
         self.my_settings.folder_statistics = self.ui.calib_statistics_folder_line.text()
+        self.my_settings.auto_export = self.ui.check_auto_export.isChecked()
+        self.my_settings.export_local_server = self.ui.check_export_to_loc_server.isChecked()
 
         self.my_settings.calib_plot = self.ui.calib_plot_graphs_check.isChecked()
         self.my_settings.calib_downsample = int(self.ui.calib_downsample_check.isChecked())
@@ -328,6 +365,8 @@ class MySettingsWindow(QMainWindow):
             self.my_settings.ref_measure_time * self.my_settings.ref_sample_rate)
 
         self.my_starting_window.config_contains_none = self.my_settings.save_config_file(True, self.my_starting_window.config_file_path)
+        self.my_starting_window.lang = self.ui.combo_box_lang.currentText()
+        self.save_global_settings()
 
         self.close()
 
@@ -350,14 +389,12 @@ class MySettingsWindow(QMainWindow):
         self.ui.opt_sampling_rate_line.setText(str(self.my_settings.opt_sampling_rate))
         self.ui.opt_exp_folder_line.setText(self.my_settings.folder_opt_export)
         self.ui.opt_exp_folder_raw_line.setText(self.my_settings.folder_opt_export_raw)
-        self.ui.opt_sentinel_fold_line.setText(self.my_settings.folder_sentinel_D_folder)
         self.ui.opt_loaded_project_line.setText(self.my_settings.opt_project)
         self.ui.opt_channels_combobox.setCurrentText(str(self.my_settings.opt_channels))
         self.ui.calib_gain_mark_line.setText(str(self.my_settings.calib_gain_mark))
         self.ui.calib_opt_sensitivity_line.setText(str(self.my_settings.calib_optical_sensitivity))
         self.ui.calib_opt_sensitivity_toler_line.setText(str(self.my_settings.calib_optical_sens_tolerance))
         self.ui.calib_export_folder_line.setText(self.my_settings.folder_calibration_export)
-        self.ui.opt_modbus_fold_line.setText(self.my_settings.folder_sentinel_modbus_folder)
         self.ui.calib_ref_sensitivity_line.setText(str(self.my_settings.calib_reference_sensitivity))
         self.ui.calib_flatness_left_line.setText(str(self.my_settings.calib_l_flatness))
         self.ui.calib_flatness_right_line.setText(str(self.my_settings.calib_r_flatness))
@@ -365,7 +402,8 @@ class MySettingsWindow(QMainWindow):
         self.ui.calib_agnelsetfreq_line.setText(str(self.my_settings.calib_angle_set_freq))
         self.ui.calib_database_export_folder_line.setText(str(self.my_settings.folder_db_export_folder))
         self.ui.calib_statistics_folder_line.setText(str(self.my_settings.folder_statistics))
-
+        self.ui.check_export_to_loc_server.setChecked(self.my_settings.export_local_server)
+        self.ui.check_auto_export.setChecked(self.my_settings.auto_export)
         self.ui.gen_vpp_line.setText(str(self.my_settings.generator_max_mvpp))
         self.ui.gen_sweep_type_combobox.setCurrentText(str(self.my_settings.generator_sweep_type))
         self.ui.gen_stop_freq_line.setText(str(self.my_settings.generator_sweep_stop_freq))
@@ -404,13 +442,16 @@ class MySettingsWindow(QMainWindow):
                                                  self.my_settings.opt_sensor_type, self.my_settings.subfolderConfig_path)
         self.ui.ref_channel_comboBox.blockSignals(False)
         self.ui.ref_device_comboBox.blockSignals(False)
+        self.ui.combo_box_lang.addItem("sk")
+        self.ui.combo_box_lang.addItem("en")
+        self.ui.combo_box_lang.setCurrentText(self.my_starting_window.lang)
 
     def gen_id_combobox_clicked(self):
         self.ui.gen_id_combobox.blockSignals(True)
         self.ui.gen_id_combobox.clear()
         self.ui.gen_id_combobox.addItem("SELECT DEVICE")
         i = 1
-        rm = pyvisa_ResourceManager()
+        rm = pyvisa_ResourceManager(r"C:\Windows\System32\visa64.dll")
         self.resources = rm.list_resources()
         for resource_name in self.resources:
             try:
@@ -429,14 +470,10 @@ class MySettingsWindow(QMainWindow):
         return folder_path
 
     def opt_sentinel_load_proj(self):
-        if self.ui.opt_sentinel_fold_line.text() is not None:
-            file_path, _ = QFileDialog.getOpenFileName(self, "Select Project",
-                                                       directory=os_path.join(self.ui.opt_sentinel_fold_line.text(),
-                                                                              "Sensors"))
-        else:
-            file_path, _ = QFileDialog.getOpenFileName(self, "Select Project")
 
-        print(file_path)
+        file_path, _ = QFileDialog.getOpenFileName(self, "Select Project",
+                                                   directory=self.my_settings.subfolder_sentinel_project)
+
         if file_path:
             self.ui.opt_loaded_project_line.setText(os_path.basename(file_path))
 
@@ -463,16 +500,6 @@ class MySettingsWindow(QMainWindow):
         folder_path = self.select_folder()
         if folder_path:
             self.ui.calib_database_export_folder_line.setText(folder_path)
-
-    def opt_modbus_folder_path_select(self):
-        folder_path = self.select_folder()
-        if folder_path:
-            self.ui.opt_modbus_fold_line.setText(folder_path)
-
-    def opt_sentinel_d_folder_path_select(self):
-        folder_path = self.select_folder()
-        if folder_path:
-            self.ui.opt_sentinel_fold_line.setText(folder_path)
 
     def stats_btn_clicked(self):
         folder_path = self.select_folder()
@@ -519,12 +546,8 @@ class MySettingsWindow(QMainWindow):
                        self.ui.opt_exp_fold_btn,
                        self.ui.opt_exp_folder_raw_line,
                        self.ui.opt_exp_fold_raw_btn,
-                       self.ui.opt_sentinel_fold_line,
-                       self.ui.opt_sentinel_fold_btn,
                        self.ui.opt_loaded_project_line,
                        self.ui.opt_loaded_project_btn,
-                       self.ui.opt_modbus_fold_line,
-                       self.ui.opt_modbus_fold_btn,
                        self.ui.gen_sweep_type_combobox,
                        self.ui.gen_start_freq_line,
                        self.ui.gen_stop_freq_line,
@@ -547,19 +570,110 @@ class MySettingsWindow(QMainWindow):
                        self.ui.calib_downsample_check,
                        self.ui.calib_do_spectrum_check,
                        self.ui.calib_plot_graphs_check,
-                       self.ui.calib_flatness_right_line]
+                       self.ui.calib_flatness_right_line,
+                       self.ui.calib_statistics_btn,
+                       self.ui.calib_statistics_folder_line,
+                       self.ui.btn_ref_calib_done,
+                       self.ui.check_auto_export,
+                       self.ui.check_export_to_loc_server]
         return list_enable
+
+    def show_back(self):
+        self.set_language()
+        self.setFixedSize(int(self.width()*self.my_starting_window.window_scale),
+                          int(self.height()*self.my_starting_window.window_scale))
+        scale_app(self, self.my_starting_window.window_scale)
+        QTimer.singleShot(0, lambda: center_on_screen(self))
 
     def closeEvent(self, event):
         self.thread_check_new.terminate()
         if self.start:
-            self.my_starting_window.show()
+            self.my_starting_window.show_back()
         else:
-            self.my_starting_window.calib_window.show()
+            self.my_starting_window.calib_window.show_back()
         super().closeEvent(event)
 
-    def showEvent(self, event):
-        self.setFixedSize(int(self.width()*self.my_starting_window.window_scale),
-                          int(self.height()*self.my_starting_window.window_scale))
-        scale_app(self, self.my_starting_window.window_scale)
-        center_on_screen(self)
+    def set_language(self, lang=None):
+        if not lang:
+            lang = self.my_starting_window.lang
+        os_chdir(self.my_starting_window.starting_folder)
+        file_path = "lang_pack.json"
+        with open(file_path, 'r', encoding="utf-8") as f:
+            trans = json_load(f)
+
+            if self.my_starting_window.check_last_calib(get_bool=True):
+                self.ui.label_recalib.setText(f"<span style='color:red;'>{trans[lang]['label_recalib_old']}{str(self.my_starting_window.last_ref_calib)}</span>")
+            else:
+                self.ui.label_recalib.setText(f"{trans[lang]['label_recalib_ok']}{str(self.my_starting_window.last_ref_calib)}")
+
+        self.ui.settings_settings_label.setText(trans[lang]["settings_settings_label"])
+        self.ui.btn_ref_calib_done.setText(trans[lang]["btn_ref_calib_done"])
+        # self.ui.settings_plot_graph_lable.setText()
+        # self.ui.settings_do_specrtum_label.setText()
+        # self.ui.settings_gain_mark_label.setText()
+        # self.ui.settings_filter_data_label.setText()
+        # self.ui.setting_downsample_label.setText()
+        # self.ui.settings_calib_flatness_label.setText()
+        # self.ui.settings_calib_flatness_label_l.setText()
+        # self.ui.settings_calib_flatness_label_r.setText()
+        # self.ui.settings_calib_anglesetfreq_label.setText()
+        # self.ui.settings_calib_phasemark_label.setText()
+        # self.ui.settings_calib_export_label.setText()
+        # self.ui.settings_exp_fold_opt_raw_label.setText()
+        # self.ui.settings_opt_exp_fold_label.setText()
+        # self.ui.settings_sampl_rate_opt_label.setText()
+        # self.ui.settings_load_project_label.setText()
+        # self.ui.settings_sentinel_fold_label.setText()
+        # self.ui.settings_opt_channles_label.setText()
+        # self.ui.settings_modbus_fold_label.setText()
+        # self.ui.settings_opt_cal_sens_label.setText()
+        # self.ui.settings_pm_g_label.setText()
+        # self.ui.settings_opt_cal_sens_label_2.setText()
+        # self.ui.setting_export_ref_folder_label.setText()
+        # self.ui.settings_devie_label.setText()
+        # self.ui.settings_channel_label.setText()
+        # self.ui.setting_sampl_rate_ref_label.setText()
+        # self.ui.settings_export_raw_label.setText()
+        # self.ui.settings_ref_cal_sens_label.setText()
+        # self.ui.settings_gen_id_label.setText()
+        # self.ui.settings_gen_sweep_type_label.setText()
+        # self.ui.settings_gen_sweep_freq_start_label.setText()
+        # self.ui.settings_gen_sweep_freq_stop_label.setText()
+        # self.ui.settings_gen_sweep_time_label.setText()
+        # self.ui.settings_gen_vpp_label.setText()
+        # self.ui.settings_s_label.setText()
+        self.ui.settings_win_scale_label.setText(trans[lang]["settings_win_scale_label"])
+        # self.ui.settings_main_folder_label.setText()
+        # self.ui.settings_calib_export_label_2.setText()
+        # self.ui.settings_calib_export_label_3.setText()
+        self.ui.label_login_warning.setText(trans[lang]["label_login_warning" if not self.logged_in else "label_login_warning_ok"])
+        self.ui.settings_lang_label.setText(trans[lang]["settings_lang_label"])
+
+        self.ui.save_btn.setText(trans[lang]["save_btn"])
+        self.ui.save_as_btn.setText(trans[lang]["save_as_btn"])
+        self.ui.close_btn.setText(trans[lang]["close_btn"])
+        self.ui.cancel_btn.setText(trans[lang]["cancel_btn"])
+        self.ui.login_btn.setText(trans[lang]["login_btn" if not self.logged_in else "change_login_btn"])
+
+    def ref_calib_done_clicked(self):
+        from datetime import datetime
+        current_datetime = datetime.now()
+        current_date = current_datetime.date()
+        self.my_starting_window.last_ref_calib = current_date
+        with open('global_settings.yaml', 'r') as f:
+            config = yaml_safe_load(f)
+            config["last_ref_calib"] = self.my_starting_window.last_ref_calib
+        with open('global_settings.yaml', 'w') as f:
+            yaml_dump(config, f)
+        self.ui.label_recalib.setText(f"{self.my_starting_window.translations[self.my_starting_window.lang if self.local_lang is None else self.local_lang]['label_recalib_set']}{str(self.my_starting_window.last_ref_calib)}")
+
+    def save_global_settings(self):
+        with open('global_settings.yaml', 'r') as f:
+            config = yaml_safe_load(f)
+            config["language"] = self.my_starting_window.lang
+            config["windows_scale"] = self.my_starting_window.window_scale
+
+        with open('global_settings.yaml', 'w') as f:
+            yaml_dump(config, f)
+
+

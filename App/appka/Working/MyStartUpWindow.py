@@ -1,29 +1,40 @@
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import QTimer, QDate
 from PyQt5.QtGui import QPixmap
 from codecs import open as codecs_open
 from configparser import ConfigParser
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QMainWindow, QMessageBox, QSplashScreen, QDialog, QVBoxLayout, QLineEdit, QDialogButtonBox
-from yaml import safe_load as yaml_safe_load, dump as yaml_dump, safe_dump as yaml_safe_dump
-from nidaqmx import system as nidaqmx_system
+from PyQt5.QtWidgets import QMainWindow, QMessageBox, QSplashScreen
+from yaml import safe_load as yaml_safe_load, safe_dump as yaml_safe_dump
 from os import path as os_path, getcwd as os_getcwd
-from start_up import Ui_Setup
-from definitions import scale_app, center_on_screen, load_all_config_files
-from ThreadControlFuncGenStatements import ThreadControlFuncGenStatements
-from SettingsParams import MySettings
+from gui.start_up import Ui_Setup
+from definitions import scale_app, center_on_screen, load_all_config_files, show_add_dialog
+from acc.ThreadControlFuncGenStatements import ThreadControlFuncGenStatements
+from acc.SettingsParams import MySettings
+from json import load as json_load
 
 
 class MyStartUpWindow(QMainWindow):
 
     def __init__(self, splash: QSplashScreen):
         super().__init__()
-
+        self.bad_ref = False
+        self.check_status = False
+        self.gen_error = False
+        self.gen_connected = False
+        self.opt_connected = False
+        self.lang = "sk"
+        self.version = None
+        self.last_ref_calib = None
+        self.translations = None
+        self.calib_treshold = 180
+        self.operators = []
         self.thread_check_usb_devices = None
         self.splash = splash
         self.thcfgs = ThreadControlFuncGenStatements()
         self.window_scale_delta = 1
         self.window_scale = 1
         self.yaml_devices_vendor = 'devices_vendor_ids.yaml'
+        self.yaml_database_com = 'database_com.yaml'
         
         self.opt_dev_vendor = None
         self.ref_dev_vendor = None
@@ -39,12 +50,14 @@ class MyStartUpWindow(QMainWindow):
         self.starting_folder = os_getcwd()
         self.my_settings = MySettings(self.starting_folder)
         self.my_settings.create_folders()
+        self.load_global_settings()
 
         self.config = None
         self.config_contains_none = True
 
         self.ui = Ui_Setup()
         self.ui.setupUi(self)
+        self.set_language()
         # connect btn
         self.ui.open_settings_btn.clicked.connect(self.open_settings_window)
         self.ui.start_app.clicked.connect(self.start_calib_app)
@@ -63,13 +76,9 @@ class MyStartUpWindow(QMainWindow):
         self.ui.start_app.setEnabled(False)
 
         # labels
-        self.ui.status_opt_label.setText("Optical device INIT")
         self.ui.status_opt_label.setStyleSheet("color: black;")
-        self.ui.status_ref_label.setText("Reference device INIT")
         self.ui.status_ref_label.setStyleSheet("color: black;")
-        self.ui.status_gen_label.setText("Function generator INIT")
         self.ui.status_gen_label.setStyleSheet("color: black;")
-        self.ui.open_settings_btn.setText("SETTINGS")
         self.ui.open_settings_btn.setStyleSheet("color: black;")
 
         #  graphics
@@ -88,7 +97,10 @@ class MyStartUpWindow(QMainWindow):
         self.setWindowTitle("Appka")
         self.setFixedSize(self.width(), int(self.height()*0.95))
         self.splash.hide()
-        self.show()
+        scale_app(self, self.window_scale)
+        self.setFixedSize(int(self.width() * self.window_scale),
+                          int(self.height() * self.window_scale))
+        self.show_back()
 
     def add_remove_operator(self):
         def show_remove_dialog():
@@ -110,80 +122,37 @@ class MyStartUpWindow(QMainWindow):
                         return f"Operator '{operator_to_delete}' not found."
                 except Exception as e:
                     return f"An error occurred: {e}"
-
             op_to_remv = self.ui.combobox_sel_operator.currentText()
-            msgBox = QMessageBox()
-            msgBox.setText(f"Do you really want to remove the operator? : {op_to_remv}")
-            msgBox.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
-            ret = msgBox.exec_()
+            box = QMessageBox(self)
+            box.setWindowTitle("Operator")
+            box.setText(f"{self.translations[self.lang]['remove_op_msg']}\n{op_to_remv}")
 
-            if ret == QMessageBox.Yes:
+            yes_button = box.addButton(self.translations[self.lang]['close_event_yes'], QMessageBox.YesRole)
+            no_button = box.addButton(self.translations[self.lang]['close_event_no'], QMessageBox.NoRole)
+
+            box.exec_()
+
+            if box.clickedButton() == yes_button:
                 load_and_delete_operator(op_to_remv)
                 self.load_operators()
                 self.operator_changed(0)
-                print("Operator removed")
                 # Logic to remove operator here
 
-        def show_add_dialog():
-            def add_operator_to_yaml(new_operator, file_path="operators.yaml"):
-                try:
-                    # Read the existing YAML file
-                    with open(file_path, 'r') as f:
-                        data = yaml_safe_load(f)
-
-                    # Check if 'operators' key exists in the YAML, if not create one
-                    if 'operators' not in data:
-                        data['operators'] = []
-
-                    # Add the new operator to the list of operators
-                    data['operators'].append(new_operator)
-
-                    # Write the updated data back to the YAML file
-                    with open(file_path, 'w') as f:
-                        yaml_safe_dump(data, f)
-
-                    print(f"Added {new_operator} to {file_path}")
-                    self.load_operators(select_operator=new_operator)
-                except Exception as e:
-                    print(f"An error occurred: {e}")
-
-            dialog = QDialog(self)
-            dialog.setWindowTitle("Add New Operator")
-            dialog_layout = QVBoxLayout()
-
-            line_edit = QLineEdit()
-            dialog_layout.addWidget(line_edit)
-
-            button_box = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
-            dialog_layout.addWidget(button_box)
-
-            dialog.setLayout(dialog_layout)
-
-            button_box.accepted.connect(dialog.accept)
-            button_box.rejected.connect(dialog.reject)
-
-            result = dialog.exec_()
-
-            if result == QDialog.Accepted:
-                add_operator_to_yaml(line_edit.text())
-
         if self.ui.combobox_sel_operator.currentIndex() != 0:
-            print("remove")
             show_remove_dialog()
         else:
-            print("add")
-            show_add_dialog()
+            show_add_dialog(self, self.starting_folder)
 
-    def load_operators(self, select_operator = None):
+    def load_operators(self, select_operator=None):
         self.ui.combobox_sel_operator.blockSignals(True)
         self.ui.combobox_sel_operator.clear()
-        self.ui.combobox_sel_operator.addItem("Select/Add operator")
+        self.ui.combobox_sel_operator.addItem(self.translations[self.lang]["combobox_sel_operator"])
         file_path = "operators.yaml"
         try:
             with open(file_path, 'r') as f:
                 data = yaml_safe_load(f)
-            operators = data.get('operators', [])
-            for operator in operators:
+            self.operators = data.get('operators', [])
+            for operator in self.operators:
                 self.ui.combobox_sel_operator.addItem(operator)
             if select_operator:
                 self.ui.combobox_sel_operator.setCurrentText(select_operator)
@@ -197,6 +166,7 @@ class MyStartUpWindow(QMainWindow):
             self.ui.btn_add_operator.setText("-")
         else:
             self.ui.btn_add_operator.setText("+")
+        self.all_dev_connected_signal(combobox=True)
 
     def config_combobox_changed(self, text):
         try:
@@ -227,30 +197,44 @@ class MyStartUpWindow(QMainWindow):
     def channel_type_changed(self, index):
         self.my_settings.opt_channels = int(index)
 
-    def all_dev_connected_signal(self, opt_connected, ref_connected, gen_connected, gen_error, check_status):
+    def all_dev_connected_signal(self, opt_connected=False, ref_connected=False, gen_connected=False, gen_error=False, check_status=False, bad_ref=False, combobox=False):
+        if combobox and self.opt_connected is not None:
+            opt_connected = self.opt_connected
+            ref_connected = self.ref_connected
+            gen_connected = self.gen_connected
+            gen_error = self.gen_error
+            check_status = self.check_status
+            bad_ref = self.bad_ref
+        else:
+            self.opt_connected = opt_connected
+            self.ref_connected = ref_connected
+            self.gen_connected = gen_connected
+            self.gen_error = gen_error
+            self.check_status = check_status
+            self.bad_ref = bad_ref
         ow = False
-        if (ref_connected and opt_connected and gen_connected and self.ui.start_app.text() == "START" and not gen_error and
-                self.ui.combobox_sel_operator.currentIndex() != 0 and self.my_settings.opt_channels != 0 and not self.config_contains_none) or ow:
+        if (ref_connected and opt_connected and gen_connected and self.ui.start_app.text() == self.translations[self.lang]["start_app_a"] and not gen_error and
+                self.ui.combobox_sel_operator.currentIndex() != 0 and self.my_settings.opt_channels != 0 and not self.config_contains_none and not bad_ref) or ow:
             self.ui.start_app.setEnabled(True)
         else:
             self.ui.start_app.setEnabled(False)
 
         if check_status:
             if not self.config_contains_none:
-                self.ui.open_settings_btn.setText("SETTINGS")
+                self.ui.open_settings_btn.setText(self.translations[self.lang]["open_settings_btn"])
                 self.ui.open_settings_btn.setStyleSheet("color: black;")
             if self.config_contains_none and not ow:
                 if self.ui.null_detect_label.isEnabled():
                     # self.ui.null_detect_label.setHidden(False)
                     self.ui.null_detect_label.setEnabled(False)
                     # self.ui.null_detect_label.setStyleSheet("color: black;")
-                    self.ui.open_settings_btn.setText("SETTINGS")
+                    self.ui.open_settings_btn.setText(self.translations[self.lang]["open_settings_btn"])
                     self.ui.open_settings_btn.setStyleSheet("color: red;")
                 else:
                     # self.ui.null_detect_label.setHidden(False)
                     self.ui.null_detect_label.setEnabled(True)
                     # self.ui.null_detect_label.setStyleSheet("color: red;")
-                    self.ui.open_settings_btn.setText("SETUP     ")
+                    self.ui.open_settings_btn.setText(self.translations[self.lang]["open_settings_btn_err"])
                     self.ui.open_settings_btn.setStyleSheet("color: red;")
                 self.ui.start_app.setEnabled(False)
             # elif self.my_settings.opt_channels != 0:
@@ -258,41 +242,49 @@ class MyStartUpWindow(QMainWindow):
             #     if ref_connected and opt_connected and gen_connected and self.ui.start_app.text() == "START" and not gen_error and (self.ui.combobox_sel_operator.currentIndex() != 0) or ow:
             #         self.ui.start_app.setEnabled(True)
 
-
-            if not ref_connected:
+            if not ref_connected and not bad_ref:
+                self.ui.status_ref_label.setText(self.translations[self.lang]["status_ref_label"]["disconnect"])
                 if self.ui.status_ref_label.isEnabled():
                     self.ui.status_ref_label.setEnabled(False)
-                    self.ui.status_ref_label.setText("Reference USB device DISCONNECTED")
                     self.ui.status_ref_label.setStyleSheet("color: black;")
                 else:
                     self.ui.status_ref_label.setEnabled(True)
-                    self.ui.status_ref_label.setText("Reference USB device DISCONNECTED")
+                    self.ui.status_ref_label.setStyleSheet("color: red;")
+                if self.ref_connected:
+                    self.check_devices_load_comboboxes()
+                    self.ref_connected = False
+            elif bad_ref:
+                self.ui.status_ref_label.setText(self.translations[self.lang]["status_ref_label"]["wrong_name"])
+                if self.ui.status_ref_label.isEnabled():
+                    self.ui.status_ref_label.setEnabled(False)
+                    self.ui.status_ref_label.setStyleSheet("color: black;")
+                else:
+                    self.ui.status_ref_label.setEnabled(True)
                     self.ui.status_ref_label.setStyleSheet("color: red;")
                 if self.ref_connected:
                     self.check_devices_load_comboboxes()
                     self.ref_connected = False
             else:
-                self.ui.status_ref_label.setText("Reference USB device CONNECTED")
+                self.ui.status_ref_label.setText(self.translations[self.lang]["status_ref_label"]["connected"])
                 self.ui.status_ref_label.setStyleSheet("color: green;")
                 if not self.ref_connected:
                     self.ref_connected = True
                     self.check_devices_load_comboboxes()
 
             if not opt_connected:
+                self.ui.status_opt_label.setText(self.translations[self.lang]["status_opt_label"]["disconnect"])
                 if self.ui.status_opt_label.isEnabled():
                     self.ui.status_opt_label.setEnabled(False)
-                    self.ui.status_opt_label.setText("Optical USB device DISCONNECTED")
                     self.ui.status_opt_label.setStyleSheet("color: black;")
                 else:
                     self.ui.status_opt_label.setEnabled(True)
-                    self.ui.status_opt_label.setText("Optical USB device DISCONNECTED")
                     self.ui.status_opt_label.setStyleSheet("color: red;")
             else:
-                self.ui.status_opt_label.setText("Optical USB device CONNECTED")
+                self.ui.status_opt_label.setText(self.translations[self.lang]["status_opt_label"]["connected"])
                 self.ui.status_opt_label.setStyleSheet("color: green;")
 
             if not gen_connected:
-                self.ui.status_gen_label.setText("Function generator DISCONNECTED")
+                self.ui.status_gen_label.setText(self.translations[self.lang]["status_gen_label"]["disconnect"])
                 if self.ui.status_gen_label.isEnabled():
                     self.ui.status_gen_label.setEnabled(False)
                     self.ui.status_gen_label.setStyleSheet("color: black;")
@@ -303,14 +295,14 @@ class MyStartUpWindow(QMainWindow):
                 if gen_error:
                     if self.ui.status_gen_label.isEnabled():
                         self.ui.status_gen_label.setEnabled(False)
-                        self.ui.status_gen_label.setText("Function generator ERROR")
+                        self.ui.status_gen_label.setText(self.translations[self.lang]["status_gen_label"]["error_a"])
                         self.ui.status_gen_label.setStyleSheet("color: red;")
                     else:
                         self.ui.status_gen_label.setEnabled(True)
-                        self.ui.status_gen_label.setText("please RESTART generator")
+                        self.ui.status_gen_label.setText(self.translations[self.lang]["status_gen_label"]["error_b"])
                         self.ui.status_gen_label.setStyleSheet("color: black;")
                 else:
-                    self.ui.status_gen_label.setText("Function generator CONNECTED")
+                    self.ui.status_gen_label.setText(self.translations[self.lang]["status_gen_label"]["connected"])
                     self.ui.status_gen_label.setStyleSheet("color: green;")
 
     def sens_type_combobox_changed(self, text):
@@ -320,27 +312,19 @@ class MyStartUpWindow(QMainWindow):
                               self.my_settings.subfolderConfig_path)
         self.setup_config()
 
-        # self.save_config_file(True)
-
-    # def ref_channel_combobox_changed(self, text):
-    #     self.my_settings.ref_channel = text
-    #     self.config_contains_none = self.my_settings.save_config_file(True, self.config_file_path)
-
-    # def ref_device_combobox_changed(self, text):
-    #     if text != "NOT DETECTED":
-    #         self.my_settings.ref_device_name = text
-    #     self.config_contains_none = self.my_settings.save_config_file(True,self.config_file_path)
-
     def return_all_configs(self):
         from glob import glob
         yaml_files = glob(os_path.join(self.my_settings.subfolderConfig_path, '*.yaml'))
         yaml_return = []
         for yaml_file in yaml_files:
-            config_file_path = os_path.join(self.my_settings.subfolderConfig_path, yaml_file)
-            with open(config_file_path, 'r') as file:
-                config = yaml_safe_load(file)
-                if config['opt_measurement']['sensor_type'] == self.my_settings.opt_sensor_type:
-                    yaml_return.append(yaml_file)
+            try:
+                config_file_path = os_path.join(self.my_settings.subfolderConfig_path, yaml_file)
+                with open(config_file_path, 'r') as file:
+                    config = yaml_safe_load(file)
+                    if config['opt_measurement']['sensor_type'] == self.my_settings.opt_sensor_type:
+                        yaml_return.append(yaml_file)
+            except:
+                continue
         return yaml_return
 
     def check_config_if_selected(self):
@@ -403,12 +387,12 @@ class MyStartUpWindow(QMainWindow):
         self.ui.opt_config_combobox.blockSignals(False)
 
     def open_settings_window(self):
-        from MySettingsWindow import MySettingsWindow
+        from acc.MySettingsWindow import MySettingsWindow
         self.settings_window = MySettingsWindow(True, self, self.my_settings)
         self.hide()
 
     def start_calib_app(self):
-        from MyMainWindow import MyMainWindow
+        from acc.MyMainWindow import MyMainWindow
         path_config = os_path.join(self.my_settings.folder_sentinel_D_folder, "config.ini")
         config = ConfigParser()
         with codecs_open(path_config, 'r', encoding='utf-8-sig') as f:
@@ -426,16 +410,18 @@ class MyStartUpWindow(QMainWindow):
         self.ui.btn_add_operator.setEnabled(False)
         self.operator = self.ui.combobox_sel_operator.currentText()
         self.ui.menubar.setEnabled(False)
-        self.ui.start_app.setText("STARTING")
+        self.ui.start_app.setText(self.translations[self.lang]["start_app_b"])
         self.ui.start_app.setEnabled(False)
         self.thread_check_usb_devices.termination = True
         self.calib_window = MyMainWindow(self, self.my_settings, self.thcfgs)
         self.calib_window.first_sentinel_start()
+        self.check_last_calib()
 
-    def showEvent(self, event):
+    def show_back(self):
+        self.set_language()
         if self.check_usbs_first_start:
             self.check_usbs_first_start = False
-            from ThreadCheckDevicesConnected import ThreadCheckDevicesConnected
+            from acc.ThreadCheckDevicesConnected import ThreadCheckDevicesConnected
             self.thread_check_usb_devices = ThreadCheckDevicesConnected(self.opt_dev_vendor, self.ref_dev_vendor,
                                                                         self.my_settings)
             self.thread_check_usb_devices.all_connected.connect(self.all_dev_connected_signal)
@@ -445,18 +431,123 @@ class MyStartUpWindow(QMainWindow):
                           int(self.height()*self.window_scale_delta))
         scale_app(self, self.window_scale_delta)
         self.window_scale_delta = 1
-        center_on_screen(self)
         self.check_devices_load_comboboxes()
         print(str(self.config_contains_none) + " <-- self.config_contains_none")
+        if self.operator:
+            self.load_operators(self.operator)
+        else:
+            self.load_operators()
+
+        def get_font_params(qfont):
+            font_params = {
+                "Family": qfont.family(),
+                "PointSize": qfont.pointSize(),
+                "PixelSize": qfont.pixelSize(),
+                "Weight": qfont.weight(),
+                "Bold": qfont.bold(),
+                "Italic": qfont.italic(),
+                "Underline": qfont.underline(),
+                "StrikeOut": qfont.strikeOut(),
+                "Kerning": qfont.kerning(),
+                "Style": qfont.style(),
+                "FixedPitch": qfont.fixedPitch(),
+                "Stretch": qfont.stretch(),
+                "LetterSpacing": qfont.letterSpacing(),
+                "LetterSpacingType": qfont.letterSpacingType(),
+                "WordSpacing": qfont.wordSpacing(),
+                "Capitalization": qfont.capitalization(),
+                "HintingPreference": qfont.hintingPreference()
+            }
+            return font_params
+        # def bad_scales():
+        #
+        #     font = self.ui.combobox_sel_operator.font()
+        #     params = get_font_params(font)
+        #     for key, value in params.items():
+        #         print(f"{key}: {value}")
+        #     # font.setPointSizeF((7 * self.window_scale))
+        #     # self.ui.combobox_sel_operator.setFont(font)
+        #
+        #     font = self.ui.opt_config_combobox.font()
+        #     font.setPointSizeF((8 * self.window_scale))
+        #     self.ui.opt_config_combobox.setFont(font)
+        #
+        #     font = self.ui.sens_type_comboBox.font()
+        #     font.setPointSizeF((8 * self.window_scale))
+        #     self.ui.sens_type_comboBox.setFont(font)
+        #
+        #     font = self.ui.btn_add_operator.font()
+        #     font.setPointSizeF((8 * self.window_scale))
+        #     self.ui.btn_add_operator.setFont(font)
+        # bad_scales()
+        QTimer.singleShot(0, lambda: center_on_screen(self))
 
     def closeEvent(self, event):
-        reply = QMessageBox.question(self, 'Confirmation',
-                                     "Are you sure you want to exit?",
-                                     QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        box = QMessageBox(self)
+        box.setWindowTitle(self.translations[self.lang]['close_event_a'])
+        box.setText(self.translations[self.lang]['close_event_b'])
 
-        if reply == QMessageBox.Yes:
+        yes_button = box.addButton(self.translations[self.lang]['close_event_yes'], QMessageBox.YesRole)
+        no_button = box.addButton(self.translations[self.lang]['close_event_no'], QMessageBox.NoRole)
+
+        box.exec_()
+
+        if box.clickedButton() == yes_button:
             self.thread_check_usb_devices.termination = True
             self.thread_check_usb_devices.wait()
             event.accept()
         else:
             event.ignore()
+
+    def set_language(self):
+        file_path = "lang_pack.json"
+        with open(file_path, 'r', encoding="utf-8") as f:
+            self.translations = json_load(f)
+
+        self.ui.sens_type_label.setText(self.translations[self.lang]["sens_type_label"])
+        self.ui.status_opt_label.setText(self.translations[self.lang]["status_opt_label"]["init"])
+        self.ui.status_label.setText(self.translations[self.lang]["status_label"])
+        self.ui.status_ref_label.setText(self.translations[self.lang]["status_ref_label"]["init"])
+        self.ui.opt_channel_label.setText(self.translations[self.lang]["opt_channel_label"])
+        self.ui.status_gen_label.setText(self.translations[self.lang]["status_gen_label"]["init"])
+        self.ui.start_app.setText(self.translations[self.lang]["start_app_a"])
+        self.ui.open_settings_btn.setText(self.translations[self.lang]["open_settings_btn"])
+
+    def load_global_settings(self):
+        with open("global_settings.yaml", 'r') as file:
+            config = yaml_safe_load(file)
+        self.version = config["version"]
+        self.lang = config["language"]
+        self.window_scale = config["windows_scale"]
+        self.last_ref_calib = config["last_ref_calib"]
+        self.calib_treshold = int(config["treshold"])
+
+    def check_last_calib(self, get_bool=False):
+
+        def show_warning(last_date):
+            msg = QMessageBox(self)
+            msg.setIcon(QMessageBox.Warning)
+            msg.setWindowTitle(self.translations[self.lang]["last_calib_warn"])
+            msg.setText(f"{self.translations[self.lang]['last_calib_warn_text']}{last_date}.")
+            msg.addButton('OK', QMessageBox.AcceptRole)
+            msg.exec_()
+        if self.last_ref_calib:
+            import datetime
+            last_calib = None
+            if isinstance(self.last_ref_calib, datetime.date):
+                last_calib = QDate(self.last_ref_calib.year, self.last_ref_calib.month, self.last_ref_calib.day)
+
+            elif isinstance(self.last_ref_calib, str):
+                year, month, day = map(int, self.last_ref_calib.split('-'))
+                last_calib = QDate(year, month, day)
+
+            current_date = QDate.currentDate()
+            if last_calib:
+                days_apart = last_calib.daysTo(current_date)
+                if days_apart > self.calib_treshold:
+                    if not get_bool:
+                        show_warning(last_calib.toString("yyyy-MM-dd"))
+                        return
+                    return True
+                else:
+                    return False

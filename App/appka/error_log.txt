@@ -1533,3 +1533,2168 @@ Sep-13-202312:17:05.853160Traceback (most recent call last):
   File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MySettingsWindow.py", line 127, in login_into_settings
     password = pswd_dialog.password_input.text()
 AttributeError: 'QDialog' object has no attribute 'password_input'
+Sep-14-202311:19:00.663701Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 156, in eventFilter
+    def eventFilter(self, obj, event):
+KeyboardInterrupt
+Sep-14-202311:25:56.655485Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 189, in open_help
+    self.ui.actionopen.text("close")
+TypeError: text(self): too many arguments
+Sep-14-202311:47:27.439402Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 377, in start_calib_app
+    self.calib_window = MyMainWindow(self, self.my_settings, self.thcfgs)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 99, in __init__
+    self.ui.actionopen.triggered.connect(self.open_help)
+AttributeError: 'Ui_AutoCalibration' object has no attribute 'actionopen'
+Sep-14-202312:09:22.756577Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 631, in showEvent
+    scale_app(self, self.window.window_scale_delta)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\definitions.py", line 96, in scale_app
+    scale_app(child, scale_factor)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\definitions.py", line 96, in scale_app
+    scale_app(child, scale_factor)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\definitions.py", line 77, in scale_app
+    new_icon_size = QSize(current_icon_size.width() * scale_factor, current_icon_size.height() * scale_factor)
+TypeError: arguments did not match any overloaded call:
+  QSize(): too many arguments
+  QSize(w: int, h: int): argument 1 has unexpected type 'float'
+  QSize(a0: QSize): argument 1 has unexpected type 'float'
+Sep-14-202312:11:56.444919Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 158, in eventFilter
+    def eventFilter(self, obj, event):
+KeyboardInterrupt
+Sep-14-202312:18:25.219182Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 391, in showEvent
+    scale_app(self, self.window_scale_delta)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\definitions.py", line 107, in scale_app
+    scale_app(child, scale_factor)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\definitions.py", line 107, in scale_app
+    scale_app(child, scale_factor)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\definitions.py", line 84, in scale_app
+    new_icon_size = QSize(current_icon_size.width() * scale_factor, current_icon_size.height() * scale_factor)
+TypeError: arguments did not match any overloaded call:
+  QSize(): too many arguments
+  QSize(w: int, h: int): argument 1 has unexpected type 'float'
+  QSize(a0: QSize): argument 1 has unexpected type 'float'
+Sep-14-202312:19:27.554922Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadSensorsCheckIfReady.py", line 18, in run
+    while (not self.termination and self.auto_calib.thread_check_sin_opt.isRunning() and
+RuntimeError: wrapped C/C++ object of type ThreadOptAndGenCheckIfReady has been deleted
+Sep-14-202313:07:51.683122Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadSensorsCheckIfReady.py", line 18, in run
+    while (not self.termination and self.auto_calib.thread_check_sin_opt.isRunning() and
+RuntimeError: wrapped C/C++ object of type ThreadOptAndGenCheckIfReady has been deleted
+Sep-14-202313:08:42.209501Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadSensorsCheckIfReady.py", line 18, in run
+    while (not self.termination and self.auto_calib.thread_check_sin_opt.isRunning() and
+RuntimeError: wrapped C/C++ object of type ThreadOptAndGenCheckIfReady has been deleted
+Sep-14-202313:10:29.140803Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadSensorsCheckIfReady.py", line 18, in run
+    while (not self.termination and self.auto_calib.thread_check_sin_opt.isRunning() and
+RuntimeError: wrapped C/C++ object of type ThreadOptAndGenCheckIfReady has been deleted
+Sep-14-202313:11:33.797714Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadSensorsCheckIfReady.py", line 18, in run
+    while (not self.termination and self.auto_calib.thread_check_sin_opt.isRunning() and
+RuntimeError: wrapped C/C++ object of type ThreadOptAndGenCheckIfReady has been deleted
+Sep-14-202313:35:11.246707Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 187, in all_dev_connected_signal
+    def all_dev_connected_signal(self, opt_connected, ref_connected, gen_connected, gen_error, check_status):
+KeyboardInterrupt
+Sep-14-202313:36:24.692204Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 391, in showEvent
+    scale_app(self, self.window_scale_delta)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\definitions.py", line 112, in scale_app
+    scale_app2(widget, scale_factor)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\definitions.py", line 80, in scale_app2
+    icko += 1
+UnboundLocalError: local variable 'icko' referenced before assignment
+Sep-14-202313:39:28.736662Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadSensorsCheckIfReady.py", line 18, in run
+    while (not self.termination and self.auto_calib.thread_check_sin_opt.isRunning() and
+RuntimeError: wrapped C/C++ object of type ThreadOptAndGenCheckIfReady has been deleted
+Sep-14-202314:03:55.704547Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 157, in eventFilter
+    def eventFilter(self, obj, event):
+KeyboardInterrupt
+Sep-14-202314:16:32.104501Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 157, in eventFilter
+    def eventFilter(self, obj, event):
+KeyboardInterrupt
+Sep-14-202314:39:03.275619Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 157, in eventFilter
+    def eventFilter(self, obj, event):
+KeyboardInterrupt
+Sep-14-202314:44:23.774021Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 157, in eventFilter
+    def eventFilter(self, obj, event):
+KeyboardInterrupt
+Sep-14-202314:45:43.230029Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 157, in eventFilter
+    def eventFilter(self, obj, event):
+KeyboardInterrupt
+Sep-18-202309:12:46.715341Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast3.py", line 107, in <module>
+    window = MyStartUpWindow(splash)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 64, in __init__
+    self.load_operators()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 134, in load_operators
+    self.ui.combobox_sel_operator.addItem(self.translations[self.lang]["combobox_sel_operator"])
+TypeError: 'NoneType' object is not subscriptable
+Sep-18-202309:18:00.518331Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast3.py", line 100, in <module>
+    app.setFontHandling(True)
+AttributeError: 'QApplication' object has no attribute 'setFontHandling'
+Sep-18-202309:19:08.534322Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast3.py", line 100, in <module>
+    app.setFontHandling(True)
+AttributeError: 'QApplication' object has no attribute 'setFontHandling'
+Sep-18-202309:21:18.773213Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast3.py", line 107, in <module>
+    window = MyStartUpWindow(splash)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 52, in __init__
+    self.set_language(self.lang)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 431, in set_language
+    self.ui.sens_type_label.setFont("ÈŠÀ")
+TypeError: setFont(self, a0: QFont): argument 1 has unexpected type 'str'
+Sep-18-202309:34:03.908061Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MySettingsWindow.py", line 587, in closeEvent
+    self.my_starting_window.show_back()
+AttributeError: 'str' object has no attribute 'show_back'
+Sep-18-202309:34:45.431921Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MySettingsWindow.py", line 587, in closeEvent
+    self.my_starting_window.show_back()
+AttributeError: 'str' object has no attribute 'show_back'
+Sep-18-202309:45:29.666531Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 185, in all_dev_connected_signal
+KeyboardInterrupt
+Sep-18-202309:48:43.789765Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 413, in closeEvent
+    QMessageBox.Yess | QMessageBox.No, QMessageBox.No)
+AttributeError: type object 'QMessageBox' has no attribute 'Yess'
+Sep-18-202310:00:13.196518Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 188, in all_dev_connected_signal
+    def all_dev_connected_signal(self, opt_connected, ref_connected, gen_connected, gen_error, check_status, bad_ref):
+KeyboardInterrupt
+Sep-18-202311:31:23.679472Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 362, in open_settings_window
+    self.settings_window = MySettingsWindow(True, self, self.my_settings)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MySettingsWindow.py", line 114, in __init__
+    self.show_back()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MySettingsWindow.py", line 585, in show_back
+    self.set_language()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MySettingsWindow.py", line 607, in set_language
+    self.ui.settings_settings_label.setText(trans[lang]["settings_settings_label"])
+KeyError: 'settings_settings_label'
+Sep-18-202311:31:52.618436Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 362, in open_settings_window
+    self.settings_window = MySettingsWindow(True, self, self.my_settings)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MySettingsWindow.py", line 114, in __init__
+    self.show_back()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MySettingsWindow.py", line 585, in show_back
+    self.set_language()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MySettingsWindow.py", line 649, in set_language
+    self.ui.save_btn.setText(trans[lang]["save_btn"])
+KeyError: 'save_btn'
+Sep-18-202311:34:14.645757Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 188, in all_dev_connected_signal
+    def all_dev_connected_signal(self, opt_connected, ref_connected, gen_connected, gen_error, check_status, bad_ref):
+KeyboardInterrupt
+Sep-22-202311:04:14.955555Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 392, in start_calib_app
+    self.check_last_calib()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 466, in check_last_calib
+    year, month, day = map(int, self.last_ref_calib.split('-'))
+AttributeError: 'datetime.date' object has no attribute 'split'
+Sep-22-202311:09:20.610637Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast3.py", line 105, in <module>
+    from MyStartUpWindow import MyStartUpWindow
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 471
+    elif isinstance(self.last_ref_calib., str):
+                                        ^
+SyntaxError: invalid syntax
+Sep-22-202311:26:16.619170Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 191, in all_dev_connected_signal
+    def all_dev_connected_signal(self, opt_connected, ref_connected, gen_connected, gen_error, check_status, bad_ref):
+KeyboardInterrupt
+Sep-22-202311:36:32.808163Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 191, in all_dev_connected_signal
+    def all_dev_connected_signal(self, opt_connected, ref_connected, gen_connected, gen_error, check_status, bad_ref):
+KeyboardInterrupt
+Sep-22-202312:07:11.076855Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 194, in all_dev_connected_signal
+    def all_dev_connected_signal(self, opt_connected, ref_connected, gen_connected, gen_error, check_status, bad_ref):
+KeyboardInterrupt
+Sep-22-202312:12:32.252927Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 194, in all_dev_connected_signal
+    def all_dev_connected_signal(self, opt_connected, ref_connected, gen_connected, gen_error, check_status, bad_ref):
+KeyboardInterrupt
+Sep-22-202313:37:26.790581Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MySettingsWindow.py", line 146, in login_into_settings
+    password_label = QLabel(self.my_starting_window.translations[self.local_lang]["password_label"])
+KeyError: None
+Sep-25-202313:12:38.569611Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 344, in start_modbus
+    self.show_back()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 621, in show_back
+    self.set_language()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 691, in set_language
+    self.ui.btn_load_wl.setText(trans[lang]["btn_load_wl"])
+KeyError: 'btn_load_wl'
+Sep-25-202313:13:33.638088Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 344, in start_modbus
+    self.show_back()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 621, in show_back
+    self.set_language()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 699, in set_language
+    self.ui.menuHelp.setTitle(trans[lang]["Pomoc"])
+KeyError: 'Pomoc'
+Sep-25-202313:21:11.673177Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 154, in eventFilter
+    def eventFilter(self, obj, event):
+KeyboardInterrupt
+Sep-25-202313:36:27.519452Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 595, in open_settings_window
+    self.settings_window = MySettingsWindow(False, self.window, self.my_settings)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MySettingsWindow.py", line 122, in __init__
+    self.show_back()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MySettingsWindow.py", line 600, in show_back
+    self.set_language()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MySettingsWindow.py", line 619, in set_language
+    with open(file_path, 'r', encoding="utf-8") as f:
+FileNotFoundError: [Errno 2] No such file or directory: 'lang_pack.json'
+Sep-25-202314:12:10.194322Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 324, in emergency_stop_clicked
+    self.calib_window.ui.S_N_line.setEnabled(True)
+AttributeError: 'MyMainWindow' object has no attribute 'calib_window'
+Sep-27-202313:16:33.235399Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadCheckDevicesConnected.py", line 44, in run
+    gen, gen_error = check_function_gen_connected(self.my_settings.generator_id, True)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\definitions.py", line 255, in check_function_gen_connected
+    rm = pyvisa_ResourceManager()
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\highlevel.py", line 2992, in __new__
+    visa_library = open_visa_library(visa_library)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\highlevel.py", line 2899, in open_visa_library
+    wrapper = _get_default_wrapper()
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\highlevel.py", line 2858, in _get_default_wrapper
+    raise ValueError(
+ValueError: Could not locate a VISA implementation. Install either the IVI binary or pyvisa-py.
+Sep-27-202313:17:20.691397Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadCheckDevicesConnected.py", line 44, in run
+    gen, gen_error = check_function_gen_connected(self.my_settings.generator_id, True)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\definitions.py", line 255, in check_function_gen_connected
+    rm = pyvisa_ResourceManager()
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\highlevel.py", line 2992, in __new__
+    visa_library = open_visa_library(visa_library)
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\highlevel.py", line 2899, in open_visa_library
+    wrapper = _get_default_wrapper()
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\highlevel.py", line 2858, in _get_default_wrapper
+    raise ValueError(
+ValueError: Could not locate a VISA implementation. Install either the IVI binary or pyvisa-py.
+Sep-27-202313:17:46.496791Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 462, in closeEvent
+    def closeEvent(self, event):
+KeyboardInterrupt
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast3.py", line 108, in <module>
+    app.exec()
+SystemError: <built-in method exec of QApplication object at 0x00000242161E3490> returned a result with an exception set
+Sep-27-202313:50:33.878995Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MySettingsWindow.py", line 368, in save_settings
+    self.my_starting_window.config_contains_none = self.my_settings.save_config_file(True, self.my_starting_window.config_file_path)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\SettingsParams.py", line 166, in save_config_file
+    with open(config_file_path, 'w') as file:
+PermissionError: [Errno 13] Permission denied: 'C:\\Users\\PC/Documents\\Sylex_sensors_export\\x_configs\\SAA_004.yaml'
+Sep-27-202313:51:47.255183Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MySettingsWindow.py", line 368, in save_settings
+    self.my_starting_window.config_contains_none = self.my_settings.save_config_file(True, self.my_starting_window.config_file_path)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\SettingsParams.py", line 166, in save_config_file
+    with open(config_file_path, 'w') as file:
+PermissionError: [Errno 13] Permission denied: 'C:\\Users\\PC/Documents\\Sylex_sensors_export\\x_configs\\SAA_004.yaml'
+Sep-27-202313:59:50.017521Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadControlFuncGen.py", line 69, in run_gen
+    self.instrument.write('OUTPut1:STATe OFF')
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\resources\messagebased.py", line 197, in write
+    count = self.write_raw(message.encode(enco))
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\resources\messagebased.py", line 157, in write_raw
+    return self.visalib.write(self.session, message)[0]
+  File "C:\Users\PC\AppData\Local\Programs\Python\Python310\lib\site-packages\pyvisa\resources\resource.py", line 171, in session
+    raise errors.InvalidSession()
+pyvisa.errors.InvalidSession: Invalid session handle. The resource might be closed.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadControlFuncGen.py", line 34, in run
+    self.run_gen()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadControlFuncGen.py", line 148, in run_gen
+    except visa_errors:
+TypeError: catching classes that do not inherit from BaseException is not allowed
+Sep-27-202314:05:14.365176Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 38, in run
+    self.start_ref_sens_data_collection()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 81, in start_ref_sens_data_collection
+    self.thread_ref_sens_finished()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 197, in thread_ref_sens_finished
+    self.lin_reg()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 294, in lin_reg
+    wl1 = self.extracted_columns[:, 0] - self.out[0]
+TypeError: list indices must be integers or slices, not tuple
+Sep-27-202314:08:01.264281Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 155, in eventFilter
+    if (event.type() == QEvent.KeyPress and not self.isHidden() and not self.ui.S_N_line.hasFocus()
+AttributeError: 'QTimerEvent' object has no attribute 'type'
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QWindow'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QSizeGrip'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QInputMethodQueryEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QFocusEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QCommonStyle'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QInputMethodQueryEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QDynamicPropertyChangeEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QSizeGrip'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPaintEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QSizeGrip'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QWindow'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QEnterEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHoverEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QEnterEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QWindow'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QEnterEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QEnterEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QEnterEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHoverEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHoverEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QMouseEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHoverEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHoverEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHoverEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QWindow'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHoverEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHoverEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QEnterEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHoverEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QWindow'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHoverEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QWindow'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHoverEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QWindow'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHoverEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QWindow'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHoverEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QWindow'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHoverEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QWindow'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHoverEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QWindow'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHoverEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QWindow'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QEnterEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QMouseEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHoverEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QWindow'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QMouseEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHoverEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QWindow'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QEnterEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QMouseEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHoverEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QWindow'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QEnterEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QMouseEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHoverEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QWindow'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QEnterEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QMouseEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHoverEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QWindow'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QEnterEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QMouseEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHoverEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QWindow'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QMouseEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHoverEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QWindow'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QMouseEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHoverEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QWindow'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QMouseEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHoverEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QWindow'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QMouseEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHoverEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QWindow'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QWindow'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHoverEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QWindow'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QWindow'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QWindow'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QWindow'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QWindow'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QWindow'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QCloseEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QCloseEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QSizeGrip'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QFocusEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QCommonStyle'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QWindow'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHideEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHideEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHideEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHideEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHideEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHideEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHideEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHideEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHideEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHideEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHideEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHideEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHideEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHideEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHideEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHideEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHideEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHideEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHideEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHideEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHideEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHideEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHideEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHideEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHideEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHideEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHideEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHideEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHideEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHideEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHideEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHideEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHideEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHideEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHideEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHideEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHideEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHideEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QWidget'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHideEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHideEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHideEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHideEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHideEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHideEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHideEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHideEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtWidgets.QSizeGrip'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QHideEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QWindow'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QPlatformSurfaceEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QWindow'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QWindow'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtGui.QWindow'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+SystemError: <class 'PyQt5.QtCore.QEvent'> returned a result with an exception set
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast3.py", line 108, in <module>
+    app.exec()
+SystemError: <built-in method exec of QApplication object at 0x0000028C99013490> returned a result with an exception set
+Sep-27-202314:09:19.393307Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 38, in run
+    self.start_ref_sens_data_collection()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 81, in start_ref_sens_data_collection
+    self.thread_ref_sens_finished()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 197, in thread_ref_sens_finished
+    self.lin_reg()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 295, in lin_reg
+    wl1 = self.extracted_columns[:, 0] - self.out[0]
+TypeError: list indices must be integers or slices, not tuple
+Sep-27-202314:13:07.313034Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 41, in run
+    self.start_ref_sens_data_collection()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 84, in start_ref_sens_data_collection
+    self.thread_ref_sens_finished()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 200, in thread_ref_sens_finished
+    self.lin_reg()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 298, in lin_reg
+    wl1 = np.array(self.extracted_column1) - self.out[0]
+numpy.core._exceptions._UFuncNoLoopError: ufunc 'subtract' did not contain a loop with signature matching types (dtype('<U9'), dtype('float64')) -> None
+Sep-28-202309:15:22.938756Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 41, in run
+    self.start_ref_sens_data_collection()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 84, in start_ref_sens_data_collection
+    self.thread_ref_sens_finished()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 200, in thread_ref_sens_finished
+    self.save_calib_data()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 219, in save_calib_data
+    file.write("# Slope check : " + '\n' + '\t\t' + str(self.wl_slopes[1]) if self.wl_slopes[4] else f"{str(self.wl_slopes[1])}, {str(self.wl_slopes[4])}" + '\n')
+TypeError: 'NoneType' object is not subscriptable
+Sep-28-202309:16:40.820513Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 41, in run
+    self.start_ref_sens_data_collection()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 84, in start_ref_sens_data_collection
+    self.thread_ref_sens_finished()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 199, in thread_ref_sens_finished
+    self.lin_reg()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 298, in lin_reg
+    wl1 = np.array(self.extracted_column1) - self.out[0] # dtype=float
+ValueError: operands could not be broadcast together with shapes (6610,) (11,) 
+Sep-28-202309:20:45.723648Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 41, in run
+    self.start_ref_sens_data_collection()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 84, in start_ref_sens_data_collection
+    self.thread_ref_sens_finished()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 199, in thread_ref_sens_finished
+    self.lin_reg()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 298, in lin_reg
+    wl1 = np.array(self.extracted_column1) - np.array([self.out[0]]) # dtype=float
+ValueError: operands could not be broadcast together with shapes (6610,) (1,11) 
+Sep-28-202309:23:39.017666Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 41, in run
+    self.start_ref_sens_data_collection()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 84, in start_ref_sens_data_collection
+    self.thread_ref_sens_finished()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 199, in thread_ref_sens_finished
+    self.lin_reg()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 301, in lin_reg
+    wl1 = np.array(self.extracted_column1, dtype=float) - np.array([self.out[0]], dtype=float)  # dtype=float
+ValueError: operands could not be broadcast together with shapes (6522,) (1,11) 
+Sep-28-202309:26:02.225609Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 41, in run
+    self.start_ref_sens_data_collection()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 84, in start_ref_sens_data_collection
+    self.thread_ref_sens_finished()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 199, in thread_ref_sens_finished
+    self.lin_reg()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 306, in lin_reg
+    wl2 = np.array(self.extracted_column2) - self.acc_calib[9]
+numpy.core._exceptions._UFuncNoLoopError: ufunc 'subtract' did not contain a loop with signature matching types (dtype('<U9'), dtype('float64')) -> None
+Sep-28-202310:04:33.406372Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 41, in run
+    self.start_ref_sens_data_collection()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 84, in start_ref_sens_data_collection
+    self.thread_ref_sens_finished()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 200, in thread_ref_sens_finished
+    self.save_calib_data()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 219, in save_calib_data
+    file.write("# Slope check : " + '\n' + '\t\t' + str(self.wl_slopes[1]) if self.wl_slopes[4] else f"{str(self.wl_slopes[1])}, {str(self.wl_slopes[4])}" + '\n')
+IndexError: list index out of range
+Sep-28-202310:08:34.631352Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 41, in run
+    self.start_ref_sens_data_collection()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 84, in start_ref_sens_data_collection
+    self.thread_ref_sens_finished()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 200, in thread_ref_sens_finished
+    self.save_calib_data()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\ThreadRefSensDataCollection.py", line 219, in save_calib_data
+    file.write("# Slope check : " + '\n' + '\t\t' + str(self.wl_slopes[1]) if self.my_settings.opt_channels >=2 else f"{str(self.wl_slopes[1])}, {str(self.wl_slopes[4])}" + '\n')
+IndexError: list index out of range
+Sep-28-202310:11:44.919383Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 1131, in thread_ref_sens_finished
+    self.plot_graphs(self.calib_output, wl_slopes)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 1174, in plot_graphs
+    mng.window.resize(int(mng.window.width() + mng.window.width() * 0.1), screen.height() if self.my_settings.opt_channels >= 2 else screen.height()/2)
+TypeError: arguments did not match any overloaded call:
+  resize(self, a0: QSize): argument 1 has unexpected type 'int'
+  resize(self, w: int, h: int): argument 2 has unexpected type 'float'
+Sep-28-202310:57:07.890799Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 1122, in thread_ref_sens_finished
+    self.calib_window.ui.output_browser_2.append()
+TypeError: append(self, text: str): not enough arguments
+Sep-28-202311:01:11.122025Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 1122, in thread_ref_sens_finished
+    self.calib_window.ui.output_browser_2.append()
+TypeError: append(self, text: str): not enough arguments
+Sep-28-202311:13:29.440987Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 154, in eventFilter
+    def eventFilter(self, obj, event):
+KeyboardInterrupt
+Sep-28-202311:15:43.722254Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 394, in start_calib_app
+    self.calib_window.first_sentinel_start()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 332, in first_sentinel_start
+    start_sentinel_d(self.my_settings.opt_project, self.my_settings.folder_sentinel_D_folder)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\definitions.py", line 136, in start_sentinel_d
+    os.chdir(sentinel_app_folder)
+NameError: name 'os' is not defined
+Sep-28-202311:16:12.225761Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 154, in eventFilter
+    def eventFilter(self, obj, event):
+KeyboardInterrupt
+Sep-28-202311:16:25.395663Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyMainWindow.py", line 154, in eventFilter
+    def eventFilter(self, obj, event):
+KeyboardInterrupt
+Sep-28-202313:26:18.029620Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MySettingsWindow.py", line 304, in save_as_settings
+    file_path, _ = QFileDialog.getSaveFileName(self, "Save YAML File", self.my_starting_window.subfolderConfig_path,
+AttributeError: 'MyStartUpWindow' object has no attribute 'subfolderConfig_path'
+Sep-28-202313:27:09.954668Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MySettingsWindow.py", line 311, in save_as_settings
+    yaml_dump(self.my_starting_window.def_config, file)
+AttributeError: 'MyStartUpWindow' object has no attribute 'def_config'
+Sep-28-202313:30:32.280480Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast3.py", line 107, in <module>
+    window = MyStartUpWindow(splash)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 82, in __init__
+    self.config_file_path = self.check_config_if_selected()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 308, in check_config_if_selected
+    yaml_files = self.return_all_configs()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 303, in return_all_configs
+    if config['opt_measurement']['sensor_type'] == self.my_settings.opt_sensor_type:
+TypeError: 'NoneType' object is not subscriptable
+Sep-28-202313:30:40.106772Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast3.py", line 107, in <module>
+    window = MyStartUpWindow(splash)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 82, in __init__
+    self.config_file_path = self.check_config_if_selected()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 308, in check_config_if_selected
+    yaml_files = self.return_all_configs()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 303, in return_all_configs
+    if config['opt_measurement']['sensor_type'] == self.my_settings.opt_sensor_type:
+TypeError: 'NoneType' object is not subscriptable
+Sep-28-202313:31:43.235787Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\appkaMainFast3.py", line 107, in <module>
+    window = MyStartUpWindow(splash)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 83, in __init__
+    self.setup_config()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 326, in setup_config
+    self.check_devices_load_comboboxes()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 361, in check_devices_load_comboboxes
+    load_all_config_files(self.ui.opt_config_combobox, self.config_file_path, self.my_settings.opt_sensor_type,
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\definitions.py", line 252, in load_all_config_files
+    yaml_files = return_all_configs(opt_sensor_type, subfolderConfig_path)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\definitions.py", line 312, in return_all_configs
+    if config['opt_measurement']['sensor_type'] == opt_sensor_type:
+TypeError: 'NoneType' object is not subscriptable
+Sep-28-202313:33:35.326712Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MySettingsWindow.py", line 312, in save_as_settings
+    yaml_dump(self.my_settings.def_config, file)
+AttributeError: 'MySettings' object has no attribute 'def_config'

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>602</width>
-    <height>499</height>
+    <width>600</width>
+    <height>500</height>
    </rect>
   </property>
   <property name="palette">
@@ -482,6 +482,9 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="layoutDirection">
+   <enum>Qt::LeftToRight</enum>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QLabel" name="S_N_label">
     <property name="geometry">
@@ -560,9 +563,9 @@
     <property name="geometry">
      <rect>
       <x>80</x>
-      <y>220</y>
+      <y>260</y>
       <width>221</width>
-      <height>181</height>
+      <height>141</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -673,14 +676,14 @@
    <widget class="QCheckBox" name="plot_graph_check">
     <property name="geometry">
      <rect>
-      <x>65</x>
+      <x>80</x>
       <y>40</y>
-      <width>91</width>
+      <width>131</width>
       <height>41</height>
      </rect>
     </property>
     <property name="layoutDirection">
-     <enum>Qt::RightToLeft</enum>
+     <enum>Qt::LeftToRight</enum>
     </property>
     <property name="text">
      <string>Plot graphs</string>
@@ -698,28 +701,6 @@
     <property name="styleSheet">
      <string notr="true">background-color: rgb(255, 255, 255);
 color: rgb(0, 0, 0);</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_cofnig">
-    <property name="geometry">
-     <rect>
-      <x>335</x>
-      <y>49</y>
-      <width>49</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>10</pointsize>
-      <bold>false</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>config</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
     </property>
    </widget>
    <widget class="QPushButton" name="stop_btn">
@@ -746,273 +727,12 @@ color: rgba(255, 255, 255, 200);</string>
      <string>STOP</string>
     </property>
    </widget>
-   <widget class="QLabel" name="gen_status_label">
-    <property name="geometry">
-     <rect>
-      <x>520</x>
-      <y>180</y>
-      <width>81</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>7</pointsize>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>FUNCTION 
-GENERATOR
-</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_name_start_freq">
-    <property name="geometry">
-     <rect>
-      <x>520</x>
-      <y>219</y>
-      <width>81</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>7</pointsize>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>Start freq.</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_start_freq">
-    <property name="geometry">
-     <rect>
-      <x>520</x>
-      <y>230</y>
-      <width>81</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>7</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Hz</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_name_stop_freq">
-    <property name="geometry">
-     <rect>
-      <x>520</x>
-      <y>249</y>
-      <width>81</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>7</pointsize>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>Stop freq.</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_stop_freq">
-    <property name="geometry">
-     <rect>
-      <x>520</x>
-      <y>260</y>
-      <width>81</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>7</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Hz</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_mvpp">
-    <property name="geometry">
-     <rect>
-      <x>520</x>
-      <y>290</y>
-      <width>81</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>7</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>mVpp</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_name_vpp">
-    <property name="geometry">
-     <rect>
-      <x>520</x>
-      <y>279</y>
-      <width>81</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>7</pointsize>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>Amplitude</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_sweep_type">
-    <property name="geometry">
-     <rect>
-      <x>520</x>
-      <y>320</y>
-      <width>81</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>7</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>SIN</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_name_sweep_type">
-    <property name="geometry">
-     <rect>
-      <x>520</x>
-      <y>309</y>
-      <width>81</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>7</pointsize>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>Sweep type</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_sweep_time">
-    <property name="geometry">
-     <rect>
-      <x>520</x>
-      <y>350</y>
-      <width>81</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>7</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>s</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_name_sweep_time">
-    <property name="geometry">
-     <rect>
-      <x>520</x>
-      <y>339</y>
-      <width>81</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>7</pointsize>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>Sweep time</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="gen_status_label_2">
-    <property name="geometry">
-     <rect>
-      <x>520</x>
-      <y>200</y>
-      <width>81</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>6</pointsize>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>DISCONNECTED</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
    <widget class="QLabel" name="label_opt_sens_type_label">
     <property name="geometry">
      <rect>
-      <x>150</x>
-      <y>49</y>
-      <width>181</width>
+      <x>170</x>
+      <y>50</y>
+      <width>201</width>
       <height>21</height>
      </rect>
     </property>
@@ -1033,9 +753,9 @@ GENERATOR
     <property name="geometry">
      <rect>
       <x>300</x>
-      <y>220</y>
+      <y>260</y>
       <width>221</width>
-      <height>181</height>
+      <height>141</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -1089,113 +809,27 @@ GENERATOR
    <widget class="QPushButton" name="btn_load_wl">
     <property name="geometry">
      <rect>
-      <x>440</x>
+      <x>482</x>
       <y>9</y>
-      <width>83</width>
+      <width>41</width>
       <height>33</height>
      </rect>
     </property>
     <property name="text">
-     <string>LOAD WL`s</string>
+     <string>WL</string>
     </property>
    </widget>
    <widget class="QPushButton" name="btn_opt_unlocked">
     <property name="geometry">
      <rect>
-      <x>25</x>
-      <y>100</y>
+      <x>480</x>
+      <y>115</y>
       <width>31</width>
       <height>31</height>
      </rect>
     </property>
     <property name="text">
      <string/>
-    </property>
-   </widget>
-   <widget class="QLabel" name="opt_wl_label">
-    <property name="geometry">
-     <rect>
-      <x>520</x>
-      <y>112</y>
-      <width>81</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>7</pointsize>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>OPT WLs</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="ref_max_g_label">
-    <property name="geometry">
-     <rect>
-      <x>520</x>
-      <y>80</y>
-      <width>81</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>7</pointsize>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>REF Gs</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="ref_value_max_g_label">
-    <property name="geometry">
-     <rect>
-      <x>520</x>
-      <y>90</y>
-      <width>81</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>7</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>init</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="opt_value_wl_label">
-    <property name="geometry">
-     <rect>
-      <x>520</x>
-      <y>126</y>
-      <width>81</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>7</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>init</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignHCenter|Qt::AlignTop</set>
     </property>
    </widget>
    <widget class="QPushButton" name="btn_settings">
@@ -1287,44 +921,6 @@ GENERATOR
      <string notr="true">background-color: rgba(255, 255, 255, 0);</string>
     </property>
    </widget>
-   <widget class="QTextBrowser" name="just_box_6">
-    <property name="geometry">
-     <rect>
-      <x>530</x>
-      <y>80</y>
-      <width>61</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="mouseTracking">
-     <bool>false</bool>
-    </property>
-    <property name="focusPolicy">
-     <enum>Qt::NoFocus</enum>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgba(255, 255, 255, 0);</string>
-    </property>
-   </widget>
-   <widget class="QTextBrowser" name="just_box_7">
-    <property name="geometry">
-     <rect>
-      <x>530</x>
-      <y>220</y>
-      <width>61</width>
-      <height>151</height>
-     </rect>
-    </property>
-    <property name="mouseTracking">
-     <bool>false</bool>
-    </property>
-    <property name="focusPolicy">
-     <enum>Qt::NoFocus</enum>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgba(255, 255, 255, 0);</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="export_fail_btn">
     <property name="geometry">
      <rect>
@@ -1357,8 +953,470 @@ GENERATOR
      <string/>
     </property>
    </widget>
-   <zorder>just_box_7</zorder>
-   <zorder>just_box_6</zorder>
+   <widget class="QWidget" name="widget_help" native="true">
+    <property name="geometry">
+     <rect>
+      <x>520</x>
+      <y>0</y>
+      <width>341</width>
+      <height>461</height>
+     </rect>
+    </property>
+    <widget class="QTextBrowser" name="help_text_browser">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>321</width>
+       <height>441</height>
+      </rect>
+     </property>
+     <property name="mouseTracking">
+      <bool>false</bool>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgba(255, 255, 255, 0);
+color: black;</string>
+     </property>
+     <property name="html">
+      <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Segoe UI'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;HOW TO START CALIBRATION&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:700;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;1. &lt;/span&gt;Mount bracked onto the optical sensor.&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;        - Use one smaller screw with hex key of size 4&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;2.&lt;/span&gt; Mount optical sensor onto the shaker.&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;       &lt;span style=&quot; font-weight:700;&quot;&gt; &lt;/span&gt;- Use two bigger screws with hex key of size 5&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;3.&lt;/span&gt; Connect optical sensor into the interogator&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;        &lt;span style=&quot; font-weight:700;&quot;&gt;-&lt;/span&gt; Take off the cap&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;        &lt;span style=&quot; font-weight:700;&quot;&gt;-&lt;/span&gt; Align the protrusion on connector with groove on&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;           interogator&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;        &lt;span style=&quot; font-weight:700;&quot;&gt;-&lt;/span&gt; Screw connector tightly&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;4.&lt;/span&gt; Replace 3M tape on the reference sensor&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;5.&lt;/span&gt; Put tightly reference sensor on top of the optical sensor&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;6.&lt;/span&gt; Check if corrent config is selected for the optical sensor&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;        - If necessary load proper wavelengths&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;7.&lt;/span&gt; Press START buttont to start calibration process&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;CALIRBATION EVALUATION&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:700;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-style:italic; color:#00aa00;&quot;&gt;PASS:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- calibration is good, you can add note if necessary&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- results are automaticly exported to the database&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-style:italic; color:#ff0000;&quot;&gt;FAIL:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;- &lt;/span&gt;put sensor aside, when you finish batch, calibrate again&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- if FAIL status persists, press &amp;quot;EXPORT&amp;quot; button&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;- add note if necessary&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="widget_gen" native="true">
+    <property name="geometry">
+     <rect>
+      <x>500</x>
+      <y>70</y>
+      <width>101</width>
+      <height>311</height>
+     </rect>
+    </property>
+    <widget class="QLabel" name="label_name_sweep_type">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>239</y>
+       <width>81</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>7</pointsize>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Sweep type</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_stop_freq">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>190</y>
+       <width>81</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>7</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Hz</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="gen_status_label">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>110</y>
+       <width>81</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>7</pointsize>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>FUNCTION 
+GENERATOR
+</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QTextBrowser" name="just_box_6">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>10</y>
+       <width>61</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="mouseTracking">
+      <bool>false</bool>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgba(255, 255, 255, 0);</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_name_sweep_time">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>269</y>
+       <width>81</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>7</pointsize>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Sweep time</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_name_stop_freq">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>179</y>
+       <width>81</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>7</pointsize>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Stop freq.</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="ref_value_max_g_label">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>20</y>
+       <width>81</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>7</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>init</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_sweep_type">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>250</y>
+       <width>81</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>7</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>SIN</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="opt_value_wl_label">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>56</y>
+       <width>81</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>7</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>init</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignHCenter|Qt::AlignTop</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_start_freq">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>160</y>
+       <width>81</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>7</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Hz</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="ref_max_g_label">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>10</y>
+       <width>81</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>7</pointsize>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>REF Gs</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="gen_status_label_2">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>130</y>
+       <width>81</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>6</pointsize>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>DISCONNECTED</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="opt_wl_label">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>42</y>
+       <width>81</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>7</pointsize>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>OPT WLs</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_name_vpp">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>209</y>
+       <width>81</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>7</pointsize>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Amplitude</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QTextBrowser" name="just_box_7">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>150</y>
+       <width>61</width>
+       <height>151</height>
+      </rect>
+     </property>
+     <property name="mouseTracking">
+      <bool>false</bool>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgba(255, 255, 255, 0);</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_sweep_time">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>280</y>
+       <width>81</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>7</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>s</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_name_start_freq">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>149</y>
+       <width>81</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>7</pointsize>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Start freq.</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_mvpp">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>220</y>
+       <width>81</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>7</pointsize>
+      </font>
+     </property>
+     <property name="layoutDirection">
+      <enum>Qt::RightToLeft</enum>
+     </property>
+     <property name="text">
+      <string>mVpp</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </widget>
+   <zorder>just_box_4</zorder>
    <zorder>S_N_label</zorder>
    <zorder>S_N_line</zorder>
    <zorder>start_btn</zorder>
@@ -1368,46 +1426,30 @@ GENERATOR
    <zorder>opt_sens_status_label</zorder>
    <zorder>plot_graph_check</zorder>
    <zorder>select_config</zorder>
-   <zorder>label_cofnig</zorder>
    <zorder>stop_btn</zorder>
-   <zorder>gen_status_label</zorder>
-   <zorder>label_name_start_freq</zorder>
-   <zorder>label_start_freq</zorder>
-   <zorder>label_name_stop_freq</zorder>
-   <zorder>label_stop_freq</zorder>
-   <zorder>label_mvpp</zorder>
-   <zorder>label_name_vpp</zorder>
-   <zorder>label_sweep_type</zorder>
-   <zorder>label_name_sweep_type</zorder>
-   <zorder>label_sweep_time</zorder>
-   <zorder>label_name_sweep_time</zorder>
-   <zorder>gen_status_label_2</zorder>
-   <zorder>label_opt_sens_type_label</zorder>
    <zorder>output_browser_2</zorder>
    <zorder>logo_label</zorder>
    <zorder>btn_load_wl</zorder>
    <zorder>btn_opt_unlocked</zorder>
-   <zorder>opt_wl_label</zorder>
-   <zorder>ref_max_g_label</zorder>
-   <zorder>ref_value_max_g_label</zorder>
-   <zorder>opt_value_wl_label</zorder>
    <zorder>btn_settings</zorder>
    <zorder>fail_status_label</zorder>
    <zorder>pass_status_label</zorder>
    <zorder>output_browser_3</zorder>
    <zorder>just_box_2</zorder>
    <zorder>just_box_3</zorder>
-   <zorder>just_box_4</zorder>
    <zorder>just_box_5</zorder>
    <zorder>export_fail_btn</zorder>
    <zorder>export_pass_btn</zorder>
+   <zorder>widget_help</zorder>
+   <zorder>widget_gen</zorder>
+   <zorder>label_opt_sens_type_label</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>602</width>
+     <width>600</width>
      <height>21</height>
     </rect>
    </property>
@@ -1426,12 +1468,27 @@ GENERATOR
      <property name="title">
       <string>Open export folder</string>
      </property>
+     <widget class="QMenu" name="menureference_folder">
+      <property name="title">
+       <string>reference folder</string>
+      </property>
+      <addaction name="actionraw_ref"/>
+      <addaction name="actionwith_header_ref"/>
+     </widget>
+     <widget class="QMenu" name="menuoptical_folder_2">
+      <property name="title">
+       <string>optical folder</string>
+      </property>
+      <addaction name="actionraw_opt"/>
+      <addaction name="actionwith_header_opt"/>
+     </widget>
      <addaction name="actionmain_folder"/>
      <addaction name="actioncalibration_folder"/>
+     <addaction name="menureference_folder"/>
+     <addaction name="menuoptical_folder_2"/>
     </widget>
     <addaction name="menuOpen_export_folder"/>
     <addaction name="menuOpen_Sentinel_D"/>
-    <addaction name="actionOpen_Function_Generator"/>
    </widget>
    <widget class="QMenu" name="menuAbout">
     <property name="title">
@@ -1445,9 +1502,16 @@ GENERATOR
     <addaction name="actionChange_operator"/>
     <addaction name="actionAdd_new_operator"/>
    </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionopen"/>
+   </widget>
    <addaction name="menuMenu"/>
-   <addaction name="menuAbout"/>
    <addaction name="menuOperator"/>
+   <addaction name="menuHelp"/>
+   <addaction name="menuAbout"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionOpen_Function_Generator">
@@ -1483,6 +1547,36 @@ GENERATOR
   <action name="actionAdd_new_operator">
    <property name="text">
     <string>Add new operator</string>
+   </property>
+  </action>
+  <action name="actionraw">
+   <property name="text">
+    <string>raw</string>
+   </property>
+  </action>
+  <action name="actionraw_ref">
+   <property name="text">
+    <string>raw</string>
+   </property>
+  </action>
+  <action name="actionwith_header_ref">
+   <property name="text">
+    <string>with header</string>
+   </property>
+  </action>
+  <action name="actionraw_opt">
+   <property name="text">
+    <string>raw</string>
+   </property>
+  </action>
+  <action name="actionwith_header_opt">
+   <property name="text">
+    <string>with header</string>
+   </property>
+  </action>
+  <action name="actionopen">
+   <property name="text">
+    <string>open</string>
    </property>
   </action>
  </widget>

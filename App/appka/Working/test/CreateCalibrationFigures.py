@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-from MyMainWindow import MyMainWindow
+from acc.MyMainWindow import MyMainWindow
 
 
 class FiguresWindow(QMainWindow):

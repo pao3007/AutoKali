@@ -30,10 +30,11 @@ class MySettings:
         self.calib_window = None
         self.settings_window = None
         self.S_N = None
-        self.folder_sentinel_D_folder = None
         self.calib_reference_sensitivity = None
         self.calib_do_spectrum = None
         self.calib_downsample = None
+        self.auto_export = None
+        self.export_local_server = None
         self.calib_plot = None
         self.calib_filter_data = None
         self.calib_optical_sensitivity = None
@@ -41,7 +42,7 @@ class MySettings:
         self.opt_project = None
         self.opt_sampling_rate = None
         self.opt_channels = None
-        self.ref_sample_rate= None
+        self.ref_sample_rate = None
         self.ref_number_of_samples = None
         self.ref_measure_time = None
         self.current_conf = None
@@ -58,9 +59,12 @@ class MySettings:
         self.folder_ref_export_raw = os_path.join(self.folder_main, 'reference_raw')
         self.folder_opt_export_raw = os_path.join(self.folder_main, 'optical_raw')
         self.folder_calibration_export = os_path.join(self.folder_main, 'calibration')
-        self.subfolderConfig_path = os_path.join(self.folder_main, 'x_configs')
+        config_fold = os_path.join(self.starting_folder, "configs")
+        self.subfolder_sentinel_project = os_path.join(config_fold, "sensors")
+        self.subfolderConfig_path = os_path.join(config_fold, 'x_configs')
 
-        self.folder_sentinel_modbus_folder = None
+        self.folder_sentinel_modbus_folder = os_path.join(self.starting_folder, "modbus")
+        self.folder_sentinel_D_folder = os_path.join(self.starting_folder, "sentinel-d")
 
     def load_config_file(self, config_file_path):
         with open(config_file_path, 'r') as file:
@@ -97,11 +101,11 @@ class MySettings:
         self.folder_opt_export = self.config['save_data']['opt_export']
         self.folder_opt_export_raw = self.config['save_data']['opt_export_raw']
         self.folder_calibration_export = self.config['save_data']['calibration_export']
-        self.folder_sentinel_D_folder = self.config['save_data']['sentinel_D_folder']
-        self.folder_sentinel_modbus_folder = self.config['save_data']['modbus_folder']
         self.folder_db_export_folder = self.config['save_data']['db_folder']
         self.folder_statistics = self.config['save_data']['stats_folder']
         self.S_N = self.config['save_data']['S_N']
+        self.export_local_server = self.config['save_data']['export_local_server']
+        self.auto_export = self.config['save_data']['auto_export']
 
         self.generator_id = self.config['function_generator']['generator_id']
         self.generator_sweep_time = int(self.config['function_generator']['generator_sweep_time'])
@@ -147,10 +151,10 @@ class MySettings:
         self.config['save_data']['opt_export'] = self.folder_opt_export
         self.config['save_data']['opt_export_raw'] = self.folder_opt_export_raw
         self.config['save_data']['calibration_export'] = self.folder_calibration_export
-        self.config['save_data']['sentinel_D_folder'] = self.folder_sentinel_D_folder
-        self.config['save_data']['modbus_folder'] = self.folder_sentinel_modbus_folder
         self.config['save_data']['db_folder'] = self.folder_db_export_folder
         self.config['save_data']['stats_folder'] = self.folder_statistics
+        self.config['save_data']['export_local_server'] = self.export_local_server
+        self.config['save_data']['auto_export'] = self.auto_export
 
         self.config['function_generator']['generator_id'] = self.generator_id
         self.config['function_generator']['generator_sweep_time'] = self.generator_sweep_time
@@ -161,11 +165,11 @@ class MySettings:
 
         self.config['save_data']['S_N'] = self.S_N
 
-        set_read_write(config_file_path)
+        # set_read_write(config_file_path)
 
         with open(config_file_path, 'w') as file:
             yaml_dump(self.config, file)
-        set_read_only(config_file_path)
+        # set_read_only(config_file_path)
 
         return self.check_if_none()
 
@@ -237,6 +241,8 @@ class MySettings:
                 'modbus_folder': None,
                 'sentinel_D_folder': None,
                 'stats_folder': None,
+                'auto_export': True,
+                'export_local_server': True,
                 'S_N': 'measured_data.csv'
             },
             'function_generator': {
@@ -270,8 +276,7 @@ class MySettings:
         print("No properties contain None")
         return False
 
-    def create_config_file(self):
-        yaml_name = 'default_config.yaml'
+    def create_config_file(self, yaml_name = 'default_config.yaml'):
         config_file_path = os_path.join(self.subfolderConfig_path, yaml_name)
         new_conf = self.default_config(self.opt_sensor_type)
         with open(config_file_path, 'w') as file:

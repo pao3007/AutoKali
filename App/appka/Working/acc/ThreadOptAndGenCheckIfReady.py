@@ -2,11 +2,11 @@ import numpy as np
 import pythoncom
 
 from PyQt5.QtCore import QThread, pyqtSignal
-from ThreadSentinelCheckNewFile import ThreadSentinelCheckNewFile
+from acc.ThreadSentinelCheckNewFile import ThreadSentinelCheckNewFile
 from definitions import check_function_gen_connected, check_usb, start_modbus, kill_sentinel, start_sentinel_d
 from MyStartUpWindow import MyStartUpWindow
-from SettingsParams import MySettings
-from ThreadControlFuncGenStatements import ThreadControlFuncGenStatements
+from acc.SettingsParams import MySettings
+from acc.ThreadControlFuncGenStatements import ThreadControlFuncGenStatements
 
 
 class ThreadOptAndGenCheckIfReady(QThread):
@@ -15,7 +15,7 @@ class ThreadOptAndGenCheckIfReady(QThread):
     check_gen_error = pyqtSignal(bool)
     out_value = pyqtSignal(str)
     from pyModbusTCP.client import ModbusClient
-    from RollingAverager import RollingAverager
+    from acc.RollingAverager import RollingAverager
 
     def __init__(self, server_ip, server_port, unit_id, address, number_of_samples, threshold, window: MyStartUpWindow,
                  my_settings: MySettings, thcfgs: ThreadControlFuncGenStatements):
@@ -182,7 +182,7 @@ class ThreadOptAndGenCheckIfReady(QThread):
         print("RESTART SENTINEL")
         kill_sentinel(True, True)
         QThread.msleep(100)
-        start_sentinel_d(self.my_settings.opt_project, self.my_settings.folder_sentinel_D_folder)
+        start_sentinel_d(self.my_settings.opt_project, self.my_settings.folder_sentinel_D_folder, self.my_settings.subfolder_sentinel_project)
         self.thread_check_new_file = ThreadSentinelCheckNewFile(self.my_settings.folder_opt_export)
         self.thread_check_new_file.finished.connect(self.thread_check_new_file_finished)
         self.thread_check_new_file.start()
@@ -190,7 +190,7 @@ class ThreadOptAndGenCheckIfReady(QThread):
 
     def thread_check_new_file_finished(self):
         start_modbus(self.my_settings.folder_sentinel_modbus_folder,
-                     self.my_settings.folder_sentinel_D_folder,
+                     self.my_settings.subfolder_sentinel_project,
                      self.my_settings.opt_project, self.my_settings.folder_opt_export,
                      self.my_settings.opt_channels,
                      self.thread_check_new_file.opt_sentinel_file_name)
