@@ -1,0 +1,377 @@
+﻿#Don't remove this tag!
+[localization]
+
+#GENERAL
+TITLE = S-line Sentinel 2.0 - Dynamic
+APP = Application
+EXIT = Exit
+REFRESH = Refresh
+
+NEW = New
+FILE = File
+SAVE = Save
+SAVE_AS = Save As
+OPEN = Open
+OPEN_RECENT = Open Recent
+
+TOOLS = Tools
+ADMIN = Administration
+ENABLE_ADMIN_MODE = Unlock Administration Mode
+
+MODE = Mode
+STORAGE_MODE = Storage Mode
+
+SETTING = Setting
+SETTINGS = Settings
+TEST = Test
+
+MEASUREMENT = Measurement
+
+MSG = Message
+
+START_APP = Start
+
+EMAIL = Email
+EMAILS = Emails
+ENTER_EMAILS = Enter Emails
+TEST_EMAIL = Test Email
+USE_SSL = SSL
+MAIL_SENT_OK = Message sent, please check test email.
+
+FTP = FTP
+SERVER = Server
+HOST = Host
+PORT = Port
+LOGIN = Login
+PASSWORD = Password
+
+HELP = Help
+ABOUT = About
+CLOSE = Close
+
+DEBUG = Debug
+GET_DEVICE_INFO = Get Device Info
+
+DECIMAL_PRECISION = Decimal Precision
+
+ENABLE_DELETE = Enable Delete
+EDIT_SELECTED = Edit Selected
+NOTIFY = Notify
+
+RUNNIG = Running
+RUNNING_CONFIG = Configuration
+STOPPED = Stopped
+
+LOG_RUNNIG  = Data logging:  Running
+LOG_STOPPED = Data logging:  Stopped
+LOG_DISABLED = Data logging:  Disabled
+LOG_ENABLED = Data logging:  Enabled
+CONNECTION_ERROR = Connection error!
+
+
+MAIN_VIEW = Home
+ADVANCED_VIEW = Charts
+LOGING = Data logging
+START = Start
+STOP = Stop
+
+START_LOG_ON = Start with Log
+START_LOG_OFF = Start without Log
+
+CONFIGURATION = Configuration
+SETUP = Setup
+SYSTEM = System
+
+DISABLE = Disable
+LOGGING = Logging
+
+
+EVENTS = Events
+TIME_FRAME = Time Frame
+GLOBAL = Global
+INFO = Info
+
+PROPERTIES = Properties
+
+PEAK_RANGES = Peak Ranges
+PEAK_RANGE = Peak Range
+SENSORS = Sensors
+SENSOR = Sensor
+UNDO = Undo
+SET = Set
+SAMPLING_RATE_HZ = Sampling Rate [Hz]
+INTEGRATION_TIME_MCS  = Integration Time [μs]
+CUSTOM_INTEGRATION_TIME_MCS = Custom Integration Time [μs]
+DEFAULT_TRESHOLD = Default Treshold
+NAME = Name
+FROM = From
+TO = To
+TRESHOLD = Treshold
+OK = Ok
+CLEAR = Clear
+CANCEL = Cancel
+PEAK_RANGE_EDIT = Edit Peak Range
+PEAK_RANGE_ADD = Add Peak Range
+ADD = Add
+AUTO_ADD = Auto Add
+DELETE = Delete
+DELETE_ALL = Delete All
+EDIT = Edit
+FOLDER = Folder
+REMOTE_FOLDER = Remote Folder
+COPY = Copy
+CHANNEL  = Channel
+CHANNEL_COUNT  = Channel Count
+SELECT_TEMPLATE = Select Template    ⌄
+VALIDATE = Validate
+FORMULA = Formula
+MEASUREMENTS = Measurements
+CONSTANTS = Constants
+TEMPLATE = Template
+GRAPH =  Graph
+GRAPH_1 =  Graph 1
+GRAPH_2 =  Graph 2
+SENSOR_EDIT = Edit Sensor
+SENSOR_ADD = Add Sensor
+ENTER_NAME = Enter Name
+DESCRIPTION = Description
+ENTER_UNIT = Enter Unit
+UNIT = Unit
+VALUE = Value
+SENSOR_INPUT = Sensor Input
+FILTER = Filter
+FREQ = Frequency
+POWER = Power
+LEVEL = Level
+DELETE_SELECTED = Delete Selected
+COPY_SELECTED = Copy Selected
+
+TEMPLATE_EDIT = Edit Template
+TEMPLATE_ADD = Add Template
+
+EDIT_ALERT = Edit Alert
+
+# Events/Alerts
+ALERTS = Events
+ALERT = Event
+
+WARN = Warning
+WARNING = Warning
+WARNINGS = Warnings
+HIGH = High
+LOW = Low
+HI = High
+LO = Low
+ENABLED = Enabled
+ENABLE = Enable
+
+REFERENCE = Referencing
+RAW_VALUE = Raw Value
+REF_VALUE = Ref. Value
+REFERENCE_ALL = Reference all
+
+CAN_REFERENCE = Referencable
+
+
+LOG_MODE_DISABLED = Disabled
+LOG_MODE_TIGGER = On Event Trigger
+LOG_MODE_CONTINOUS = Continous
+
+DATA_FORMAT = Data Format
+
+ADAPTATIVE_INTERGRATION_MODE = Adaptative Integration Time
+DISABLE_ADAPTATIVE_INTERGRATION_MODE = Disable Adaptative Integration 
+
+REALLY_CLEAR_TEXT = Really clear graph data?
+REALLY_CLEAR_CAPTION = Really clear graph data?
+
+
+REALLY_DELETE_RANGES_TEXT = Really delete selected range(s)?
+REALLY_DELETE_RANGES_CAPTION = Really delete selected range(s)?
+
+REALLY_DELETE_ALL_RANGES_TEXT = Really delete all ranges on this channel?
+REALLY_DELETE_ALL_RANGES_CAPTION = Delete all ranges?
+
+REALLY_DELETE_SI_TEXT = Really delete sesor input(s)?
+REALLY_DELETE_SI_CAPTION = Really delete sesor input(s)?
+
+REALLY_DELETE_SENSORS_TEXT = Really delete sesor(s)?
+REALLY_DELETE_SENSORS_CAPTION = Really delete sesor(s)?
+
+REALLY_DELETE_TEMPLATES_TEXT = Really delete template(s)?
+REALLY_DELETE_TEMPLATES_CAPTION = Really delete template(s)?
+
+REALLY_DEREFERENCE_TEXT = Really dereference sensor(s)?
+REALLY_DEREFERENCE_CAPTION = Really dereference sensor(s)?
+
+ONLY_ADMIN_TEXT = You need to enable admin mode for this operation.
+ONLY_ADMIN_CAPTION = Admin Mode required!
+
+PICK_CONSTANT_CAPTION = Pick Constant
+
+SAVE_CHANGES_TEXT = Save changes?
+SAVE_CHANGES_CAPTION = Save changes?
+
+NO_TEMPLATES_DEFINED = No templates defined!
+
+ADAPTATIV_INTEGRATION = Adaptative Integration Mode
+
+SPECTRUM_EXPORT = Export Spectrum
+
+EXPORT_CONF = FTP && Local Logging Configuration
+LOCAL_DATALOG_CONF = Local Export Config
+DISABLE_DEFAULT_DATA_LOGGER = Disable Default Logging
+DISABLE_DEFAULT_DATA_LOGGER_TOOLTIP = Disable default data logging and use only current settings.\nThis settings takes effect only if 'Local Export Config' is enabled.
+
+EXPORT_TO_FTP = FTP Export Enabled
+INTERVAL = Interval
+DURATION = Duration
+INTERLEAVE = Interleave
+SIZE_LIMIT = Max Size
+SCHEDULER = Scheduler
+
+RESET = Reset
+SELECT = Select
+DETACH = Detach
+RANGE = Range
+
+ACTIVE = Active
+
+SELECT_ALL = Select All
+DESELECT_ALL = Deselect All
+
+SELECT_ALL = Select All
+UNSELECT_ALL = Unselect All
+
+LOG_MODE_FTP = FTP Only
+LOG_MODE_LOCAL = Local Only
+LOG_MODE_FTP_AND_LOCAL = FTP and Local
+
+INTERVAL_CONTINUOUS = continuous
+INTERVAL_30_SEC = 30 sec
+INTERVAL_1_MIN = 1 min
+INTERVAL_5_MIN = 5 min
+INTERVAL_15_MIN = 15 min
+INTERVAL_30_MIN = 30 min
+INTERVAL_1_HOUR = 1 hour
+INTERVAL_6_HOUR = 6 hours
+INTERVAL_12_HOUR = 12 hours
+INTERVAL_CUSTOM_IN_MIN = custom minutes
+
+DURATION_FULL = full
+DURATION_ONCE = once per interval
+DURATION_30_SEC = 30 sec
+DURATION_1_MIN = 1 min
+DURATION_15_MIN = 15 min
+DURATION_30_MIN = 30 min
+DURATION_1_HOUR = 1 hour
+
+INTERLEAVE_NONE = every sample
+INTERLEAVE_ONCE = once per interval
+INTERLEAVE_5 = every 5th sample 
+INTERLEAVE_10 = every 10th sample 
+INTERLEAVE_60 = every 60th sample 
+INTERLEAVE_100 = every 100th sample 
+INTERLEAVE_1000 = every 1000 sample
+INTERLEAVE_CUSTOM = custom
+
+SIZE_ULIMITED = unlimited
+SIZE_1MB = 1MB
+SIZE_10MB = 10MB
+SIZE_100MB = 100MB
+SIZE_250MB = 250MB
+
+ROUND_TO_MIDNIGHT = Round to Midnight
+
+
+AUTO_ADD_RANGE_SETUP = Autodetect ranges setup
+RANGE_WIDTH = Range width
+RANGE_GAP = Range gap
+RANGE_HEIGHT = Range height
+
+HIERARCHY = Hierarchy
+DIRECT_USAGE = Direct Usage
+INDIRECT_USAGE = Indirect Usage
+
+MATH_FUNCTION = Math Function
+
+SELECT_SENSORS = Select Sensors
+ALL_SH = All
+NAME_SH = Name
+DESCRIPTION_SH = Desc
+MATH_FUNCTION_SH = Func
+TEMPLATE_SH = Tmpl
+UNIT_SH = Unit
+
+TOGGLE_POWER_COLUMN = Toggle Power Column
+DEVICE_COM_PORT = Device COM port:
+SWITCH_COM_PORT = Switch COM port:
+REDRAW = Redraw
+
+
+BIN_TO_CSV = BIN To CSV Conversion
+
+SAMPLE_RATE = Sampling Rate (Hz)
+VISUAL_SAMPLE_RATE = Visual Sampling Rate
+
+SAMPLE_RATE_TOTAL = Total Sampling Rate
+
+SAMPLE_RATE_TOTAL_INFO = Real sampling rate is divided by number of active channels.\nMax value for 1 Channel  : 5000Hz\nMax value for 2 Channels : 1800Hz\nMax value for 4 Channels : 900Hz
+
+LIVE_GRAPH_LOD = Graph Level Of Detail
+LIVE_GRAPH_LOD_INFO = Live graph downsampling ratio.\nEffects total number of samples in graph.
+
+
+TIME_FORMAT = Time Format
+TIME_FORMAT_DEFAULT = Default
+TIME_FORMAT_ISO_8601 = ISO 8601
+
+TIME_FORMAT_TOOLTIP = Defaul    : yyyy.MM.dd HH:mm:ss.ffff\nISO 8601 : yyyy-MM-ddTHH:mm:ssK
+
+SET_LO_BOUNDARY = Set Marker I
+SET_HI_BOUNDARY = Set Marker II
+FIX_ON_BOUNDARY = Fix On Markers
+CLEAR_BOUNDARIES = Clear Markers
+
+MISSING_VARS_TEXT = Missing variables in formula:
+MISSING_VARS_CAPTION = Missing some variables!
+
+MISSING_FORMULA_TEXT = Formula is empty!
+MISSING_FORMULA_CAPTION = Empty formula!
+
+
+FORMULA_OK_TEXT = Formula is valid.
+FORMULA_OK_CAPTION = Formula is valid.
+
+FORMULA_NOT_VALID_TEXT = Formula is invalid, unable to save template!
+FORMULA_NOT_VALID_CAPTION = Formula is invalid!
+
+APPLY_TO_ALL_CHANNELS = Apply to all channels
+APPLY_TOALL_CHANNELS_TEXT =  Do you want to apply this settings to all channels?
+APPLY_TOALL_CHANNELS_CAPTION = Apply to all channels?
+
+
+WRONG_USE_OF_CARET_FOR_POW_TEXT = Use pow() instead of ^. See ? for details.
+WRONG_USE_OF_CARET_FOR_POW_CAPTION = Wrong use of '^' symbol!
+
+
+START_REST_API_SERVER = Start API Server Mode
+STOP_REST_API_SERVER = Stop API Server Mode
+
+
+SENSOR_SERIAL_NUMBER = Sensor Serial Number
+ADDITIONAL_INFO = Additional Info
+PARAMETERS = Parameters
+
+IMPORT_SENSORS = Import Sensors
+CREATE_SENSORS = Create Selected
+
+RANGE_DEFINITIONS_REQUIRED_CAPTION = Range Definition(s) Required
+RANGE_DEFINITIONS_REQUIRED_TEXT = Adaptative integration is done on already existing Peak Range Definitions. Please first define them.
+
+AUTO_ADJUST_RANGES_CAPTION = Auto Adjust Ranges
+AUTO_ADJUST_RANGES_TEXT = Auto adjust heights of defined ranges? (Applies only to current channel)
+AUTO_ADJUST_RANGES_ALL_TEXT = Auto adjust heights of defined ranges? (Applies to all channels)
+
+
+DATA_LOGGER_SETTING_INFO_TEXT = * You must restart measurement for these changes to take effect.

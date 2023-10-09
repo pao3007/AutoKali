@@ -1,0 +1,1012 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Configuration>
+  <SensorTemplates>
+
+    <!-- NEW TEMPLATES -->
+
+    <SensorTemplate>
+      <InputsIds>
+        <string>SE_IN_ID-ab39-4b40-84eb-6ca2180ae0da</string>
+        <string>SE_IN_ID-111a-40b6-8a6b-fa940a423ad3</string>
+        <string>SE_IN_ID-c77c-4a60-aacb-efdf39420713</string>
+        <string>SE_IN_ID-d5a2-472d-b386-55aecd1cca6b</string>
+        <string>SE_IN_ID-5cf0-4dce-a7fb-4d35a2b52e3d</string>
+      </InputsIds>
+      <BuildIn>true</BuildIn>
+      <OutputUnit>°C</OutputUnit>
+      <Id>TEMPL_ID-2258-4361-a2e4-abd1ed4d4e5d</Id>
+      <Name>Temperature, 2nd grade</Name>
+      <Description>2nd grade used for example with TP-02</Description>
+      <Formula>Ts1*pow(((λTact-λTref)/λTref),2)+Ts2*((λTact-λTref)/λTref)+Ts3</Formula>
+      <CanReference>true</CanReference>
+      <DecimalPrecision>3</DecimalPrecision>
+    </SensorTemplate>
+
+    <SensorTemplate>
+      <InputsIds>
+        <string>SE_IN_ID-ab00-453e-ba1c-948b11de6480</string>
+        <string>SE_IN_ID-a92a-4064-8e2a-e51a0567c5d2</string>
+        <string>SE_IN_ID-7137-412a-9bba-2e20c45ce576</string>
+        <string>SE_IN_ID-088a-4376-9115-cfeef17d99b2</string>
+        <string>SE_IN_ID-1da2-4767-a6ea-28644c88b20c</string>
+        <string>SE_IN_ID-25e1-4c3d-ad38-a88de018b808</string>
+      </InputsIds>
+      <BuildIn>true</BuildIn>
+      <OutputUnit>°C</OutputUnit>
+      <Id>TEMPL_ID-cca6-4794-83a9-7bfc962ffeb1</Id>
+      <Name>Temperature, 3rd grade</Name>
+      <Description>3rd grade used for example with STS-04</Description>
+      <Formula>Ts1*pow(((λTact-λTref)/λTref),3)+Ts2*pow(((λTact-λTref)/λTref),2)+Ts3*((λTact-λTref)/λTref)+Ts4</Formula>
+      <CanReference>true</CanReference>
+      <DecimalPrecision>3</DecimalPrecision>
+    </SensorTemplate>
+    <SensorTemplate>
+      <InputsIds>
+        <string>SE_IN_ID-355b-422d-8ae6-657f4c64b63b</string>
+        <string>SE_IN_ID-5e47-4612-842d-d8e63f513cef</string>
+        <string>SE_IN_ID-d445-4b24-81e2-793d2b030e86</string>
+        <string>SE_IN_ID-0c5a-48f1-8631-b60325e53e8f</string>
+        <string>SE_IN_ID-4e82-4cd3-b5fa-e8b9d61f2130</string>
+        <string>SE_IN_ID-fca6-4600-9c86-0fd5e46c9499</string>
+      </InputsIds>
+      <BuildIn>true</BuildIn>
+      <OutputUnit>με</OutputUnit>
+      <Id>TEMPL_ID-08ea-4c70-a63a-4ae5637745d9</Id>
+      <Name>Total Strain, basic formula</Name>
+      <Description>Basic strain formula with thermo-optic effect compensation</Description>
+      <Formula>(((λStrAct-λStrInst)/λStrInst)-(B*(Tact-Tinst)))/A</Formula>
+      <CanReference>true</CanReference>
+      <DecimalPrecision>3</DecimalPrecision>
+    </SensorTemplate>
+    <SensorTemplate>
+      <InputsIds>
+        <string>SE_IN_ID-d8ec-4842-87d9-585cb0968dd4</string>
+        <string>SE_IN_ID-e63d-4103-bedd-18c2528a5d84</string>
+        <string>SE_IN_ID-78bb-4aaa-8e9b-fd8b661a1ba0</string>
+        <string>SE_IN_ID-d62e-402a-90d2-6fc04765ba53</string>
+        <string>SE_IN_ID-c47c-4fff-b224-9bc898116350</string>
+        <string>SE_IN_ID-e79a-4650-82f5-9a9576d45068</string>
+        <string>SE_IN_ID-55da-4d83-93d4-fd8fe3d9463a</string>
+        <string>SE_IN_ID-cbc1-4af3-aa81-f8e85da0769b</string>
+      </InputsIds>
+      <BuildIn>true</BuildIn>
+      <OutputUnit>με</OutputUnit>
+      <Id>TEMPL_ID-5e9f-4476-bf57-125acfa083b1</Id>
+      <Name>Total Strain, extended formula #1</Name>
+      <Description>Extended strain formula with compensation of thermo-optic effect and length mismatch</Description>
+      <Formula>(((λStrAct-λStrInst)/λStrInst)-(B*(Tact-Tinst)))/(A*(Lfal/Lffl))</Formula>
+      <CanReference>true</CanReference>
+      <DecimalPrecision>3</DecimalPrecision>
+    </SensorTemplate>
+    <SensorTemplate>
+      <InputsIds>
+        <string>SE_IN_ID-549b-47a6-ba08-6d8fcb002b6d</string>
+        <string>SE_IN_ID-1ee2-4e17-b80a-cc3800b3d6fd</string>
+        <string>SE_IN_ID-c25f-4bd0-9bce-2af5affe1c29</string>
+        <string>SE_IN_ID-1b42-4dff-b15d-009402bc09ec</string>
+        <string>SE_IN_ID-158d-45b1-905f-c8b85036e596</string>
+        <string>SE_IN_ID-619e-47ac-94fb-eecf2cca2732</string>
+        <string>SE_IN_ID-a326-4e34-b4d2-fc7528781e72</string>
+        <string>SE_IN_ID-6662-4a41-9ca4-8e326882919d</string>
+        <string>SE_IN_ID-884f-4a35-8e19-6f93674abb3e</string>
+      </InputsIds>
+      <BuildIn>true</BuildIn>
+      <OutputUnit>με</OutputUnit>
+      <Id>TEMPL_ID-9f77-41ab-b08c-97373fd180d9</Id>
+      <Name>Total Strain, extended formula #2</Name>
+      <Description>Extended strain formula with compensation of thermo-optic effect, length mismatch and housing CTE</Description>
+      <Formula>(((λStrAct-λStrInst)/λStrInst)-(B*(Tact-Tinst)))/(A*(Lfal/Lffl))+(Tact-Tinst)*CTEsensor*((Lfal-Lffl)/Lfal)</Formula>
+      <CanReference>true</CanReference>
+      <DecimalPrecision>3</DecimalPrecision>
+    </SensorTemplate>
+
+    <SensorTemplate>
+      <InputsIds>
+        <string>SE_IN_ID-19b1-4ce2-881f-570cb3b899a8</string>
+        <string>SE_IN_ID-93e8-4942-ae23-4f65e4e5f398</string>
+        <string>SE_IN_ID-9e75-4cde-8924-cfbe251345c7</string>
+        <string>SE_IN_ID-082f-4700-9187-0abb4c28d8ba</string>
+        <string>SE_IN_ID-9704-4554-892c-19130d422abf</string>
+        <string>SE_IN_ID-e237-48d7-a03f-83d558f87f07</string>
+        <string>SE_IN_ID-e2ca-4906-a1c7-62130aabd573</string>
+        <string>SE_IN_ID-8411-42bd-9b18-feda9a831dcd</string>
+        <string>SE_IN_ID-6d3e-4d87-9763-412c1cbb9cc6</string>
+        <string>SE_IN_ID-bc20-47c8-9053-584a548a320b</string>
+      </InputsIds>
+      <BuildIn>true</BuildIn>
+      <OutputUnit>με</OutputUnit>
+      <Id>TEMPL_ID-c060-4218-92f1-865efb107838</Id>
+      <Name>Mechanical Strain, extended formula</Name>
+      <Description>Extended strain formula with compensation of thermo-optic effect, length mismatch, housing CTE and substrate CTE</Description>
+      <Formula>(((λStrAct-λStrInst)/λStrInst)-(B*(Tact-Tinst)))/(A*(Lfal/Lffl))+(Tact-Tinst)*CTEsensor*((Lfal-Lffl)/Lfal)-(Tact-Tinst)*CTEsubstrate</Formula>
+      <CanReference>true</CanReference>
+      <DecimalPrecision>3</DecimalPrecision>
+    </SensorTemplate>
+
+    <!-- NEW TEMPLATES II -->
+    <SensorTemplate>
+      <InputsIds>
+        <!-- Constatns -->
+        <!-- ψ,μm/nm^2 ,Displacement sensitivity #1 -->
+        <string>SE_IN_ID-0001-0001-abcd-abcdefghijkl</string>
+
+        <!-- ω,μm/nm,Displacement sensitivity #2 -->
+        <string>SE_IN_ID-0001-0002-abcd-abcdefghijkl</string>
+        <!-- τ,μm,Displacement sensitivity #3 -->
+        <string>SE_IN_ID-0001-0003-abcd-abcdefghijkl</string>
+        <!-- φ1,nm,Temperature sensitivity #1 -->
+        <string>SE_IN_ID-0001-0004-abcd-abcdefghijkl</string>
+        <!-- φ2,nm,Temperature sensitivity #2 -->
+        <string>SE_IN_ID-0001-0005-abcd-abcdefghijkl</string>
+        <!-- χ,nm,Temperature sensitivity #3 -->
+        <string>SE_IN_ID-0001-0006-abcd-abcdefghijkl</string>
+        <!-- λref_t, nm, Reference temperature wavelength -->
+        <string>SE_IN_ID-0001-0007-abcd-abcdefghijkl</string>
+
+        <!-- Measurements -->
+        <!-- λact_t, nm, Actual temperature wavelength -->
+        <string>SE_IN_ID-0001-0008-abcd-abcdefghijkl</string>
+        <!-- λact_ε, nm, Actual temperature wavelength -->
+        <string>SE_IN_ID-0001-0009-abcd-abcdefghijkl</string>
+
+      </InputsIds>
+      <BuildIn>true</BuildIn>
+      <OutputUnit>μm</OutputUnit>
+      <Id>TEMPL_ID-0001-4218-92f1-865efb107838</Id>
+      <Name>Displacement</Name>
+      <Description>Used for displacement sensors, D-01 &amp; D-02</Description>
+      <Formula>ψ*pow((λact_ε-((φ1*pow(((λact_t-λref_t)/λref_t),2)+φ2*((λact_t-λref_t)/λref_t)+χ))),2)+ω*(λact_ε-((φ1*pow(((λact_t-λref_t)/λref_t),2)+φ2*((λact_t-λref_t)/λref_t)+χ)))+τ</Formula>
+      <CanReference>true</CanReference>
+      <DecimalPrecision>3</DecimalPrecision>
+    </SensorTemplate>
+
+    <SensorTemplate>
+      <InputsIds>
+        <!-- Constatns -->
+        <!-- α,bar,Pressure sensitivity #1 -->
+        <string>SE_IN_ID-0002-0001-abcd-abcdefghijkl</string>
+        <!-- β,bar,Pressure sensitivity #2 -->
+        <string>SE_IN_ID-0002-0002-abcd-abcdefghijkl</string>
+        <!-- γ,bar,Pressure sensitivity #3 -->
+        <string>SE_IN_ID-0002-0003-abcd-abcdefghijkl</string>
+        <!-- λpressure_ref1,nm,Reference pressure wavelength -->
+        <string>SE_IN_ID-0002-0004-abcd-abcdefghijkl</string>
+        <!-- λpressure_ref2,nm,Reference pressure wavelength -->
+        <string>SE_IN_ID-0002-0005-abcd-abcdefghijkl</string>
+
+        <!-- Measurements -->
+        <!-- λpressure1, nm, Actual pressure wavelength -->
+        <string>SE_IN_ID-0002-0006-abcd-abcdefghijkl</string>
+        <!-- λpressure2, nm, Actual pressure wavelength -->
+        <string>SE_IN_ID-0002-0007-abcd-abcdefghijkl</string>
+
+      </InputsIds>
+      <BuildIn>true</BuildIn>
+      <OutputUnit>bar</OutputUnit>
+      <Id>TEMPL_ID-0002-4218-92f1-865efb107838</Id>
+      <Name>Pressure</Name>
+      <Description>Used for pressure measurement, P-05</Description>
+      <Formula>α*pow((((λpressure2-λpressure_ref2)/λpressure_ref2)-((λpressure1-λpressure_ref1)/λpressure_ref1)),2)+β*(((λpressure2-λpressure_ref2)/λpressure_ref2)-((λpressure1-λpressure_ref1)/λpressure_ref1))+γ</Formula>
+      <CanReference>true</CanReference>
+      <DecimalPrecision>3</DecimalPrecision>
+    </SensorTemplate>
+
+    <SensorTemplate>
+      <InputsIds>
+        <!-- λref, nm, Instalation wavelength -->
+        <string>SE_IN_ID-c8fa-4cf1-9c83-2930a6e73efb</string>
+        <!-- λact, nm, Actual wavelength -->
+        <string>SE_IN_ID-92fb-4883-bfe0-f8dce2cdb9f3</string>
+      </InputsIds>
+      <BuildIn>true</BuildIn>
+      <OutputUnit>pm</OutputUnit>
+      <Id>TEMPL_ID-ab88-42c3-a82c-e5e0d469bb8a</Id>
+      <Name>Wavelength Change</Name>
+      <Description>Used for observing wavelength change</Description>
+      <Formula>(λact-λref)*1000</Formula>
+      <CanReference>true</CanReference>
+      <DecimalPrecision>3</DecimalPrecision>
+    </SensorTemplate>
+
+
+
+  </SensorTemplates>
+
+
+
+
+  <SensorInputs>
+
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-375b-48fe-866a-b8bda0341cfc</Id>
+      <Name>λTact</Name>
+      <Type>PeakRange</Type>
+      <Description>Actual temperature wavelength</Description>
+      <Unit>nm</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-d742-4a66-b967-37ca87722463</Id>
+      <Name>S1</Name>
+      <Type>Constant</Type>
+      <Description>Temperature senitivity #1</Description>
+      <Unit>°C-1</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-73b0-4271-83a7-95e9c5f8c545</Id>
+      <Name>S2</Name>
+      <Type>Constant</Type>
+      <Description>Temperature senitivity #2</Description>
+      <Unit>°C-2</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-691b-4f1e-bc9f-8d67f86f9b72</Id>
+      <Name>λTref</Name>
+      <Type>Constant</Type>
+      <Description>Reference temperature wavelength - To be measured after installation of the sensor</Description>
+      <Unit>nm</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-6ad1-4a35-8f5b-b5f32aa4ac0b</Id>
+      <Name>λTact</Name>
+      <Type>PeakRange</Type>
+      <Description>Actual temperature wavelength</Description>
+      <Unit>nm</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-671b-4c83-acfa-75194cfc29c5</Id>
+      <Name>Ts1</Name>
+      <Type>Constant</Type>
+      <Description>Temperature sensitivity #1</Description>
+      <Unit>°C</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-4272-429f-bacd-396ce25525b6</Id>
+      <Name>Ts2</Name>
+      <Type>Constant</Type>
+      <Description>Temperature sensitivity #2</Description>
+      <Unit>°C</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-8f65-4e4b-a35e-2e515f22b2b3</Id>
+      <Name>Ts3</Name>
+      <Type>Constant</Type>
+      <Description>Temperature sensitivity #3</Description>
+      <Unit>°C</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-6373-4796-b077-4fcae715859f</Id>
+      <Name>λTref</Name>
+      <Type>Constant</Type>
+      <Description>Reference temperature wavelength - To be measured after installation</Description>
+      <Unit>nm</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-43e4-4fcc-a30a-be4bfec7c3f1</Id>
+      <Name>λStrAct</Name>
+      <Type>PeakRange</Type>
+      <Description>Actual strain wavelength</Description>
+      <Unit>nm</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-e948-41c9-9e9e-7a6629358618</Id>
+      <Name>A</Name>
+      <Type>Constant</Type>
+      <Description>Strain sensitivity coefficient</Description>
+      <Unit>µε-1</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-d7d7-48de-9268-0e1318671647</Id>
+      <Name>λStrInst</Name>
+      <Type>Constant</Type>
+      <Description>Initial strain wavelength - To be measured after installation</Description>
+      <Unit>nm</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-ba04-456f-821b-f9391458b9af</Id>
+      <Name>λStrAct</Name>
+      <Type>PeakRange</Type>
+      <Description>Actual strain wavelength</Description>
+      <Unit>nm</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-7dea-44de-8e0d-ece27483011d</Id>
+      <Name>Tact</Name>
+      <Type>Sensor</Type>
+      <Description>Actual temperature</Description>
+      <Unit>°C</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-089e-41b6-bd84-7ff578a8857d</Id>
+      <Name>A</Name>
+      <Type>Constant</Type>
+      <Description>Strain sensitivity coefficient</Description>
+      <Unit>µε-1</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-1f34-4968-b70c-777be564eb7e</Id>
+      <Name>B</Name>
+      <Type>Constant</Type>
+      <Description>Thermo-optic coefficient</Description>
+      <Unit>°C-1</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-1597-4716-921d-e69a7594af50</Id>
+      <Name>λStrInst</Name>
+      <Type>Constant</Type>
+      <Description>Initial strain wavelength - To be measured after installation</Description>
+      <Unit>nm</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-1935-4640-bba5-3593690a16f1</Id>
+      <Name>Tinst</Name>
+      <Type>Constant</Type>
+      <Description>Initial temperature - To be measured after installation</Description>
+      <Unit>°C</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-7ca1-47fa-8712-f57e7ad40260</Id>
+      <Name>λStrAct</Name>
+      <Type>PeakRange</Type>
+      <Description>Actual strain wavelength</Description>
+      <Unit>nm</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-24cd-4a83-baff-f458950e77b6</Id>
+      <Name>TactB</Name>
+      <Type>Sensor</Type>
+      <Description>Actual temperature - Thermo-optic compensation</Description>
+      <Unit>°C</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-89e5-4988-926b-d9f59d9792f0</Id>
+      <Name>TactCTE</Name>
+      <Type>Sensor</Type>
+      <Description>Actual temperature - Thermally induced strain compensation</Description>
+      <Unit>°C</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-4572-499c-8951-3b9170df3bc7</Id>
+      <Name>A</Name>
+      <Type>Constant</Type>
+      <Description>Strain sensitivity coefficient</Description>
+      <Unit>µε-1</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-e0e8-4327-9958-0dcbec492e7e</Id>
+      <Name>B</Name>
+      <Type>Constant</Type>
+      <Description>Thermo-optic effect</Description>
+      <Unit>°C-1</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-e0a5-4678-b451-19d0e1fdc1ea</Id>
+      <Name>CTE</Name>
+      <Type>Constant</Type>
+      <Description>Coefficient of thermal expansion - substrate material</Description>
+      <Unit>μm/m/°C</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-115b-4aab-baec-7800ad1515a3</Id>
+      <Name>λStrInst</Name>
+      <Type>Constant</Type>
+      <Description>Initial strain wavelength - To be measured after installation</Description>
+      <Unit>nm</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-fb51-4ec0-907b-245fc93bb32b</Id>
+      <Name>TinstB</Name>
+      <Type>Constant</Type>
+      <Description>Initial temperature - Thermo-optic compensation</Description>
+      <Unit>°C</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-e991-4481-99d6-6b6cf29628cb</Id>
+      <Name>TinstCTE</Name>
+      <Type>Constant</Type>
+      <Description>Initial temperature - Thermally induced strain compensation</Description>
+      <Unit>°C</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-a5ab-4ed5-8e82-e6c8a48bd39e</Id>
+      <Name>Sensor_val</Name>
+      <Type>Sensor</Type>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-a97c-491b-988b-6e9dd8942694</Id>
+      <Name>E</Name>
+      <Type>Constant</Type>
+      <Description>Young's modulus</Description>
+      <Unit>GPa</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-438f-4019-acbb-befb61f8df28</Id>
+      <Name>ε</Name>
+      <Type>Sensor</Type>
+      <Description>Strain - µm/m</Description>
+      <Unit>µε</Unit>
+    </SensorInput>
+
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-xxxx-xxxx-xxxx-xxx01_RAW_WL</Id>
+      <Name>lambda_act</Name>
+      <Type>PeakRange</Type>
+      <Description>Actual wavelength value.</Description>
+      <Unit>nm</Unit>
+    </SensorInput>
+
+    <!-- NEW TEMPLATES -->
+
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-ab39-4b40-84eb-6ca2180ae0da</Id>
+      <Name>Ts1</Name>
+      <Type>Constant</Type>
+      <Description>Temperature sensitivity #1</Description>
+      <Unit>°C</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-111a-40b6-8a6b-fa940a423ad3</Id>
+      <Name>Ts2</Name>
+      <Type>Constant</Type>
+      <Description>Temperature sensitivity #2</Description>
+      <Unit>°C</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-c77c-4a60-aacb-efdf39420713</Id>
+      <Name>Ts3</Name>
+      <Type>Constant</Type>
+      <Description>Temperature sensitivity #3</Description>
+      <Unit>°C</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-d5a2-472d-b386-55aecd1cca6b</Id>
+      <Name>λTref</Name>
+      <Type>Constant</Type>
+      <Description>Reference temperature wavelength</Description>
+      <Unit>nm</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-5cf0-4dce-a7fb-4d35a2b52e3d</Id>
+      <Name>λTact</Name>
+      <Type>PeakRange</Type>
+      <Description>Actual temperature wavelength</Description>
+      <Unit>nm</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-ab00-453e-ba1c-948b11de6480</Id>
+      <Name>λTact</Name>
+      <Type>PeakRange</Type>
+      <Description>Actual temperature wavelength</Description>
+      <Unit>nm</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-a92a-4064-8e2a-e51a0567c5d2</Id>
+      <Name>Ts1</Name>
+      <Type>Constant</Type>
+      <Description>Temperature sensitivity #1</Description>
+      <Unit>°C</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-7137-412a-9bba-2e20c45ce576</Id>
+      <Name>Ts2</Name>
+      <Type>Constant</Type>
+      <Description>Temperature sensitivity #2</Description>
+      <Unit>°C</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-088a-4376-9115-cfeef17d99b2</Id>
+      <Name>Ts3</Name>
+      <Type>Constant</Type>
+      <Description>Temperature sensitivity #3</Description>
+      <Unit>°C</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-1da2-4767-a6ea-28644c88b20c</Id>
+      <Name>Ts4</Name>
+      <Type>Constant</Type>
+      <Description>Temperature sensitivity #4</Description>
+      <Unit>°C</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-25e1-4c3d-ad38-a88de018b808</Id>
+      <Name>λTref</Name>
+      <Type>Constant</Type>
+      <Description>Reference temperature wavelength</Description>
+      <Unit>nm</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-355b-422d-8ae6-657f4c64b63b</Id>
+      <Name>λStrAct</Name>
+      <Type>PeakRange</Type>
+      <Description>Actual strain wavelength</Description>
+      <Unit>nm</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-5e47-4612-842d-d8e63f513cef</Id>
+      <Name>Tact</Name>
+      <Type>Sensor</Type>
+      <Description>Actual temperature</Description>
+      <Unit>°C</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-d445-4b24-81e2-793d2b030e86</Id>
+      <Name>A</Name>
+      <Type>Constant</Type>
+      <Description>Strain sensitvity coefficient</Description>
+      <Unit>µε⁻¹ </Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-0c5a-48f1-8631-b60325e53e8f</Id>
+      <Name>B</Name>
+      <Type>Constant</Type>
+      <Description>Thermo-optic coefficient</Description>
+      <Unit>°C⁻¹ </Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-4e82-4cd3-b5fa-e8b9d61f2130</Id>
+      <Name>λStrInst</Name>
+      <Type>Constant</Type>
+      <Description>Initial strain wavelength - To be measured after installation</Description>
+      <Unit>nm</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-fca6-4600-9c86-0fd5e46c9499</Id>
+      <Name>Tinst</Name>
+      <Type>Constant</Type>
+      <Description>Initial temperature - To be measured after installation</Description>
+      <Unit>°C</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-d8ec-4842-87d9-585cb0968dd4</Id>
+      <Name>λStrAct</Name>
+      <Type>PeakRange</Type>
+      <Description>Actual strain wavelength</Description>
+      <Unit>nm</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-e63d-4103-bedd-18c2528a5d84</Id>
+      <Name>Tact</Name>
+      <Type>Sensor</Type>
+      <Description>Actual temperature</Description>
+      <Unit>°C</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-78bb-4aaa-8e9b-fd8b661a1ba0</Id>
+      <Name>A</Name>
+      <Type>Constant</Type>
+      <Description>Strain sensitvity coefficient</Description>
+      <Unit>µε⁻¹</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-d62e-402a-90d2-6fc04765ba53</Id>
+      <Name>B</Name>
+      <Type>Constant</Type>
+      <Description>Thermo-optic coefficient</Description>
+      <Unit>°C⁻¹</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-c47c-4fff-b224-9bc898116350</Id>
+      <Name>Lfal</Name>
+      <Type>Constant</Type>
+      <Description>Anchoring length - To be measured after installation</Description>
+      <Unit>m</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-e79a-4650-82f5-9a9576d45068</Id>
+      <Name>Lffl</Name>
+      <Type>Constant</Type>
+      <Description>Free fiber length</Description>
+      <Unit>m</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-55da-4d83-93d4-fd8fe3d9463a</Id>
+      <Name>λStrInst</Name>
+      <Type>Constant</Type>
+      <Description>Initial strain wavelength - To be measured after installation</Description>
+      <Unit>nm</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-cbc1-4af3-aa81-f8e85da0769b</Id>
+      <Name>Tinst</Name>
+      <Type>Constant</Type>
+      <Description>Initial temperature - To be measured after installation</Description>
+      <Unit>°C</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-549b-47a6-ba08-6d8fcb002b6d</Id>
+      <Name>Tact</Name>
+      <Type>Sensor</Type>
+      <Description>Actual temperature</Description>
+      <Unit>°C</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-1ee2-4e17-b80a-cc3800b3d6fd</Id>
+      <Name>λStrAct</Name>
+      <Type>PeakRange</Type>
+      <Description>Actual strain wavelength</Description>
+      <Unit>nm</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-c25f-4bd0-9bce-2af5affe1c29</Id>
+      <Name>A</Name>
+      <Type>Constant</Type>
+      <Description>Strain sensitvity coefficient</Description>
+      <Unit>µε⁻¹</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-1b42-4dff-b15d-009402bc09ec</Id>
+      <Name>B</Name>
+      <Type>Constant</Type>
+      <Description>Thermo-optic coefficien</Description>
+      <Unit>°C⁻¹</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-158d-45b1-905f-c8b85036e596</Id>
+      <Name>Lfal</Name>
+      <Type>Constant</Type>
+      <Description>Anchoring length - To be measured after installation</Description>
+      <Unit>m</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-619e-47ac-94fb-eecf2cca2732</Id>
+      <Name>Lffl</Name>
+      <Type>Constant</Type>
+      <Description>Free fiber length</Description>
+      <Unit>m</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-a326-4e34-b4d2-fc7528781e72</Id>
+      <Name>λStrInst</Name>
+      <Type>Constant</Type>
+      <Description>Initial strain wavelength - To be measured after installation</Description>
+      <Unit>nm</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-6662-4a41-9ca4-8e326882919d</Id>
+      <Name>Tinst</Name>
+      <Type>Constant</Type>
+      <Description>Initial temperature - To be measured after installation</Description>
+      <Unit>°C</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-884f-4a35-8e19-6f93674abb3e</Id>
+      <Name>CTEsensor</Name>
+      <Type>Constant</Type>
+      <Description>Coefficient of thermal expansion of housing material</Description>
+      <Unit>µε°C⁻¹</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-19b1-4ce2-881f-570cb3b899a8</Id>
+      <Name>Tact</Name>
+      <Type>Sensor</Type>
+      <Description>Actual temperature</Description>
+      <Unit>°C</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-93e8-4942-ae23-4f65e4e5f398</Id>
+      <Name>λStrAct</Name>
+      <Type>PeakRange</Type>
+      <Description>Actual strain wavelength</Description>
+      <Unit>nm</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-9e75-4cde-8924-cfbe251345c7</Id>
+      <Name>A</Name>
+      <Type>Constant</Type>
+      <Description>Strain sensitvity coefficient</Description>
+      <Unit>µε⁻¹</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-082f-4700-9187-0abb4c28d8ba</Id>
+      <Name>B</Name>
+      <Type>Constant</Type>
+      <Description>Thermo-optic coefficient</Description>
+      <Unit>°C⁻¹</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-9704-4554-892c-19130d422abf</Id>
+      <Name>Lfal</Name>
+      <Type>Constant</Type>
+      <Description>Anchoring length - To be measured after installation</Description>
+      <Unit>m</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-e237-48d7-a03f-83d558f87f07</Id>
+      <Name>Lffl</Name>
+      <Type>Constant</Type>
+      <Description>Free fiber length</Description>
+      <Unit>m</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-e2ca-4906-a1c7-62130aabd573</Id>
+      <Name>λStrInst</Name>
+      <Type>Constant</Type>
+      <Description>Initial strain wavelength - To be measured after installation</Description>
+      <Unit>nm</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-8411-42bd-9b18-feda9a831dcd</Id>
+      <Name>Tinst</Name>
+      <Type>Constant</Type>
+      <Description>Initial temperature - To be measured after installation</Description>
+      <Unit>°C</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-6d3e-4d87-9763-412c1cbb9cc6</Id>
+      <Name>CTEsensor</Name>
+      <Type>Constant</Type>
+      <Description>Coefficient of thermal expansion of housing material</Description>
+      <Unit>µε°C⁻¹</Unit>
+    </SensorInput>
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-bc20-47c8-9053-584a548a320b</Id>
+      <Name>CTEsubstrate</Name>
+      <Type>Constant</Type>
+      <Description>Coefficient of thermal expansion of substrate material</Description>
+      <Unit>µε°C⁻¹</Unit>
+    </SensorInput>
+
+    <!-- Displacement: TEMPL_ID-0001-4218-92f1-865efb107838 -->
+
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-0001-0001-abcd-abcdefghijkl</Id>
+      <Name>ψ</Name>
+      <Type>Constant</Type>
+      <Description>Displacement sensitivity #1</Description>
+      <Unit>μm/nm^2</Unit>
+    </SensorInput>
+
+
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-0001-0002-abcd-abcdefghijkl</Id>
+      <Name>ω</Name>
+      <Type>Constant</Type>
+      <Description>Displacement sensitivity #2</Description>
+      <Unit>μm/nm</Unit>
+    </SensorInput>
+
+
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-0001-0003-abcd-abcdefghijkl</Id>
+      <Name>τ</Name>
+      <Type>Constant</Type>
+      <Description>Displacement sensitivity #3</Description>
+      <Unit>μm</Unit>
+    </SensorInput>
+
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-0001-0004-abcd-abcdefghijkl</Id>
+      <Name>φ1</Name>
+      <Type>Constant</Type>
+      <Description>Temperature sensitivity #1</Description>
+      <Unit>nm</Unit>
+    </SensorInput>
+
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-0001-0005-abcd-abcdefghijkl</Id>
+      <Name>φ2</Name>
+      <Type>Constant</Type>
+      <Description>Temperature sensitivity #2</Description>
+      <Unit>nm</Unit>
+    </SensorInput>
+
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-0001-0006-abcd-abcdefghijkl</Id>
+      <Name>χ</Name>
+      <Type>Constant</Type>
+      <Description>Temperature sensitivity #3</Description>
+      <Unit>nm</Unit>
+    </SensorInput>
+
+
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-0001-0007-abcd-abcdefghijkl</Id>
+      <Name>λref_t</Name>
+      <Type>Constant</Type>
+      <Description>Reference temperature wavelength</Description>
+      <Unit>nm</Unit>
+    </SensorInput>
+
+
+
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-0001-0008-abcd-abcdefghijkl</Id>
+      <Name>λact_t</Name>
+      <Type>PeakRange</Type>
+      <Description>Actual temperature wavelength</Description>
+      <Unit>nm</Unit>
+    </SensorInput>
+
+
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-0001-0009-abcd-abcdefghijkl</Id>
+      <Name>λact_ε</Name>
+      <Type>PeakRange</Type>
+      <Description>Actual temperature wavelength</Description>
+      <Unit>nm</Unit>
+    </SensorInput>
+
+
+    <!-- Pressure: TEMPL_ID-0002-4218-92f1-865efb107838 -->
+
+
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-0002-0001-abcd-abcdefghijkl</Id>
+      <Name>α</Name>
+      <Type>Constant</Type>
+      <Description>Pressure sensitivity #1</Description>
+      <Unit>bar</Unit>
+    </SensorInput>
+
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-0002-0002-abcd-abcdefghijkl</Id>
+      <Name>β</Name>
+      <Type>Constant</Type>
+      <Description>Pressure sensitivity #2</Description>
+      <Unit>bar</Unit>
+    </SensorInput>
+
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-0002-0003-abcd-abcdefghijkl</Id>
+      <Name>γ</Name>
+      <Type>Constant</Type>
+      <Description>Pressure sensitivity #3</Description>
+      <Unit>bar</Unit>
+    </SensorInput>
+
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-0002-0004-abcd-abcdefghijkl</Id>
+      <Name>λpressure_ref1</Name>
+      <Type>Constant</Type>
+      <Description>Temperature sensitivity #3</Description>
+      <Unit>nm</Unit>
+    </SensorInput>
+
+
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-0002-0005-abcd-abcdefghijkl</Id>
+      <Name>λpressure_ref2</Name>
+      <Type>Constant</Type>
+      <Description>Reference temperature wavelength</Description>
+      <Unit>nm</Unit>
+    </SensorInput>
+
+
+
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-0002-0006-abcd-abcdefghijkl</Id>
+      <Name>λpressure1</Name>
+      <Type>PeakRange</Type>
+      <Description>Actual pressure wavelength</Description>
+      <Unit>nm</Unit>
+    </SensorInput>
+
+
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-0002-0007-abcd-abcdefghijkl</Id>
+      <Name>λpressure2</Name>
+      <Type>PeakRange</Type>
+      <Description>Actual pressure wavelength</Description>
+      <Unit>nm</Unit>
+    </SensorInput>
+
+    <!-- Wavelength Change: TEMPL_ID-ab88-42c3-a82c-e5e0d469bb8a -->
+
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-c8fa-4cf1-9c83-2930a6e73efb</Id>
+      <Name>λref</Name>
+      <Type>Constant</Type>
+      <Description>Instalation wavelength</Description>
+      <Unit>nm</Unit>
+    </SensorInput>
+
+    <SensorInput>
+      <BuildIn>true</BuildIn>
+      <Id>SE_IN_ID-92fb-4883-bfe0-f8dce2cdb9f3</Id>
+      <Name>λact</Name>
+      <Type>PeakRange</Type>
+      <Description>Actual wavelength</Description>
+      <Unit>nm</Unit>
+    </SensorInput>
+
+
+  </SensorInputs>
+  <Sensors />
+  <Alerts />
+  <DataLogging>
+    <SensorIds />
+    <PeakRangesIds />
+  </DataLogging>
+</Configuration>

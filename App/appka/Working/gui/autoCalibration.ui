@@ -922,6 +922,9 @@ color: rgba(255, 255, 255, 200);</string>
     </property>
    </widget>
    <widget class="QPushButton" name="export_fail_btn">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>80</x>
@@ -938,6 +941,9 @@ color: rgba(255, 255, 255, 200);</string>
     </property>
    </widget>
    <widget class="QPushButton" name="export_pass_btn">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>300</x>
@@ -1416,6 +1422,20 @@ GENERATOR
      </property>
     </widget>
    </widget>
+   <widget class="QWidget" name="widget_graph" native="true">
+    <property name="geometry">
+     <rect>
+      <x>65</x>
+      <y>225</y>
+      <width>471</width>
+      <height>181</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgba(255, 255, 255, 0);</string>
+    </property>
+   </widget>
+   <zorder>widget_graph</zorder>
    <zorder>just_box_4</zorder>
    <zorder>S_N_label</zorder>
    <zorder>S_N_line</zorder>

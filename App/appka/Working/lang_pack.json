@@ -158,19 +158,22 @@
     "symm": "# Difference in symmetry : ",
     "auto_export_off": "Auto export is disabled",
     "export_to_local_server": "Exporting to the local server is disabled",
+    "db_file_path_not_found": "Could not find specified folder path to the local server database",
+    "statistics_file_path_not_found": "Could not find specified folder path to the local statistics",
+    "export_to_local_server_success": "Export to the local database was successful!",
 
     "help_browser": {
       "0": "HOW TO START CALIBRATION<br><br>",
-      "1": " Mount bracked onto the optical sensor.<br>        - Use one smaller screw with hex key of size 4<br>",
+      "1": " Mount bracket onto the optical sensor.<br>        - Use one smaller screw with hex key of size 4<br>",
       "2": " Mount optical sensor onto the shaker.<br>        - Use two bigger screws with hex key of size 5<br>",
-      "3": " Connect optical sensor into the interogator<br>      - Take off the cap<br>        - Align the protrusion on connector with groove on interogator<br>        - Screw connector tightly<br>",
+      "3": " Connect optical sensor into the interrogator<br>      - Take off the cap<br>        - Align the protrusion on connector with groove on interrogator<br>        - Screw connector tightly<br>",
       "4": " Replace 3M tape on the reference sensor<br>",
       "5": " Put tightly reference sensor on top of the optical sensor<br>",
-      "6": " Check if corrent config is selected for the optical sensor<br>        - If necessary load proper wavelengths<br>",
-      "7": " Press START buttont to start calibration process<br>",
-      "a": "<br>CALIRBATION EVALUATION<br><br>",
-      "b": "- calibration is good, you can add note if necessary<br>- results are automaticly exported to the database<br>",
-      "c": "- put sensor aside, when you finish batch, calibrate bad sensor again<br>- if FAIL status persists, press \"EXPORT\" button<br>- add note if necessary<br>"
+      "6": " Check if current config is selected for the optical sensor<br>        - If necessary load proper wavelengths<br>",
+      "7": " Press START button to start calibration process<br>",
+      "a": "<br>CALIBRATION EVALUATION<br><br>",
+      "b": "<br>- calibration is good, you can add note if necessary<br>- results are automatically exported to the database<br>",
+      "c": "<br>- put sensor aside, when you finish batch, calibrate bad sensor again<br>- if FAIL status persists, press \"EXPORT\" button<br>- add note if necessary<br>"
 
     }
 
@@ -333,6 +336,9 @@
     "slope_y": "Vlnová dĺžka [nm]",
     "auto_export_off": "Automatický export je vypnutý",
     "export_to_local_server": "Export na lokálny server je vypnutý",
+    "db_file_path_not_found": "Nepodarilo sa nájsť zadanú cestu priečinka k databáze lokálneho servera",
+    "statistics_file_path_not_found": "Nepodarilo sa nájsť zadanú cestu priečinka k lokálnym štatistikám",
+    "export_to_local_server_success": "Export do lokálnej databázy bol úspešný!",
 
     "help_browser": {
       "0": " AKO ZAČAŤ S KALIBRÁCIOU<br><br>",

@@ -1,5 +1,6 @@
 import subprocess
 import threading
+from datetime import datetime
 from subprocess import CalledProcessError
 from configparser import ConfigParser
 from codecs import open as codecs_open
@@ -17,7 +18,7 @@ from pyvisa import ResourceManager as pyvisa_ResourceManager
 from DatabaseCom import DatabaseCom
 from xml.etree.ElementTree import parse as ET_parse
 from yaml import safe_load as yaml_safe_load, safe_dump as yaml_safe_dump
-from re import search as re_search, sub as re_sub
+from re import search as re_search, sub as re_sub, escape as re_escape
 from shutil import copy as shutil_copy
 from platform import system as platform_system
 from csv import writer as csv_writer
@@ -37,38 +38,13 @@ def center_on_screen(self):
     self.show()
 
 
-# def scale_app(widget, scale_factor: float):
-#     # Check if it's a QWidget instance before accessing specific attributes
-#     if isinstance(widget, QWidget):
-#
-#         # Adjust font size
-#         if hasattr(widget, 'font') and hasattr(widget, 'setFont'):
-#             font = widget.font()
-#             font.setPointSize(int(font.pointSize() * scale_factor))
-#             widget.setFont(font)
-#
-#         # Adjust size for all widgets
-#         current_size = widget.size()
-#         widget.resize(int(current_size.width() * scale_factor), int(current_size.height() * scale_factor))
-#
-#         # Adjust position for all widgets
-#         current_pos = widget.pos()
-#         widget.move(int(current_pos.x() * scale_factor), int(current_pos.y() * scale_factor))
-#
-#     # Recursively scale child widgets or objects
-#     for child in widget.children():
-#         scale_app(child, scale_factor)
-
 def scale_app(widget, scale_factor: float):
 
     def scale_app2(widget, scale_factor: float):
-        # Check if it's a QWidget instance before accessing specific attributes
         if isinstance(widget, QWidget):
 
-            # Special case for QTextBrowser
             if isinstance(widget, QTextBrowser):
                 rich_text_content = widget.toHtml()
-
                 def replacer(match):
                     original_size = int(match.group(2))
                     new_size = int(original_size * scale_factor)
@@ -76,46 +52,42 @@ def scale_app(widget, scale_factor: float):
                 scaled_text = re_sub(r'(font-size:|size=)(\d+)(pt|px|%)', replacer, rich_text_content)
                 widget.setHtml(scaled_text)
 
-            # Adjust font size for all widgets having a font attribute
             if hasattr(widget, 'font') and hasattr(widget, 'setFont'):
                 font = widget.font()
                 font.setPointSizeF((font.pointSize() * scale_factor))
                 widget.setFont(font)
 
-            # Special case for QPushButton with icons
             if isinstance(widget, QPushButton):
                 current_icon_size = widget.iconSize()
                 new_icon_size = QSize(int(current_icon_size.width() * scale_factor), int(current_icon_size.height() * scale_factor))
                 widget.setIconSize(new_icon_size)
 
-            # Special case for QLabel with pixmap (images)
             if isinstance(widget, QLabel):
                 pixmap = widget.pixmap()
-                if pixmap:
+                if pixmap and not pixmap.isNull():  # Check if pixmap is null
                     scaled_pixmap = pixmap.scaled(
                         int(pixmap.width() * scale_factor),
                         int(pixmap.height() * scale_factor)
                     )
                     widget.setPixmap(scaled_pixmap)
+                elif pixmap and pixmap.isNull():  # Log an error message if pixmap is null
+                    print(f"Warning: Pixmap for widget {widget.objectName()} is null.")
 
-            # Adjust size for all widgets
             current_size = widget.size()
             widget.resize(int(current_size.width() * scale_factor), int(current_size.height() * scale_factor))
 
-            # Adjust position for all widgets
             current_pos = widget.pos()
             widget.move(int(current_pos.x() * scale_factor), int(current_pos.y() * scale_factor))
 
-        # Recursively scale child widgets or objects
         for child in widget.children():
             scale_app2(child, scale_factor)
 
     QTimer.singleShot(0, lambda: scale_app2(widget, scale_factor))
-    print("YEEET")
 
 
 def start_sentinel_d(project: str, sentinel_app_folder: str, subfolder_sentinel_project, no_log=False,
-                     no_proj=False):  # ! vybrat path to .exe a project
+                     no_proj=False, get_pid=False):  # ! vybrat path to .exe a project
+    kill_sentinel(False, True)
     coms = list_com_ports()
     active_com = "AUTO"
     for com in coms:
@@ -135,7 +107,13 @@ def start_sentinel_d(project: str, sentinel_app_folder: str, subfolder_sentinel_
     if not no_proj:
         os_system(comm)
     else:
-        os_system("start ClientApp_Dyn -switch=COM3")
+        if os_path.exists("test.ssd"):
+            os_system(f"start ClientApp_Dyn -switch={active_com} test.ssd")
+        else:
+            os_system(f"start ClientApp_Dyn")
+    if get_pid:
+        return 1111
+    return None
 
 
 def list_com_ports():
@@ -146,7 +124,7 @@ def list_com_ports():
     return coms
 
 
-def start_sentinel_modbus(modbus_path: str, project_path: str, project: str, opt_channels: int):
+def start_sentinel_modbus(modbus_path: str, project_path: str, project: str, opt_channels: int, check_pid=False):
     sentinel_app = modbus_path
     os_chdir(sentinel_app)
 
@@ -163,6 +141,11 @@ def start_sentinel_modbus(modbus_path: str, project_path: str, project: str, opt
         config.write(configfile)
 
     os_system("start /min Sentinel-Dynamic-Modbus")
+    if check_pid:
+        for process in psutil.process_iter(['pid', 'name']):
+            if process.info['name'] == "Sentinel-Dynamic-Modbus":
+                return process.info['pid']
+    return None
 
 
 def kill_sentinel(dyn: bool, mod: bool):
@@ -208,40 +191,52 @@ def start_modbus(folder_sentinel_modbus_folder: str, project_path: str, opt_proj
 
 
 def check_usb(opt_vendor_ids, ref_vendor_ids):
-    c = wmi_WMI()
+    try:
+        c = wmi_WMI()
+    except Exception as e:
+        print(f"COM Error initializing WMI: {e}")
+        return False, False
+
     opt = False
     ref = False
-    for usb in c.Win32_USBControllerDevice():
-        try:
-            device = usb.Dependent
-            # The string to parse is like 'USB\\VID_045E&PID_07A5&MI_02\\7&37207CFF&0&0002'
-            # VID is the vendor id
-            device = device.DeviceID
-            vid_start = device.find('VID_') + 4
-            vid_end = device.find('&', vid_start)
-            v_id = device[vid_start:vid_end]
 
-            if v_id.upper() in [str(id1) for id1 in opt_vendor_ids]:
-                opt = True
-            if v_id.upper() in [str(id1) for id1 in ref_vendor_ids]:
-                ref = True
-            if opt and ref:
-                break
-        except Exception as e:
-            pass
-            return False, False
+    try:
+        for usb in c.Win32_USBControllerDevice():
+            try:
+                device = usb.Dependent
+                device = device.DeviceID
+                vid_start = device.find('VID_') + 4
+                vid_end = device.find('&', vid_start)
+                v_id = device[vid_start:vid_end]
+
+                if v_id.upper() in [str(id1) for id1 in opt_vendor_ids]:
+                    opt = True
+                if v_id.upper() in [str(id1) for id1 in ref_vendor_ids]:
+                    ref = True
+                if opt and ref:
+                    break
+            except Exception as e:
+                continue
+    except Exception as e:
+        return False, False
+
     return opt, ref
 
 
 def check_function_gen_connected(generator_id, first_start=False):
-    rm = pyvisa_ResourceManager(r"C:\Windows\System32\visa64.dll")
-    devices = rm.list_resources()
-    # print(devices)
+    try:
+        rm = pyvisa_ResourceManager(r"C:\Windows\System32\visa64.dll")
+        devices = rm.list_resources()
+    except Exception as e:
+        print(e)
 
     if generator_id in devices:
         if first_start:
             try:
-                rm.open_resource(generator_id)
+                inst = rm.open_resource(generator_id)
+                res = inst.query("OUTPut1:STATe?")
+                if res[0] == "1":
+                    inst.write('OUTPut1:STATe OFF')
                 rm.close()
                 return True, False
             except Exception as e:
@@ -267,7 +262,7 @@ def set_wavelengths(s_n: str, sentinel_file_path: str, project: str, start_folde
     iwl = DatabaseCom(start_folder)
     wl = iwl.load_sylex_nominal_wavelength(objednavka_id=s_n)
 
-    project_path = os_path.join(sentinel_file_path, f"Sensors/{project}")
+    project_path = os_path.join(sentinel_file_path, project)
     if wl != 0 and wl != -1 and not None:
         if len(wl) == 2:
             mid = np.abs(wl[0] - wl[1]) / 2
@@ -322,10 +317,8 @@ def return_all_configs(opt_sensor_type: str, subfolder_config_path: str):
 def copy_files(serial_number, folder_id, source_folders, export_folder):
     try:
         return_str = []
-        # Define folder names to associate with folder types
         folder_name_dict = {'optical': 'opt', 'reference': 'ref', 'calibration': 'cal'}
 
-        # Find folder by ID and company name
         target_folder = None
         for folder in os_listdir(export_folder):
             if folder.startswith(f"{folder_id}_"):
@@ -335,33 +328,43 @@ def copy_files(serial_number, folder_id, source_folders, export_folder):
         if target_folder is None:
             return -1, f"No folder with ID {folder_id} found in {export_folder}"
 
-        # Inside target folder, find or create folder ID_kalibracia
-        kalibracia_folder = os_path.join(target_folder, f"{folder_id}_kalibracia")
+        kalibracia_folder = os_path.join(target_folder, f"9_App_calibration")
         if not os_path.exists(kalibracia_folder):
             os_makedirs(kalibracia_folder)
 
-        # Check for existence or create new subfolders (opt, ref, cal)
         for short_name in folder_name_dict.values():
             sub_folder = os_path.join(kalibracia_folder, short_name)
             if not os_path.exists(sub_folder):
                 os_makedirs(sub_folder)
 
-        # Loop through source folders to find the file based on the serial number
         for folder_type, folder_path in source_folders.items():
-            file_found = False  # Initialize a flag for found files
+            file_found = False
             for file_name in os_listdir(folder_path):
-                # Verify the file is a CSV file
                 if not file_name.endswith('.csv'):
                     continue
 
-                name_without_extension = os_path.splitext(file_name)[0]  # Strip the file extension
-
+                name_without_extension = os_path.splitext(file_name)[0]
                 if name_without_extension == serial_number:
-                    file_found = True  # Update the flag
+                    file_found = True
                     source_file = os_path.join(folder_path, file_name)
 
                     target_subfolder = os_path.join(kalibracia_folder, folder_name_dict[folder_type])
-                    target_file = os_path.join(target_subfolder, file_name)
+
+                    # Check for files with the same name
+                    existing_files = [f for f in os_listdir(target_subfolder) if f.startswith(name_without_extension)]
+                    if existing_files:
+                        highest_index = 0
+                        for existing_file in existing_files:
+                            # Match number_number_index.csv pattern
+                            match = re_search(rf'{re_escape(name_without_extension)}_(\d+)\.csv$', existing_file)
+                            if match:
+                                index = int(match.group(1))
+                                highest_index = max(highest_index, index)
+                        new_file_name = f"{name_without_extension}_{highest_index + 1}.csv"
+                    else:
+                        new_file_name = f"{name_without_extension}_0.csv"
+
+                    target_file = os_path.join(target_subfolder, new_file_name)
 
                     shutil_copy(source_file, target_file)
 
@@ -374,7 +377,7 @@ def copy_files(serial_number, folder_id, source_folders, export_folder):
             return_str = (-1, return_str)
     except Exception as e:
         return -1, f"Unexpected error happened during export to the local raw DB: \n {e}"
-    return return_str
+    return return_str, ""
 
 
 def set_read_only(file_path):
@@ -434,28 +437,26 @@ def save_statistics_to_csv(folder_path, file_name, time_stamp, serial_number, se
 
 def show_add_dialog(self, start_fold, start=True):
     def add_operator_to_yaml(new_operator, file_path="operators.yaml"):
-        try:
-            os_chdir(start_fold)
-            # Read the existing YAML file
-            with open(file_path, 'r') as f:
-                data = yaml_safe_load(f)
+        os_chdir(start_fold)
+        # Read the existing YAML file
+        with open(file_path, 'r') as f:
+            data = yaml_safe_load(f)
 
-            # Check if 'operators' key exists in the YAML, if not create one
-            if 'operators' not in data:
-                data['operators'] = []
+        # Check if 'operators' key exists in the YAML, if not create one
+        if 'operators' not in data:
+            data['operators'] = []
 
-            # Add the new operator to the list of operators
-            data['operators'].append(new_operator)
+        # Add the new operator to the list of operators
+        data['operators'].append(new_operator)
 
-            # Write the updated data back to the YAML file
-            with open(file_path, 'w') as f:
-                yaml_safe_dump(data, f)
+        # Write the updated data back to the YAML file
+        with open(file_path, 'w') as f:
+            yaml_safe_dump(data, f)
 
-            print(f"Added {new_operator} to {file_path}")
-            if start:
-                self.load_operators(select_operator=new_operator)
-        except Exception as e:
-            print(f"An error occurred: {e}")
+        print(f"Added {new_operator} to {file_path}")
+        if start:
+            self.load_operators(select_operator=new_operator)
+
 
     dialog = QDialog(self)
     dialog.setWindowTitle("Operator")
@@ -490,3 +491,13 @@ def open_folder_in_explorer(folder_path):
         subprocess_run(['explorer', folder_path])
     else:
         print("Folder does not exist")
+
+
+def save_error(path, e):
+    os_chdir(path)
+    current_time = datetime.now().time().strftime("%H:%M:%S.%f")
+    today = datetime.today().strftime("%b-%d-%Y")
+    with open("error_log.txt", "a") as f:  # Open the file in append mode
+        f.write("\n-- " + today)
+        f.write(" " + current_time)
+        f.write(e + "\n")  # Write the traceback to the file

@@ -1,3 +1,5 @@
+import time
+
 from PyQt5.QtCore import QTimer, QDate
 from PyQt5.QtGui import QPixmap
 from codecs import open as codecs_open
@@ -7,9 +9,10 @@ from PyQt5.QtWidgets import QMainWindow, QMessageBox, QSplashScreen
 from yaml import safe_load as yaml_safe_load, safe_dump as yaml_safe_dump
 from os import path as os_path, getcwd as os_getcwd
 from gui.start_up import Ui_Setup
-from definitions import scale_app, center_on_screen, load_all_config_files, show_add_dialog
-from acc.ThreadControlFuncGenStatements import ThreadControlFuncGenStatements
-from acc.SettingsParams import MySettings
+from definitions import scale_app, center_on_screen, load_all_config_files, show_add_dialog, start_sentinel_d, \
+    save_error, kill_sentinel
+from SensAcc.ThreadControlFuncGenStatements import ThreadControlFuncGenStatements
+from SensAcc.SettingsParams import MySettings
 from json import load as json_load
 
 
@@ -17,6 +20,7 @@ class MyStartUpWindow(QMainWindow):
 
     def __init__(self, splash: QSplashScreen):
         super().__init__()
+        self.worker = None
         self.bad_ref = False
         self.check_status = False
         self.gen_error = False
@@ -64,8 +68,6 @@ class MyStartUpWindow(QMainWindow):
         self.ui.btn_add_operator.clicked.connect(self.add_remove_operator)
         # connect comboBox
         self.ui.sens_type_comboBox.currentTextChanged.connect(self.sens_type_combobox_changed)
-        # self.ui.ref_channel_comboBox.currentTextChanged.connect(self.ref_channel_combobox_changed)
-        # self.ui.ref_device_comboBox.currentTextChanged.connect(self.ref_device_combobox_changed)
         self.ui.opt_config_combobox.currentTextChanged.connect(self.config_combobox_changed)
         self.ui.combobox_sel_operator.currentIndexChanged.connect(self.operator_changed)
 
@@ -96,10 +98,10 @@ class MyStartUpWindow(QMainWindow):
         self.setWindowIcon(QIcon('images/logo_icon.png'))
         self.setWindowTitle("Appka")
         self.setFixedSize(self.width(), int(self.height()*0.95))
-        self.splash.hide()
         scale_app(self, self.window_scale)
         self.setFixedSize(int(self.width() * self.window_scale),
                           int(self.height() * self.window_scale))
+        kill_sentinel(True, True)
         self.show_back()
 
     def add_remove_operator(self):
@@ -121,6 +123,7 @@ class MyStartUpWindow(QMainWindow):
                     else:
                         return f"Operator '{operator_to_delete}' not found."
                 except Exception as e:
+                    save_error(self.my_settings.starting_folder, e)
                     return f"An error occurred: {e}"
             op_to_remv = self.ui.combobox_sel_operator.currentText()
             box = QMessageBox(self)
@@ -166,7 +169,12 @@ class MyStartUpWindow(QMainWindow):
             self.ui.btn_add_operator.setText("-")
         else:
             self.ui.btn_add_operator.setText("+")
-        self.all_dev_connected_signal(combobox=True)
+        if (self.ref_connected and self.opt_connected and self.gen_connected and self.ui.start_app.text() ==
+            self.translations[self.lang]["start_app_a"] and not self.gen_error and
+            self.ui.combobox_sel_operator.currentIndex() != 0 and self.my_settings.opt_channels != 0 and not self.config_contains_none and not self.bad_ref):
+            self.ui.start_app.setEnabled(True)
+        else:
+            self.ui.start_app.setEnabled(False)
 
     def config_combobox_changed(self, text):
         try:
@@ -197,113 +205,153 @@ class MyStartUpWindow(QMainWindow):
     def channel_type_changed(self, index):
         self.my_settings.opt_channels = int(index)
 
-    def all_dev_connected_signal(self, opt_connected=False, ref_connected=False, gen_connected=False, gen_error=False, check_status=False, bad_ref=False, combobox=False):
-        if combobox and self.opt_connected is not None:
-            opt_connected = self.opt_connected
-            ref_connected = self.ref_connected
-            gen_connected = self.gen_connected
-            gen_error = self.gen_error
-            check_status = self.check_status
-            bad_ref = self.bad_ref
-        else:
-            self.opt_connected = opt_connected
-            self.ref_connected = ref_connected
-            self.gen_connected = gen_connected
-            self.gen_error = gen_error
-            self.check_status = check_status
-            self.bad_ref = bad_ref
-        ow = False
-        if (ref_connected and opt_connected and gen_connected and self.ui.start_app.text() == self.translations[self.lang]["start_app_a"] and not gen_error and
-                self.ui.combobox_sel_operator.currentIndex() != 0 and self.my_settings.opt_channels != 0 and not self.config_contains_none and not bad_ref) or ow:
-            self.ui.start_app.setEnabled(True)
-        else:
-            self.ui.start_app.setEnabled(False)
+    # def all_dev_connected_signal(self, opt_connected=False, ref_connected=False, gen_connected=False, gen_error=False, check_status=False, bad_ref=False, combobox=False):
+    #     if combobox and self.opt_connected is not None:
+    #         opt_connected = self.opt_connected
+    #         ref_connected = self.ref_connected
+    #         gen_connected = self.gen_connected
+    #         gen_error = self.gen_error
+    #         check_status = self.check_status
+    #         bad_ref = self.bad_ref
+    #     else:
+    #         self.opt_connected = opt_connected
+    #         self.ref_connected = ref_connected
+    #         self.gen_connected = gen_connected
+    #         self.gen_error = gen_error
+    #         self.check_status = check_status
+    #         self.bad_ref = bad_ref
+    #     ow = False
+    #     if (ref_connected and opt_connected and gen_connected and self.ui.start_app.text() == self.translations[self.lang]["start_app_a"] and not gen_error and
+    #             self.ui.combobox_sel_operator.currentIndex() != 0 and self.my_settings.opt_channels != 0 and not self.config_contains_none and not bad_ref) or ow:
+    #         self.ui.start_app.setEnabled(True)
+    #     else:
+    #         self.ui.start_app.setEnabled(False)
+    #
+    #     if check_status:
+    #         if not self.config_contains_none:
+    #             self.ui.open_settings_btn.setText(self.translations[self.lang]["open_settings_btn"])
+    #             self.ui.open_settings_btn.setStyleSheet("color: black;")
+    #         if self.config_contains_none and not ow:
+    #             if self.ui.null_detect_label.isEnabled():
+    #
+    #                 self.ui.null_detect_label.setEnabled(False)
+    #
+    #                 self.ui.open_settings_btn.setText(self.translations[self.lang]["open_settings_btn"])
+    #                 self.ui.open_settings_btn.setStyleSheet("color: red;")
+    #             else:
+    #
+    #                 self.ui.null_detect_label.setEnabled(True)
+    #
+    #                 self.ui.open_settings_btn.setText(self.translations[self.lang]["open_settings_btn_err"])
+    #                 self.ui.open_settings_btn.setStyleSheet("color: red;")
+    #             self.ui.start_app.setEnabled(False)
+    #
+    #         if not ref_connected and not bad_ref:
+    #             self.ui.status_ref_label.setText(self.translations[self.lang]["status_ref_label"]["disconnect"])
+    #             if self.ui.status_ref_label.isEnabled():
+    #                 self.ui.status_ref_label.setEnabled(False)
+    #                 self.ui.status_ref_label.setStyleSheet("color: black;")
+    #             else:
+    #                 self.ui.status_ref_label.setEnabled(True)
+    #                 self.ui.status_ref_label.setStyleSheet("color: red;")
+    #             if self.ref_connected:
+    #                 self.check_devices_load_comboboxes()
+    #                 self.ref_connected = False
+    #         elif bad_ref:
+    #             self.ui.status_ref_label.setText(self.translations[self.lang]["status_ref_label"]["wrong_name"])
+    #             if self.ui.status_ref_label.isEnabled():
+    #                 self.ui.status_ref_label.setEnabled(False)
+    #                 self.ui.status_ref_label.setStyleSheet("color: black;")
+    #             else:
+    #                 self.ui.status_ref_label.setEnabled(True)
+    #                 self.ui.status_ref_label.setStyleSheet("color: red;")
+    #             if self.ref_connected:
+    #                 self.check_devices_load_comboboxes()
+    #                 self.ref_connected = False
+    #         else:
+    #             self.ui.status_ref_label.setText(self.translations[self.lang]["status_ref_label"]["connected"])
+    #             self.ui.status_ref_label.setStyleSheet("color: green;")
+    #             if not self.ref_connected:
+    #                 self.ref_connected = True
+    #                 self.check_devices_load_comboboxes()
+    #
+    #         if not opt_connected:
+    #             self.ui.status_opt_label.setText(self.translations[self.lang]["status_opt_label"]["disconnect"])
+    #             if self.ui.status_opt_label.isEnabled():
+    #                 self.ui.status_opt_label.setEnabled(False)
+    #                 self.ui.status_opt_label.setStyleSheet("color: black;")
+    #             else:
+    #                 self.ui.status_opt_label.setEnabled(True)
+    #                 self.ui.status_opt_label.setStyleSheet("color: red;")
+    #         else:
+    #             self.ui.status_opt_label.setText(self.translations[self.lang]["status_opt_label"]["connected"])
+    #             self.ui.status_opt_label.setStyleSheet("color: green;")
+    #
+    #         if not gen_connected:
+    #             self.ui.status_gen_label.setText(self.translations[self.lang]["status_gen_label"]["disconnect"])
+    #             if self.ui.status_gen_label.isEnabled():
+    #                 self.ui.status_gen_label.setEnabled(False)
+    #                 self.ui.status_gen_label.setStyleSheet("color: black;")
+    #             else:
+    #                 self.ui.status_gen_label.setEnabled(True)
+    #                 self.ui.status_gen_label.setStyleSheet("color: red;")
+    #         else:
+    #             if gen_error:
+    #                 if self.ui.status_gen_label.isEnabled():
+    #                     self.ui.status_gen_label.setEnabled(False)
+    #                     self.ui.status_gen_label.setText(self.translations[self.lang]["status_gen_label"]["error_a"])
+    #                     self.ui.status_gen_label.setStyleSheet("color: red;")
+    #                 else:
+    #                     self.ui.status_gen_label.setEnabled(True)
+    #                     self.ui.status_gen_label.setText(self.translations[self.lang]["status_gen_label"]["error_b"])
+    #                     self.ui.status_gen_label.setStyleSheet("color: black;")
+    #             else:
+    #                 self.ui.status_gen_label.setText(self.translations[self.lang]["status_gen_label"]["connected"])
+    #                 self.ui.status_gen_label.setStyleSheet("color: green;")
+
+    def all_dev_connected_signal(self, opt_connected=False, ref_connected=False, gen_connected=False, gen_error=False,
+                                 check_status=False, bad_ref=False):
+        properties = ["opt_connected", "ref_connected", "gen_connected", "gen_error", "check_status", "bad_ref"]
+
+
+        for prop, value in zip(properties,
+                               [opt_connected, ref_connected, gen_connected, gen_error, check_status, bad_ref]):
+            setattr(self, prop, value)
+
+        enable_start_app = (
+                ref_connected and opt_connected and gen_connected and
+                self.ui.start_app.text() == self.translations[self.lang]["start_app_a"] and
+                not gen_error and self.ui.combobox_sel_operator.currentIndex() != 0 and
+                self.my_settings.opt_channels != 0 and not self.config_contains_none and not bad_ref
+        )
+        self.ui.start_app.setEnabled(enable_start_app)
 
         if check_status:
-            if not self.config_contains_none:
-                self.ui.open_settings_btn.setText(self.translations[self.lang]["open_settings_btn"])
-                self.ui.open_settings_btn.setStyleSheet("color: black;")
-            if self.config_contains_none and not ow:
-                if self.ui.null_detect_label.isEnabled():
-                    # self.ui.null_detect_label.setHidden(False)
-                    self.ui.null_detect_label.setEnabled(False)
-                    # self.ui.null_detect_label.setStyleSheet("color: black;")
-                    self.ui.open_settings_btn.setText(self.translations[self.lang]["open_settings_btn"])
-                    self.ui.open_settings_btn.setStyleSheet("color: red;")
-                else:
-                    # self.ui.null_detect_label.setHidden(False)
-                    self.ui.null_detect_label.setEnabled(True)
-                    # self.ui.null_detect_label.setStyleSheet("color: red;")
-                    self.ui.open_settings_btn.setText(self.translations[self.lang]["open_settings_btn_err"])
-                    self.ui.open_settings_btn.setStyleSheet("color: red;")
-                self.ui.start_app.setEnabled(False)
-            # elif self.my_settings.opt_channels != 0:
-            #     self.ui.null_detect_label.setHidden(True)
-            #     if ref_connected and opt_connected and gen_connected and self.ui.start_app.text() == "START" and not gen_error and (self.ui.combobox_sel_operator.currentIndex() != 0) or ow:
-            #         self.ui.start_app.setEnabled(True)
+            label_config = [
+                ("status_ref_label", ref_connected, not bad_ref, bad_ref),
+                ("status_opt_label", opt_connected, True, False),
+                ("status_gen_label", gen_connected, not gen_error, gen_error)
+            ]
 
-            if not ref_connected and not bad_ref:
-                self.ui.status_ref_label.setText(self.translations[self.lang]["status_ref_label"]["disconnect"])
-                if self.ui.status_ref_label.isEnabled():
-                    self.ui.status_ref_label.setEnabled(False)
-                    self.ui.status_ref_label.setStyleSheet("color: black;")
+            for label, connected, condition_a, condition_b in label_config:
+                label_widget = getattr(self.ui, label)
+                translations = self.translations[self.lang][label]
+                if connected:
+                    label_widget.setText(translations["connected"])
+                    label_widget.setStyleSheet("color: green;")
                 else:
-                    self.ui.status_ref_label.setEnabled(True)
-                    self.ui.status_ref_label.setStyleSheet("color: red;")
-                if self.ref_connected:
+                    label_widget.setText(translations["disconnect"])
+                    enabled = label_widget.isEnabled()
+                    label_widget.setEnabled(not enabled)
+                    label_widget.setStyleSheet("color: black;" if enabled else "color: red;")
+
+                if label == "status_ref_label" and not connected:
                     self.check_devices_load_comboboxes()
                     self.ref_connected = False
-            elif bad_ref:
-                self.ui.status_ref_label.setText(self.translations[self.lang]["status_ref_label"]["wrong_name"])
-                if self.ui.status_ref_label.isEnabled():
-                    self.ui.status_ref_label.setEnabled(False)
-                    self.ui.status_ref_label.setStyleSheet("color: black;")
-                else:
-                    self.ui.status_ref_label.setEnabled(True)
-                    self.ui.status_ref_label.setStyleSheet("color: red;")
-                if self.ref_connected:
-                    self.check_devices_load_comboboxes()
-                    self.ref_connected = False
-            else:
-                self.ui.status_ref_label.setText(self.translations[self.lang]["status_ref_label"]["connected"])
-                self.ui.status_ref_label.setStyleSheet("color: green;")
-                if not self.ref_connected:
-                    self.ref_connected = True
-                    self.check_devices_load_comboboxes()
-
-            if not opt_connected:
-                self.ui.status_opt_label.setText(self.translations[self.lang]["status_opt_label"]["disconnect"])
-                if self.ui.status_opt_label.isEnabled():
-                    self.ui.status_opt_label.setEnabled(False)
-                    self.ui.status_opt_label.setStyleSheet("color: black;")
-                else:
-                    self.ui.status_opt_label.setEnabled(True)
-                    self.ui.status_opt_label.setStyleSheet("color: red;")
-            else:
-                self.ui.status_opt_label.setText(self.translations[self.lang]["status_opt_label"]["connected"])
-                self.ui.status_opt_label.setStyleSheet("color: green;")
-
-            if not gen_connected:
-                self.ui.status_gen_label.setText(self.translations[self.lang]["status_gen_label"]["disconnect"])
-                if self.ui.status_gen_label.isEnabled():
-                    self.ui.status_gen_label.setEnabled(False)
-                    self.ui.status_gen_label.setStyleSheet("color: black;")
-                else:
-                    self.ui.status_gen_label.setEnabled(True)
-                    self.ui.status_gen_label.setStyleSheet("color: red;")
-            else:
-                if gen_error:
-                    if self.ui.status_gen_label.isEnabled():
-                        self.ui.status_gen_label.setEnabled(False)
-                        self.ui.status_gen_label.setText(self.translations[self.lang]["status_gen_label"]["error_a"])
-                        self.ui.status_gen_label.setStyleSheet("color: red;")
-                    else:
-                        self.ui.status_gen_label.setEnabled(True)
-                        self.ui.status_gen_label.setText(self.translations[self.lang]["status_gen_label"]["error_b"])
-                        self.ui.status_gen_label.setStyleSheet("color: black;")
-                else:
-                    self.ui.status_gen_label.setText(self.translations[self.lang]["status_gen_label"]["connected"])
-                    self.ui.status_gen_label.setStyleSheet("color: green;")
+                elif condition_b:
+                    label_widget.setText(translations["wrong_name"])
+                elif condition_a:
+                    label_widget.setText(translations["disconnect"])
 
     def sens_type_combobox_changed(self, text):
         self.my_settings.opt_sensor_type = text
@@ -346,13 +394,9 @@ class MyStartUpWindow(QMainWindow):
             self.check_devices_load_comboboxes()
 
     def check_devices_load_comboboxes(self):
-        # self.ui.ref_device_comboBox.blockSignals(True)
-        # self.ui.ref_channel_comboBox.blockSignals(True)
         self.ui.sens_type_comboBox.blockSignals(True)
         self.ui.opt_config_combobox.blockSignals(True)
 
-        # self.ui.ref_device_comboBox.clear()
-        # self.ui.ref_channel_comboBox.clear()
         self.ui.sens_type_comboBox.clear()
 
         # load optical sensor types
@@ -360,39 +404,30 @@ class MyStartUpWindow(QMainWindow):
         self.ui.sens_type_comboBox.addItem('Test')
         self.ui.sens_type_comboBox.setCurrentText(self.my_settings.opt_sensor_type)
 
-        # load ref sens devices
-        # system = nidaqmx_system.System.local()
-        # for device in system.devices:
-        #     # self.ui.ref_device_comboBox.addItem(f'{device.name}')
-        # if self.my_settings.ref_device_name is not None and self.ui.ref_device_comboBox.count() != 0:
-        #     self.ui.ref_device_comboBox.setCurrentText(self.my_settings.ref_device_name)
-        # else:
-        #     self.ui.ref_device_comboBox.addItem('NOT DETECTED')
-        #     self.ui.ref_device_comboBox.setCurrentText("NOT DETECTED")
-
-        # load ref sens channels
-        # self.ui.ref_channel_comboBox.addItem('ai0')
-        # self.ui.ref_channel_comboBox.addItem('ai1')
-        # self.ui.ref_channel_comboBox.addItem('ai2')
-
-        # if self.my_settings.ref_channel is not None:
-        #     self.ui.ref_channel_comboBox.setCurrentText(self.my_settings.ref_channel)
-
         load_all_config_files(self.ui.opt_config_combobox, self.config_file_path, self.my_settings.opt_sensor_type,
                               self.my_settings.subfolderConfig_path)
 
-        # self.ui.ref_device_comboBox.blockSignals(False)
-        # self.ui.ref_channel_comboBox.blockSignals(False)
         self.ui.sens_type_comboBox.blockSignals(False)
         self.ui.opt_config_combobox.blockSignals(False)
 
     def open_settings_window(self):
-        from acc.MySettingsWindow import MySettingsWindow
+        from SensAcc.MySettingsWindow import MySettingsWindow
         self.settings_window = MySettingsWindow(True, self, self.my_settings)
         self.hide()
 
     def start_calib_app(self):
-        from acc.MyMainWindow import MyMainWindow
+        self.ui.start_app.setStyleSheet("QPushButton:hover { background-color: none; }")
+        self.ui.start_app.setEnabled(False)
+        self.ui.start_app.setText(self.translations[self.lang]["start_app_b"])
+        self.ui.opt_config_combobox.setEnabled(False)
+        self.ui.sens_type_comboBox.setEnabled(False)
+        self.ui.open_settings_btn.setEnabled(False)
+        self.ui.combobox_sel_operator.setEnabled(False)
+        self.ui.btn_add_operator.setEnabled(False)
+        self.ui.menubar.setEnabled(False)
+        QTimer.singleShot(100, self.after_delay)
+
+    def after_delay(self):
         path_config = os_path.join(self.my_settings.folder_sentinel_D_folder, "config.ini")
         config = ConfigParser()
         with codecs_open(path_config, 'r', encoding='utf-8-sig') as f:
@@ -400,28 +435,21 @@ class MyStartUpWindow(QMainWindow):
         config.set('general', 'export_folder_path', self.my_settings.folder_opt_export)
         with open(path_config, 'w') as configfile:
             config.write(configfile)
+        start_sentinel_d(self.my_settings.opt_project, self.my_settings.folder_sentinel_D_folder, self.my_settings.subfolder_sentinel_project)
+        self.operator = self.ui.combobox_sel_operator.currentText()
 
         # self.ui.ref_device_comboBox.setEnabled(False)
-        self.ui.opt_config_combobox.setEnabled(False)
-        # self.ui.ref_channel_comboBox.setEnabled(False)
-        self.ui.sens_type_comboBox.setEnabled(False)
-        self.ui.open_settings_btn.setEnabled(False)
-        self.ui.combobox_sel_operator.setEnabled(False)
-        self.ui.btn_add_operator.setEnabled(False)
-        self.operator = self.ui.combobox_sel_operator.currentText()
-        self.ui.menubar.setEnabled(False)
-        self.ui.start_app.setText(self.translations[self.lang]["start_app_b"])
-        self.ui.start_app.setEnabled(False)
+
         self.thread_check_usb_devices.termination = True
-        self.calib_window = MyMainWindow(self, self.my_settings, self.thcfgs)
-        self.calib_window.first_sentinel_start()
+        self.calib_window.first_sentinel_start(self.operator)
+        self.ui.start_app.setText(self.translations[self.lang]["start_app_b"])
         self.check_last_calib()
 
     def show_back(self):
         self.set_language()
         if self.check_usbs_first_start:
             self.check_usbs_first_start = False
-            from acc.ThreadCheckDevicesConnected import ThreadCheckDevicesConnected
+            from SensAcc.ThreadCheckDevicesConnected import ThreadCheckDevicesConnected
             self.thread_check_usb_devices = ThreadCheckDevicesConnected(self.opt_dev_vendor, self.ref_dev_vendor,
                                                                         self.my_settings)
             self.thread_check_usb_devices.all_connected.connect(self.all_dev_connected_signal)
@@ -432,55 +460,18 @@ class MyStartUpWindow(QMainWindow):
         scale_app(self, self.window_scale_delta)
         self.window_scale_delta = 1
         self.check_devices_load_comboboxes()
-        print(str(self.config_contains_none) + " <-- self.config_contains_none")
         if self.operator:
             self.load_operators(self.operator)
         else:
             self.load_operators()
 
-        def get_font_params(qfont):
-            font_params = {
-                "Family": qfont.family(),
-                "PointSize": qfont.pointSize(),
-                "PixelSize": qfont.pixelSize(),
-                "Weight": qfont.weight(),
-                "Bold": qfont.bold(),
-                "Italic": qfont.italic(),
-                "Underline": qfont.underline(),
-                "StrikeOut": qfont.strikeOut(),
-                "Kerning": qfont.kerning(),
-                "Style": qfont.style(),
-                "FixedPitch": qfont.fixedPitch(),
-                "Stretch": qfont.stretch(),
-                "LetterSpacing": qfont.letterSpacing(),
-                "LetterSpacingType": qfont.letterSpacingType(),
-                "WordSpacing": qfont.wordSpacing(),
-                "Capitalization": qfont.capitalization(),
-                "HintingPreference": qfont.hintingPreference()
-            }
-            return font_params
-        # def bad_scales():
-        #
-        #     font = self.ui.combobox_sel_operator.font()
-        #     params = get_font_params(font)
-        #     for key, value in params.items():
-        #         print(f"{key}: {value}")
-        #     # font.setPointSizeF((7 * self.window_scale))
-        #     # self.ui.combobox_sel_operator.setFont(font)
-        #
-        #     font = self.ui.opt_config_combobox.font()
-        #     font.setPointSizeF((8 * self.window_scale))
-        #     self.ui.opt_config_combobox.setFont(font)
-        #
-        #     font = self.ui.sens_type_comboBox.font()
-        #     font.setPointSizeF((8 * self.window_scale))
-        #     self.ui.sens_type_comboBox.setFont(font)
-        #
-        #     font = self.ui.btn_add_operator.font()
-        #     font.setPointSizeF((8 * self.window_scale))
-        #     self.ui.btn_add_operator.setFont(font)
-        # bad_scales()
         QTimer.singleShot(0, lambda: center_on_screen(self))
+
+    def showEvent(self, a0):
+        if self.calib_window is None:
+            from SensAcc.MyMainWindow import MyMainWindow
+            self.calib_window = MyMainWindow(self, self.my_settings, self.thcfgs)
+            self.splash.hide()
 
     def closeEvent(self, event):
         box = QMessageBox(self)
@@ -503,15 +494,15 @@ class MyStartUpWindow(QMainWindow):
         file_path = "lang_pack.json"
         with open(file_path, 'r', encoding="utf-8") as f:
             self.translations = json_load(f)
-
-        self.ui.sens_type_label.setText(self.translations[self.lang]["sens_type_label"])
-        self.ui.status_opt_label.setText(self.translations[self.lang]["status_opt_label"]["init"])
-        self.ui.status_label.setText(self.translations[self.lang]["status_label"])
-        self.ui.status_ref_label.setText(self.translations[self.lang]["status_ref_label"]["init"])
-        self.ui.opt_channel_label.setText(self.translations[self.lang]["opt_channel_label"])
-        self.ui.status_gen_label.setText(self.translations[self.lang]["status_gen_label"]["init"])
-        self.ui.start_app.setText(self.translations[self.lang]["start_app_a"])
-        self.ui.open_settings_btn.setText(self.translations[self.lang]["open_settings_btn"])
+        if self.calib_window is None:
+            self.ui.sens_type_label.setText(self.translations[self.lang]["sens_type_label"])
+            self.ui.status_opt_label.setText(self.translations[self.lang]["status_opt_label"]["init"])
+            self.ui.status_label.setText(self.translations[self.lang]["status_label"])
+            self.ui.status_ref_label.setText(self.translations[self.lang]["status_ref_label"]["init"])
+            self.ui.opt_channel_label.setText(self.translations[self.lang]["opt_channel_label"])
+            self.ui.status_gen_label.setText(self.translations[self.lang]["status_gen_label"]["init"])
+            self.ui.start_app.setText(self.translations[self.lang]["start_app_a"])
+            self.ui.open_settings_btn.setText(self.translations[self.lang]["open_settings_btn"])
 
     def load_global_settings(self):
         with open("global_settings.yaml", 'r') as file:

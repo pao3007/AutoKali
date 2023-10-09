@@ -60,20 +60,19 @@ class DatabaseCom:
             print(params)
         except Exception as e:
             print(f"export_to_database1:{e}")
-            return -2
+            return -2, e
         try:
             conn = self.pyodbc.connect(conn_str)
             with conn.cursor() as cursor:
                 cursor.execute(query, params)
                 conn.commit()
             conn.close()
-            return 0
+            return 0, ""
         except Exception as e:
             print("export_to_database2:", e)
-            return -1
+            return -1, e
 
     def update_export_note(self, s_n, notes):
-        print("NOTE TO DATABASE")
         conn_str = self.do_connection_string(self.database_conf['ExportDatabase'])
         query = "UPDATE tblKalibracia_Accel SET Notes = ? WHERE SylexSN = ? AND CalibrationFinal = 1"
         query = self.database_conf['ExportNoteAcc']
@@ -83,10 +82,10 @@ class DatabaseCom:
                 cursor.execute(query, (notes, s_n))
                 conn.commit()
             conn.close()
-            return 1
+            return 1, ""
         except self.pyodbc.Error as e:
             print("update_export_note:", e)
-            return -1
+            return -1, e
 
     def fetch_records_by_sylexsn(self, sylexsn_value, conn_str):
         query = """

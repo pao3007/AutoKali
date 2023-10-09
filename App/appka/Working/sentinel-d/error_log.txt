@@ -1,0 +1,45 @@
+Aug-14-202314:07:01.363545Traceback (most recent call last):
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 306, in run
+    self.start_ref_sens_data_collection()
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 330, in start_ref_sens_data_collection
+    self.task.start()
+  File "C:\Users\lukac\AppData\Local\Programs\Python\Python311\Lib\site-packages\nidaqmx\task.py", line 1067, in start
+    check_for_error(error_code)
+  File "C:\Users\lukac\AppData\Local\Programs\Python\Python311\Lib\site-packages\nidaqmx\errors.py", line 183, in check_for_error
+    raise DaqError(error_buffer.value.decode("utf-8"), error_code)
+nidaqmx.errors.DaqError: Resource requested by this task has already been reserved by a different task.
+Device: cDAQ1
+
+Task Name: _unnamedTask<2>
+
+Status Code: -200022
+Aug-14-202314:09:34.630180Traceback (most recent call last):
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 306, in run
+    self.start_ref_sens_data_collection()
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 330, in start_ref_sens_data_collection
+    self.task.start()
+  File "C:\Users\lukac\AppData\Local\Programs\Python\Python311\Lib\site-packages\nidaqmx\task.py", line 1067, in start
+    check_for_error(error_code)
+  File "C:\Users\lukac\AppData\Local\Programs\Python\Python311\Lib\site-packages\nidaqmx\errors.py", line 183, in check_for_error
+    raise DaqError(error_buffer.value.decode("utf-8"), error_code)
+nidaqmx.errors.DaqError: Resource requested by this task has already been reserved by a different task.
+Device: cDAQ1
+
+Task Name: _unnamedTask<2>
+
+Status Code: -200022
+Aug-16-202308:01:44.034575Traceback (most recent call last):
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 875, in all_dev_connected_signal
+    self.ui.opt_channel_comboBox.setEnabled(False)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Ui_Setup' object has no attribute 'opt_channel_comboBox'
+Aug-16-202308:58:52.201090Traceback (most recent call last):
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 227, in run
+    if not (set(window.settings_window.nidaq_devices) == set(current_devices)) or \
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'nidaq_devices'
+Aug-16-202309:02:23.571150Traceback (most recent call last):
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 227, in run
+    if not (set(window.settings_window.nidaq_devices) == set(current_devices)) or \
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'nidaq_devices'

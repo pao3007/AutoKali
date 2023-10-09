@@ -1,0 +1,110 @@
+Aug-14-202308:15:49.272555Traceback (most recent call last):
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 1398, in start_modbus
+    self.autoCalib.start()
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 1585, in start
+    self.thread_check_sin_opt.finished.connect()
+TypeError: connect() missing required argument 'slot' (pos 1)
+Aug-14-202309:57:21.564987Traceback (most recent call last):
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 1399, in start_modbus
+    self.autoCalib.start()
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 1592, in start
+    for func in [print("SENS IS RUNNING ? : " + str(self.thread_check_sensors.isRunning())),
+                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'isRunning'
+Aug-14-202309:58:12.148769Traceback (most recent call last):
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 1399, in start_modbus
+    self.autoCalib.start()
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 1592, in start
+    for func in [print("SENS IS RUNNING ? : " + str(self.thread_check_sensors.isRunning())),
+                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'isRunning'
+Aug-14-202309:58:55.654272Traceback (most recent call last):
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 1399, in start_modbus
+    self.autoCalib.start()
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 1592, in start
+    for func in [print("SENS IS RUNNING ? : " + str(self.thread_check_sensors.isRunning())),
+                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'isRunning'
+Aug-14-202310:01:47.862925Traceback (most recent call last):
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 1399, in start_modbus
+    self.autoCalib.start()
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 1592, in start
+    for func in [print("SENS IS RUNNING ? : " + str(self.thread_check_sensors.isRunning())),
+                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'isRunning'
+Aug-14-202311:00:22.509812Traceback (most recent call last):
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 230, in run
+    instrument.write('OUTPut1:STATe OFF')
+  File "C:\Users\lukac\AppData\Local\Programs\Python\Python311\Lib\site-packages\pyvisa\resources\messagebased.py", line 197, in write
+    count = self.write_raw(message.encode(enco))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\lukac\AppData\Local\Programs\Python\Python311\Lib\site-packages\pyvisa\resources\messagebased.py", line 157, in write_raw
+    return self.visalib.write(self.session, message)[0]
+                              ^^^^^^^^^^^^
+  File "C:\Users\lukac\AppData\Local\Programs\Python\Python311\Lib\site-packages\pyvisa\resources\resource.py", line 171, in session
+    raise errors.InvalidSession()
+pyvisa.errors.InvalidSession: Invalid session handle. The resource might be closed.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 277, in run
+    print("GEN : " + e)
+          ~~~~~~~~~^~~
+TypeError: can only concatenate str (not "InvalidSession") to str
+Aug-14-202313:42:34.005927Traceback (most recent call last):
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 1460, in start_modbus
+    self.autoCalib.start()
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 1651, in start
+    print("REF MEASURE GEN IS RUNNING ? : " + str(self.thread_ref_sens.isRunning()))
+                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: super-class __init__() of type ThreadRefSensDataCollection was never called
+Aug-14-202313:54:48.641560Traceback (most recent call last):
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 1712, in thread_control_gen_finished
+    instrument = rm.open_resource(window.generator_id)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\lukac\AppData\Local\Programs\Python\Python311\Lib\site-packages\pyvisa\highlevel.py", line 3284, in open_resource
+    res.open(access_mode, open_timeout)
+  File "C:\Users\lukac\AppData\Local\Programs\Python\Python311\Lib\site-packages\pyvisa\resources\resource.py", line 282, in open
+    self.session, status = self._resource_manager.open_bare_resource(
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\lukac\AppData\Local\Programs\Python\Python311\Lib\site-packages\pyvisa\highlevel.py", line 3209, in open_bare_resource
+    return self.visalib.open(self.session, resource_name, access_mode, open_timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\lukac\AppData\Local\Programs\Python\Python311\Lib\site-packages\pyvisa\ctwrapper\functions.py", line 1851, in open
+    ret = library.viOpen(
+          ^^^^^^^^^^^^^^^
+  File "C:\Users\lukac\AppData\Local\Programs\Python\Python311\Lib\site-packages\pyvisa\ctwrapper\highlevel.py", line 226, in _return_handler
+    return self.handle_return_value(session, ret_value)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\lukac\AppData\Local\Programs\Python\Python311\Lib\site-packages\pyvisa\highlevel.py", line 251, in handle_return_value
+    raise errors.VisaIOError(rv)
+pyvisa.errors.VisaIOError: VI_ERROR_RSRC_NFOUND (-1073807343): Insufficient location information or the requested device or resource is not present in the system.
+Aug-14-202313:55:38.497226Traceback (most recent call last):
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 1712, in thread_control_gen_finished
+    instrument = rm.open_resource(window.generator_id)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\lukac\AppData\Local\Programs\Python\Python311\Lib\site-packages\pyvisa\highlevel.py", line 3284, in open_resource
+    res.open(access_mode, open_timeout)
+  File "C:\Users\lukac\AppData\Local\Programs\Python\Python311\Lib\site-packages\pyvisa\resources\resource.py", line 282, in open
+    self.session, status = self._resource_manager.open_bare_resource(
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\lukac\AppData\Local\Programs\Python\Python311\Lib\site-packages\pyvisa\highlevel.py", line 3209, in open_bare_resource
+    return self.visalib.open(self.session, resource_name, access_mode, open_timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\lukac\AppData\Local\Programs\Python\Python311\Lib\site-packages\pyvisa\ctwrapper\functions.py", line 1851, in open
+    ret = library.viOpen(
+          ^^^^^^^^^^^^^^^
+  File "C:\Users\lukac\AppData\Local\Programs\Python\Python311\Lib\site-packages\pyvisa\ctwrapper\highlevel.py", line 226, in _return_handler
+    return self.handle_return_value(session, ret_value)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\lukac\AppData\Local\Programs\Python\Python311\Lib\site-packages\pyvisa\highlevel.py", line 251, in handle_return_value
+    raise errors.VisaIOError(rv)
+pyvisa.errors.VisaIOError: VI_ERROR_RSRC_NFOUND (-1073807343): Insufficient location information or the requested device or resource is not present in the system.
+Aug-16-202311:40:48.641034Traceback (most recent call last):
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 1949, in thread_ref_sens_finished
+    self.make_opt_raw(4)
+  File "C:\Users\lukac\Desktop\Sylex\AutoKali\App\appka\appkaMainFast.py", line 2069, in make_opt_raw
+    for _ in range(lines_to_read):
+             ^^^^^^^^^^^^^^^^^^^^
+TypeError: 'float' object cannot be interpreted as an integer

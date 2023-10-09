@@ -1149,7 +1149,7 @@ background-color: rgba(255, 255, 255, 0);</string>
          <property name="geometry">
           <rect>
            <x>210</x>
-           <y>160</y>
+           <y>190</y>
            <width>321</width>
            <height>24</height>
           </rect>
@@ -1165,7 +1165,7 @@ background-color: rgba(255, 255, 255, 0);</string>
          <property name="geometry">
           <rect>
            <x>540</x>
-           <y>160</y>
+           <y>190</y>
            <width>23</width>
            <height>23</height>
           </rect>
@@ -1184,9 +1184,9 @@ background-color: rgb(44, 44, 44);</string>
         <widget class="QLabel" name="settings_calib_export_label">
          <property name="geometry">
           <rect>
-           <x>50</x>
-           <y>150</y>
-           <width>151</width>
+           <x>30</x>
+           <y>180</y>
+           <width>171</width>
            <height>41</height>
           </rect>
          </property>
@@ -1204,6 +1204,56 @@ background-color: rgb(44, 44, 44);</string>
          </property>
          <property name="text">
           <string>Local export folder</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+        <widget class="QLabel" name="settings_opt_slope_label">
+         <property name="geometry">
+          <rect>
+           <x>60</x>
+           <y>160</y>
+           <width>141</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>12</pointsize>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="layoutDirection">
+          <enum>Qt::LeftToRight</enum>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: rgb(208, 208, 208);</string>
+         </property>
+         <property name="text">
+          <string>Slope check</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+        <widget class="QLineEdit" name="calib_opt_slope_line">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="geometry">
+          <rect>
+           <x>210</x>
+           <y>160</y>
+           <width>81</width>
+           <height>24</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: rgb(208, 208, 208);</string>
+         </property>
+         <property name="text">
+          <string/>
          </property>
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -3210,6 +3260,7 @@ background-color: rgba(255, 255, 255, 0);</string>
          </rect>
         </property>
        </widget>
+       <zorder>widget_opt</zorder>
        <zorder>settings_settings_label</zorder>
        <zorder>save_btn</zorder>
        <zorder>cancel_btn</zorder>
@@ -3229,12 +3280,11 @@ background-color: rgba(255, 255, 255, 0);</string>
        <zorder>login_btn</zorder>
        <zorder>label_login_warning</zorder>
        <zorder>widget_gen</zorder>
-       <zorder>widget_calib</zorder>
        <zorder>settings_lang_label</zorder>
        <zorder>combo_box_lang</zorder>
        <zorder>widget_ref</zorder>
        <zorder>widget_db_others</zorder>
-       <zorder>widget_opt</zorder>
+       <zorder>widget_calib</zorder>
       </widget>
      </widget>
     </item>

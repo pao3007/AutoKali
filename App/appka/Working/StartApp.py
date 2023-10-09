@@ -16,9 +16,9 @@ def excepthook(exc_type, exc_value, exc_tb):
     current_time = datetime.now().time().strftime("%H:%M:%S.%f")
     today = datetime.today().strftime("%b-%d-%Y")
     with open("error_log.txt", "a") as f:  # Open the file in append mode
-        f.write(today)
-        f.write(current_time)
-        f.write(tb)  # Write the traceback to the file
+        f.write("\n-- " + today)
+        f.write(" " + current_time)
+        f.write(tb + "\n")  # Write the traceback to the file
 
     print("catched: ", tb)
     kill_sentinel(True, True)
