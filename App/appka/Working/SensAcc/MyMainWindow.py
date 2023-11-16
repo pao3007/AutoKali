@@ -5,13 +5,13 @@ from numpy import abs as np_abs
 import win32api
 import win32con
 from PyQt5.QtGui import QFont, QIcon, QPixmap
-from PyQt5.QtWidgets import QMainWindow, QMessageBox, QApplication, QDesktopWidget, QDialog, QVBoxLayout, QLabel, \
+from PyQt5.QtWidgets import QMainWindow, QMessageBox, QApplication, QDialog, QVBoxLayout, QLabel, \
     QLineEdit, QDialogButtonBox, QComboBox
 from PyQt5.QtCore import QThread, QEvent, Qt, QTimer
 from os import chdir as os_chdir, path as os_path, remove as os_remove
 
 from matplotlib import pyplot as plt
-from SensAcc.ThreadCheckDevicesConnected import ThreadCheckDevicesConnected
+from ThreadCheckDevicesConnected import ThreadCheckDevicesConnected
 from definitions import (kill_sentinel, start_sentinel_modbus, start_sentinel_d, scale_app, center_on_screen,
                          load_all_config_files, set_wavelengths, get_params, copy_files, save_statistics_to_csv,
                          show_add_dialog, open_folder_in_explorer, save_error)
@@ -30,8 +30,10 @@ from SensAcc.PlotSlope import PlotSlope
 class MyMainWindow(QMainWindow):
     from MyStartUpWindow import MyStartUpWindow
 
-    def __init__(self, window: MyStartUpWindow, my_settings: MySettings, thcfgs: ThreadControlFuncGenStatements):
+    def __init__(self, window: MyStartUpWindow, my_settings: MySettings):
         super().__init__()
+        self.setWindowFlags(
+            self.windowFlags() & ~Qt.WindowContextHelpButtonHint & ~Qt.WindowMaximizeButtonHint)
         self.pid = None
         self.data = deque(maxlen=10000)
         self.first_show = True
@@ -41,7 +43,7 @@ class MyMainWindow(QMainWindow):
         self.sensor_gen_error = False
         from gui.autoCalibration import Ui_AutoCalibration
 
-        self.thcfgs = thcfgs
+        self.thcfgs = ThreadControlFuncGenStatements()
         self.my_settings = my_settings
         self.window = window
         self.out_bro = 0
@@ -252,10 +254,12 @@ class MyMainWindow(QMainWindow):
 
     def open_sentinel_app_with_proj(self):
         self.pid = start_sentinel_d(self.my_settings.opt_project, self.my_settings.folder_sentinel_D_folder, self.my_settings.subfolder_sentinel_project, no_log=True, get_pid=True)
+        self.ui.output_browser_3.setText(self.window.translations[self.window.lang]["open_sentinel"])
 
     def open_sentinel_app_no_proj(self):
         self.pid = start_sentinel_d(self.my_settings.opt_project, self.my_settings.folder_sentinel_D_folder,self.my_settings.subfolder_sentinel_project, no_log=True,
                          no_proj=True, get_pid=True)
+        self.ui.output_browser_3.setText(self.window.translations[self.window.lang]["open_sentinel"])
 
     def change_operator(self):
         dialog = QDialog(self)
@@ -702,11 +706,23 @@ class MyMainWindow(QMainWindow):
         QTimer.singleShot(0, lambda: center_on_screen(self))
 
     def closeEvent(self, event):
-        reply = QMessageBox.question(self, self.window.translations[self.window.lang]["close_event_a"],
-                                     self.window.translations[self.window.lang]["close_event_b"],
-                                     QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        trans = self.window.translations
+        lang = self.window.lang
+        box = QMessageBox(self)
+        # box.setWindowFlags(self.windowFlags() | Qt.FramelessWindowHint)
+        # Remove only the close button
+        box.setWindowFlags(box.windowFlags() & ~Qt.WindowContextHelpButtonHint & ~Qt.WindowMinMaxButtonsHint)
+        # box.setWindowFlags(Qt.Popup | Qt.FramelessWindowHint)
+        box.setWindowTitle(trans[lang]['close_event_a'])
+        box.setText(trans[lang]['close_event_b'])
 
-        if reply == QMessageBox.Yes:
+        yes_button = box.addButton(trans[lang]['close_event_yes'], QMessageBox.YesRole)
+        no_button = box.addButton(trans[lang]['close_event_no'], QMessageBox.NoRole)
+
+        box.exec_()
+
+        if box.clickedButton() == yes_button:
+            self.hide()
             # Clean up resources or save any data if needed before exiting
             kill_sentinel(True, True)
             pyplot_close('all')
@@ -734,7 +750,6 @@ class MyMainWindow(QMainWindow):
         self.ui.plot_graph_check.setText(trans[lang]["plot_graph_check"])
         self.ui.actionAdd_new_operator.setText(trans[lang]["actionAdd_new_operator"])
         self.ui.actionChange_operator.setText(trans[lang]["actionChange_operator"])
-        self.ui.menuOperator.setTitle(trans[lang]["menuOperator"])
         self.ui.label_opt_sens_type_label.setText(self.my_settings.opt_sensor_type + f" {self.window.translations[self.window.lang]['config']}")
         if self.ui.widget_help.isHidden():
             self.ui.actionopen.setText(trans[lang]["actionopen_open"])
@@ -809,9 +824,7 @@ class AutoCalibMain:
         self.current_date = None
         self.time_string = None
         self.opt_sentinel_file_name = None
-        self.thread_check_opt_usb = ThreadCheckDevicesConnected(self.start_window.opt_dev_vendor,
-                                                                self.start_window.ref_dev_vendor,
-                                                                self.my_settings, True)
+        self.thread_check_opt_usb = ThreadCheckDevicesConnected(self.my_settings,self.start_window, True)
         self.thread_control_gen = self.ThreadControlFuncGen(self.my_settings.generator_id,
                                                             self.my_settings.generator_sweep_time,
                                                             self.my_settings.generator_sweep_start_freq,
@@ -1042,9 +1055,9 @@ class AutoCalibMain:
                 self.calib_window.ui.plot_graph_check.setEnabled(False)
                 self.calib_window.ui.menubar.setEnabled(False)
                 self.calib_window.ui.start_btn.setEnabled(False)
-                self.thread_check_opt_usb = ThreadCheckDevicesConnected(self.start_window.opt_dev_vendor,
-                                                                        self.start_window.ref_dev_vendor,
-                                                                        self.my_settings, True)
+                self.calib_window.btn_connect_load_wl()
+
+                self.thread_check_opt_usb = ThreadCheckDevicesConnected(self.my_settings, self.start_window, True)
                 self.thread_check_opt_usb.opt_connected.connect(self.check_usb_opt)
 
                 self.thread_control_gen = self.ThreadControlFuncGen(self.my_settings.generator_id,

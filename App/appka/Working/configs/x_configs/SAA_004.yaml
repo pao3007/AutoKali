@@ -12,7 +12,7 @@ calibration:
   r_flatness: 100
   reference_sensitivity: 105.532
   slope_check: 5
-current: false
+current: true
 function_generator:
   generator_id: TCPIP0::10.88.5.166::inst0::INSTR
   generator_max_vpp: 40

@@ -23770,3 +23770,18 @@ INFO   2023-10-09 14:04:56 – Unloading Driver
 INFO   2023-10-09 14:04:56 – Old lib hack done.
 INFO   2023-10-09 14:04:56 – Unloading Driver
 INFO   2023-10-09 14:04:56 – Old lib hack done.
+INFO   2023-10-09 14:27:40 – alternative Loading settings.ini
+INFO   2023-10-09 14:27:40 – dirPath: C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\modbus
+INFO   2023-10-09 14:27:40 – fileName: settings.ini
+INFO   2023-10-09 14:27:40 – Loading OldLibHack
+INFO   2023-10-09 14:27:40 – DLL version : 21902070
+INFO   2023-10-09 14:27:41 – Device Open : SUCCESS
+INFO   2023-10-09 14:27:41 – DLL_Set_AutoScan_Integration_Time : SUCCESS
+INFO   2023-10-09 14:27:41 – Device Closed.
+INFO   2023-10-09 14:27:41 – Unloading Driver
+INFO   2023-10-09 14:27:41 – Old lib hack done.
+INFO   2023-10-09 14:27:43 – Device Open : SUCCESS
+INFO   2023-10-09 14:27:43 – DLL_Set_AutoScan_Integration_Time : SUCCESS
+INFO   2023-10-09 14:27:43 – Device Closed.
+INFO   2023-10-09 14:27:44 – Unloading Driver
+INFO   2023-10-09 14:27:44 – Old lib hack done.

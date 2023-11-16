@@ -11,10 +11,10 @@ calibration:
   plot: true
   r_flatness: 100
   reference_sensitivity: 105.532
-  slope_check: 1
+  slope_check: 1.0
 current: true
 function_generator:
-  generator_id: TCPIP0::10.88.5.166::inst0::INSTR
+  generator_id: TCPIP0::10.88.5.251::inst0::INSTR
   generator_max_vpp: 100
   generator_sweep_start_freq: 5
   generator_sweep_stop_freq: 400

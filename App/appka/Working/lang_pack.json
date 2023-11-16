@@ -16,6 +16,14 @@
       "connected": "Reference USB device CONNECTED",
       "wrong_name": "Reference device WRONG name"
     },
+    "status_ref_label_benchtop": {
+      "init": "initialization",
+      "disconnect": "Motor USB device DISCONNECTED",
+      "connected": "Motor USB device CONNECTED",
+      "usb_disconnected": "Motor USB device DISCONNECTED",
+      "connected2": "Motor is connected",
+      "calibration": "MOTOR CALIBRATION"
+    },
     "status_gen_label": {
       "init": "initialization",
       "disconnect": "Function generator DISCONNECTED",
@@ -46,23 +54,32 @@
 
     "S_N_label": "S/N",
     "ref_sens_status_label": {
-      "connected": "REF. SENSOR IS CONNECTED",
-      "ready": "REF. SENSOR IS READY",
-      "not_ready": "REF. SENSOR IS NOT READY",
-      "usb_disconnected": "REF. USB DEVICE DISCONNECTED!",
-      "init": "REF. SENSOR INITIALIZATION",
-      "not_connected": "REF. SENSOR IS NOT CONNECTED"
+      "connected": "REF.SENSOR - CONNECTED",
+      "ready": "REF.SENSOR - READY",
+      "not_ready": "REF.SENSOR - NOT READY",
+      "usb_disconnected": "REF.DEVICE - DISCONNECTED!",
+      "init": "REF.SENSOR - INITIALIZATION",
+      "not_connected": "REF.SENSOR - NOT CONNECTED"
+    },
+    "ref_benchtop_status_label": {
+      "connected": "MOTOR - CONNECTED",
+      "usb_disconnected": "MOTOR - DISCONNECTED!",
+      "init": "MOTOR - INITIALIZATION",
+      "calibration": "MOTOR - CALIBRATION",
+      "error": "MOTOR - ERROR, RESTART",
+      "error2": "MOTOR THEN PROGRAM"
     },
     "opt_sens_status_label": {
-      "connected": "OPT. SENSOR IS CONNECTED",
-      "ready": "OPT. SENSOR IS READY",
-      "not_ready": "OPT. SENSOR IS NOT READY",
+      "connected": "OPT.SENSOR - CONNECTED",
+      "ready": "OPT.SENSOR - READY",
+      "not_ready": "OPT.SENSOR - NOT READY",
       "unlock": "PLEASE UNLOCK THE SENSOR",
-      "usb_disconnected": "OPT. USB DEVICE DISCONNECTED!",
-      "init": "OPT. SENSOR INITIALIZATION",
-      "not_connected": "OPT. SENSOR IS NOT CONNECTED",
+      "usb_disconnected": "OPT.DEVICE - DISCONNECTED!",
+      "init": "OPT.SENSOR - INITIALIZATION",
+      "not_connected": "OPT.SENSOR - NOT CONNECTED",
       "load_wl": "LOAD PROPER WAVELENGTHS",
-      "try_load_wl": "OR TRY LOAD WAVELENGTHS"
+      "try_load_wl": "OR TRY LOAD WAVELENGTHS",
+      "peak_logger_disconnected": "PEAKLOGGER - NOT CONNECTED"
     },
     "gen_status_label": {
       "disconnected": "DISCONNECTED",
@@ -161,6 +178,14 @@
     "db_file_path_not_found": "Could not find specified folder path to the local server database",
     "statistics_file_path_not_found": "Could not find specified folder path to the local statistics",
     "export_to_local_server_success": "Export to the local database was successful!",
+    "open_sentinel": "Opening sentinel-D",
+    "label_name_move_to": "Move to\n mm:",
+    "label_name_move_by": "Move by",
+    "motor_pos_out_of_range": "Desired position\nis out of allowed range",
+    "range_locked": "Range",
+    "range_locked_msg": "Range is locked",
+    "range_unlocked_msg": "Range is unlocked",
+
 
     "help_browser": {
       "0": "HOW TO START CALIBRATION<br><br>",
@@ -193,7 +218,15 @@
       "init": "inicializácia",
       "disconnect": "Referenčné USB zariadenie ODPOJENÉ",
       "connected": "Referenčné USB zariadenie PRIPOJENÉ",
-      "wrong_name": "Referenčné zariadenie, zlé meno"
+      "wrong_name": "Referenčné zariadenie, zlý názov"
+    },
+    "status_ref_label_benchtop": {
+      "init": "inicializácia",
+      "disconnect": "Motor USB zariadenie ODPOJENÉ",
+      "connected": "Motora USB zariadenie PRIPOJENÉ",
+      "usb_disconnected": "Motor USB zariadenie ODPOJENÉ",
+      "connected2": "Motor je PRIPOJENÝ",
+      "calibration": "Motor - kalibrácia"
     },
     "status_gen_label": {
       "init": "inicializácia",
@@ -225,23 +258,32 @@
 
     "S_N_label": "S/N",
     "ref_sens_status_label": {
-      "connected": "REF. SENZOR JE PRIPOJENÝ",
-      "ready": "REF. SENZOR JE PRIPRAVENÝ",
-      "not_ready": "REF. SENZOR NIE JE PRIPRAVENÝ",
-      "usb_disconnected": "REF. USB ZARIADENIE ODPOJENÉ!",
+      "connected": "REF.SENZOR - PRIPOJENÝ",
+      "ready": "REF.SENZOR - PRIPRAVENÝ",
+      "not_ready": "REF.SENZOR - NEPRIPRAVENÝ!",
+      "usb_disconnected": "REF.ZARIADENIE - ODPOJENÉ!",
       "init": "INICIALIZÁCIA REF. SENZORA",
-      "not_connected": "REF. SENZOR NIE JE PRIPOJENÝ"
+      "not_connected": "REF.SENZOR - ODPOJENÝ!"
+    },
+    "ref_benchtop_status_label": {
+      "connected": "MOTOR - PRIPOJENÝ",
+      "usb_disconnected": "MOTOR ZARIADENIE - ODPOJENÉ!",
+      "init": "MOTOR - INICIALIZÁCIA",
+      "calibration": "MOTOR - KALIBRÁCIA",
+      "error": "MOTOR - ERROR, REŠTARTUJTE",
+      "error2": "MOTOR POTOM PROGRAM"
     },
     "opt_sens_status_label": {
-      "connected": "OPT. SENZOR JE PRIPOJENÝ",
-      "ready": "OPT. SENZOR JE PRIPRAVENÝ",
-      "not_ready": "OPT. SENZOR NIE JE PRIPRAVENÝ",
-      "unlock": "PROSÍM ODBLOKUJTE SENZOR",
-      "usb_disconnected": "OPT. USB ZARIADENIE ODPOJENÉ!",
+      "connected": "OPT.SENZOR - PRIPOJENÝ",
+      "ready": "OPT.SENZOR - PRIPRAVENÝ",
+      "not_ready": "OPT.SENZOR - NEPRIPRAVENÝ!",
+      "unlock": "PROSÍM ODOMKNITE SENZOR",
+      "usb_disconnected": "OPT.ZARIADENIE - ODPOJENÉ!",
       "init": "INICIALIZÁCIA OPT. SENZORA",
-      "not_connected": "OPT. SENZOR NIE JE PRIPOJENÝ",
+      "not_connected": "OPT.SENZOR - ODPOJENÝ",
       "load_wl": "NAČÍTAJTE SPRÁVNE VLNOVÉ DĹŽKY",
-      "try_load_wl": "ALEBO SKÚSTE NAČÍTAŤ VLNOVÉ DĹŽKY"
+      "try_load_wl": "ALEBO SKÚSTE NAČÍTAŤ VLNOVÉ DĹŽKY",
+      "peak_logger_disconnected": "PEAKLOGGER - ODPOJENÝ!"
     },
     "gen_status_label": {
       "disconnected": "ODPOJENÝ",
@@ -339,6 +381,14 @@
     "db_file_path_not_found": "Nepodarilo sa nájsť zadanú cestu priečinka k databáze lokálneho servera",
     "statistics_file_path_not_found": "Nepodarilo sa nájsť zadanú cestu priečinka k lokálnym štatistikám",
     "export_to_local_server_success": "Export do lokálnej databázy bol úspešný!",
+    "open_sentinel": "Otváram sentinel-D",
+    "label_name_move_to": "Posun na\n mm:",
+    "label_name_move_by": "Posun o:",
+    "motor_pos_out_of_range": "Želaná poloha\nje mimo povolený rozsah",
+    "range_locked": "Rozsah",
+    "range_locked_msg": "Rozsah je zamknutý",
+    "range_unlocked_msg": "Rozsah je odomkuntý",
+
 
     "help_browser": {
       "0": " AKO ZAČAŤ S KALIBRÁCIOU<br><br>",

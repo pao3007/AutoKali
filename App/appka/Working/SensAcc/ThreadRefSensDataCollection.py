@@ -18,7 +18,7 @@ from SensAcc.AC_functions_1FBG_v2 import resample_by_interpolation
 class ThreadRefSensDataCollection(QThread):
     out_value = pyqtSignal(ndarray, str, int)
 
-    def __init__(self, window: MyStartUpWindow, thcfgs: ThreadControlFuncGenStatements, s_n: str, 
+    def __init__(self, window: MyStartUpWindow, thcfgs: ThreadControlFuncGenStatements, s_n: str,
                  my_settings: MySettings, s_n_export: str):
         super().__init__()
         self.extracted_column2 = []
@@ -39,7 +39,7 @@ class ThreadRefSensDataCollection(QThread):
         self.sensitivities_file = "sensitivities.csv"
         self.time_corrections_file = "time_corrections.csv"
         self.acc_calib = None
-        self.num_of_samples_per_cycle = int(self.my_settings.ref_sample_rate/10)
+        self.num_of_samples_per_cycle = int(self.my_settings.ref_sample_rate / 10)
         self.i = 1
 
     def run(self):
@@ -52,6 +52,7 @@ class ThreadRefSensDataCollection(QThread):
             # Perform resampling
             output_data = resample(input_data, num_output_samples)
             return output_data
+
         # spustenie získavania vzoriek
         self.task.start()
         print("Start merania")
@@ -66,10 +67,11 @@ class ThreadRefSensDataCollection(QThread):
         try:
             while len(data) < self.my_settings.ref_number_of_samples and not self.thcfgs.get_emergency_stop():
                 temp = self.task.read(number_of_samples_per_channel=self.num_of_samples_per_cycle,
-                                  timeout=WAIT_INFINITELY)
+                                      timeout=WAIT_INFINITELY)
                 data.extend(temp)
                 self.out_value.emit(
-                    resample_by_interpolation(temp, self.my_settings.ref_sample_rate, self.my_settings.opt_sampling_rate),
+                    resample_by_interpolation(temp, self.my_settings.ref_sample_rate,
+                                              self.my_settings.opt_sampling_rate),
                     str(round(np_max(np_abs(temp)), 3)), self.i)
                 # self.out_value.emit(downsample_data(temp, self.my_settings.ref_sample_rate, self.my_settings.opt_sampling_rate*2), str(round(np_max(np_abs(temp)), 3)), self.i)
                 self.i += + 1
@@ -113,7 +115,8 @@ class ThreadRefSensDataCollection(QThread):
             file.write("# " + self.current_date + '\n')
             file.write("# " + self.time_string + '\n')
             file.write(
-                "# Dĺžka merania : " + str(self.my_settings.ref_measure_time) + "s (" + str(round(elapsed_time / 1000, 2)) +
+                "# Dĺžka merania : " + str(self.my_settings.ref_measure_time) + "s (" + str(
+                    round(elapsed_time / 1000, 2)) +
                 "s)" + '\n')
             file.write("# Vzorkovacia frekvencia : " + str(self.my_settings.ref_sample_rate) + '\n')
             file.write("# Počet vzoriek : " + str(self.my_settings.ref_number_of_samples) + '\n')
@@ -159,8 +162,8 @@ class ThreadRefSensDataCollection(QThread):
                                        int(self.my_settings.calib_r_flatness),
                                        int(self.my_settings.calib_angle_set_freq),
                                        int(self.my_settings.calib_phase_mark)).start(False,
-                                                                                self.my_settings.calib_optical_sensitivity / 1000,
-                                                                                True, time_difference)
+                                                                                     self.my_settings.calib_optical_sensitivity / 1000,
+                                                                                     True, time_difference)
                 self.acc_calib = self.out[0]
                 self.out = ACCalib_1ch(self.s_n, self.window.starting_folder, self.my_settings.folder_main,
                                        self.my_settings.folder_opt_export_raw,
@@ -176,8 +179,10 @@ class ThreadRefSensDataCollection(QThread):
                                        int(self.my_settings.calib_r_flatness),
                                        int(self.my_settings.calib_angle_set_freq),
                                        int(self.my_settings.calib_phase_mark)).start(self.my_settings.calib_plot,
-                                                                                self.acc_calib[1] / 1000,
-                                                                                True, time_difference + self.acc_calib[8])
+                                                                                     self.acc_calib[1] / 1000,
+                                                                                     True,
+                                                                                     time_difference + self.acc_calib[
+                                                                                         8])
                 self.acc_calib = self.out[0]
                 # [0]>wavelength 1,[1]>sensitivity pm/g at gainMark,[2]>flatness_edge_l,
                 # [3]>flatness_edge_r,[4]>sens. flatness,[5]>MAX SensAcc,[6]>MIN SensAcc,[7]>DIFF symmetry,[8]>TimeCorrection,
@@ -187,29 +192,33 @@ class ThreadRefSensDataCollection(QThread):
 
                 self.out = ACCalib_2ch(self.s_n, self.window.starting_folder, self.my_settings.folder_main,
                                        self.my_settings.folder_opt_export_raw, self.my_settings.folder_ref_export_raw,
-                                       float(self.my_settings.calib_reference_sensitivity), int(self.my_settings.calib_gain_mark),
+                                       float(self.my_settings.calib_reference_sensitivity),
+                                       int(self.my_settings.calib_gain_mark),
                                        int(self.my_settings.opt_sampling_rate),
                                        int(self.my_settings.ref_sample_rate), self.my_settings.calib_filter_data,
                                        int(self.my_settings.calib_downsample),
                                        int(self.my_settings.calib_do_spectrum),
                                        int(self.my_settings.calib_l_flatness),
-                                       int(self.my_settings.calib_r_flatness), int(self.my_settings.calib_angle_set_freq),
+                                       int(self.my_settings.calib_r_flatness),
+                                       int(self.my_settings.calib_angle_set_freq),
                                        int(self.my_settings.calib_phase_mark)).start(False,
-                                                                                self.my_settings.calib_optical_sensitivity / 1000,
-                                                                                True, 0)
+                                                                                     self.my_settings.calib_optical_sensitivity / 1000,
+                                                                                     True, 0)
                 self.acc_calib = self.out[0]
                 self.out = ACCalib_2ch(self.s_n, self.window.starting_folder, self.my_settings.folder_main,
                                        self.my_settings.folder_opt_export_raw, self.my_settings.folder_ref_export_raw,
-                                       float(self.my_settings.calib_reference_sensitivity), int(self.my_settings.calib_gain_mark),
+                                       float(self.my_settings.calib_reference_sensitivity),
+                                       int(self.my_settings.calib_gain_mark),
                                        int(self.my_settings.opt_sampling_rate),
                                        int(self.my_settings.ref_sample_rate), self.my_settings.calib_filter_data,
                                        int(self.my_settings.calib_downsample),
                                        int(self.my_settings.calib_do_spectrum),
                                        int(self.my_settings.calib_l_flatness),
-                                       int(self.my_settings.calib_r_flatness), int(self.my_settings.calib_angle_set_freq),
+                                       int(self.my_settings.calib_r_flatness),
+                                       int(self.my_settings.calib_angle_set_freq),
                                        int(self.my_settings.calib_phase_mark)).start(self.my_settings.calib_plot,
-                                                                                self.acc_calib[1] / 1000,
-                                                                                True, self.acc_calib[8])
+                                                                                     self.acc_calib[1] / 1000,
+                                                                                     True, self.acc_calib[8])
                 self.acc_calib = self.out[0]
 
                 # [3]>flatness_edge_r,[4]>sens. flatness,[5]>MAX SensAcc,[6]>MIN SensAcc,[7]>DIFF symmetry,[8]>TimeCorrection,
@@ -312,23 +321,26 @@ class ThreadRefSensDataCollection(QThread):
         os_rename(opt_sentinel_file_name, self.s_n + '.csv')
 
     def lin_reg(self):
-        
+
         def linear_regression(x, y):
             n = len(x)
             m = (n * np_sum(x * y) - np_sum(x) * np_sum(y)) / (n * np_sum(x ** 2) - (np_sum(x)) ** 2)
             b = (np_sum(y) - m * np_sum(x)) / n
             return m, b
-        wl1 = np.array(self.extracted_column1[800:len(self.extracted_column1)-250], dtype=float) - self.acc_calib[0]  # dtype=float
+
+        wl1 = np.array(self.extracted_column1[800:len(self.extracted_column1) - 250], dtype=float) - self.acc_calib[
+            0]  # dtype=float
         index_values = np_array(range(len(wl1)), dtype=float)  # Convert range to NumPy array
         slope1, intercept1 = linear_regression(index_values, wl1)
-        check_wl1 = abs(slope1)*10e6
+        check_wl1 = abs(slope1) * 10e6
         slope_samp1 = [slope1 * x + intercept1 for x in index_values]
         self.wl_slopes = [index_values, round(check_wl1, 3), slope_samp1, wl1]
 
         if self.my_settings.opt_channels == 2:
-            wl2 = np.array(self.extracted_column2[800:len(self.extracted_column1)-250], dtype=float) - self.acc_calib[9]
+            wl2 = np.array(self.extracted_column2[800:len(self.extracted_column1) - 250], dtype=float) - self.acc_calib[
+                9]
             # Linear regression for the second column against index
             slope2, intercept2 = linear_regression(index_values, wl2)
-            check_wl2 = abs(slope2)*10e6
+            check_wl2 = abs(slope2) * 10e6
             slope_samp2 = [slope2 * x + intercept2 for x in index_values]
             self.wl_slopes.extend([round(check_wl2, 3), slope_samp2, wl2])

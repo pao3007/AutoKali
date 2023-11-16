@@ -1,11 +1,9 @@
 from yaml import safe_load
 from os import path
+import pyodbc as pyodbc
 
 
 class DatabaseCom:
-
-    import pyodbc as pyodbc
-
     def __init__(self, start_folder):
         filename = path.join(start_folder, "database_com.yaml")
         with open(filename, 'r', encoding="utf-8") as file:

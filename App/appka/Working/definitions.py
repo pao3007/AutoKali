@@ -1,13 +1,17 @@
-import subprocess
-import threading
+import time
 from datetime import datetime
-from subprocess import CalledProcessError
 from configparser import ConfigParser
 from codecs import open as codecs_open
+
+import pythoncom
+import requests
 import serial.tools.list_ports
 import psutil
+import win32com
+import win32con
+import win32gui
 from wmi import WMI as wmi_WMI
-from PyQt5.QtCore import QThread, QFileInfo, QSize, QTimer
+from PyQt5.QtCore import QThread, QFileInfo, QSize, QTimer, pyqtSignal, Qt
 
 import numpy as np
 from PyQt5.QtWidgets import QApplication, QWidget, QDialog, QLineEdit, QVBoxLayout, QDialogButtonBox, QTextBrowser, \
@@ -23,6 +27,54 @@ from shutil import copy as shutil_copy
 from platform import system as platform_system
 from csv import writer as csv_writer
 from subprocess import run as subprocess_run
+from json import loads as json_loads
+from glob import glob
+
+
+def fetch_wavelengths_peak_logger(fetch_wl, timeout_short=0.5):
+    try:
+        api_url = "http://localhost:43122/swagger/index.html" if not fetch_wl else "http://localhost:43122/peaks"
+        timeout = timeout_short
+        response = requests.get(api_url, timeout=timeout)
+        if not fetch_wl:
+            return response.status_code, [-1]
+        elif response.status_code == 404:
+            return response.status_code, [-1]
+        elif response.status_code == 200:
+            data = json_loads(response.text)
+
+            wavelengths = [entry['wavelength'] for entry in data if 'wavelength' in entry]
+
+            return response.status_code, wavelengths
+        else:
+            return response.status_code, [-1]
+
+    except requests.exceptions.RequestException as e:
+        print(f"An error occurred: {e}")
+        return -1, [0]
+
+
+def start_peaklogger(start_folder, peaklogger_folder=r"C:PeakLogger\oapp"):  # ! vybrat path to .exe a project
+    def minimize_window(window_title):
+        def wait_for_window_title(title, timeout=30):
+            end_time = time.time() + timeout
+            while time.time() < end_time:
+                hwnd = win32gui.FindWindow(None, title)
+                if hwnd != 0:
+                    return hwnd
+                time.sleep(0.05)  # Sleep for 1 second before retrying
+            return None
+
+        hwnd = wait_for_window_title(window_title)
+        if hwnd:
+            win32gui.ShowWindow(hwnd, win32con.SW_MINIMIZE)
+            print(f"Window with title '{window_title}' minimized.")
+        else:
+            print(f"Window with title '{window_title}' not found within timeout.")
+    folder = os_path.join(start_folder, peaklogger_folder)
+    os_chdir(folder)
+    os_system("start /min PeakLogger")
+    minimize_window("PeakLogger")
 
 
 def center_on_screen(self):
@@ -102,7 +154,6 @@ def start_sentinel_d(project: str, sentinel_app_folder: str, subfolder_sentinel_
         comm += "-autolog=NO "
     project = os_path.join(subfolder_sentinel_project, project)
     comm += project
-    print(comm)
 
     if not no_proj:
         os_system(comm)
@@ -148,12 +199,13 @@ def start_sentinel_modbus(modbus_path: str, project_path: str, project: str, opt
     return None
 
 
-def kill_sentinel(dyn: bool, mod: bool):
-    def kill_process(app_name):
-        for process in psutil.process_iter(attrs=['pid', 'name']):
-            if app_name.lower() in process.info['name'].lower():
-                psutil.Process(process.info['pid']).terminate()
+def kill_process(app_name):
+    for process in psutil.process_iter(attrs=['pid', 'name']):
+        if app_name.lower() in process.info['name'].lower():
+            psutil.Process(process.info['pid']).terminate()
 
+
+def kill_sentinel(dyn: bool, mod: bool):
     if dyn:
         app_name = "ClientApp_Dyn"
         kill_process(app_name)
@@ -161,6 +213,11 @@ def kill_sentinel(dyn: bool, mod: bool):
     if mod:
         app_name = "Sentinel-Dynamic-Modbus"
         kill_process(app_name)
+
+
+def kill_peaklogger():
+    app_name = "PeakLogger"
+    kill_process(app_name)
 
 
 def dominant_frequency(samples, sampling_rate):
@@ -209,9 +266,9 @@ def check_usb(opt_vendor_ids, ref_vendor_ids):
                 vid_end = device.find('&', vid_start)
                 v_id = device[vid_start:vid_end]
 
-                if v_id.upper() in [str(id1) for id1 in opt_vendor_ids]:
+                if str(v_id.upper()) in [str(id1) for id1 in opt_vendor_ids]:
                     opt = True
-                if v_id.upper() in [str(id1) for id1 in ref_vendor_ids]:
+                if str(v_id.upper()) in [str(id1) for id1 in ref_vendor_ids]:
                     ref = True
                 if opt and ref:
                     break
@@ -255,6 +312,7 @@ def load_all_config_files(combobox, config_file_path: str, opt_sensor_type: str,
     if config_file_path is not None:
         combobox.setCurrentText(QFileInfo(config_file_path).fileName())
     combobox.blockSignals(False)
+    print("yaml files:",yaml_files)
     return yaml_files
 
 
@@ -302,7 +360,6 @@ def get_params(s_n, start_folder):
 
 
 def return_all_configs(opt_sensor_type: str, subfolder_config_path: str):
-    from glob import glob
     yaml_files = glob(os_path.join(subfolder_config_path, '*.yaml'))
     yaml_return = []
     for yaml_file in yaml_files:
@@ -501,3 +558,98 @@ def save_error(path, e):
         f.write("\n-- " + today)
         f.write(" " + current_time)
         f.write(e + "\n")  # Write the traceback to the file
+
+
+class ThreadAddVendorIds(QThread):
+    update_label = pyqtSignal(str)
+
+    def __init__(self, start_folder, sensor_type, device_type, yaml_folder=None):
+        super().__init__()
+        print("BUILDING THREAD")
+        self.start_folder = start_folder
+        self.sensor_type = sensor_type
+        self.device_type = device_type
+        self.yaml_folder = yaml_folder
+        self.exit_flag = False
+
+    def run(self):
+        print("START THREAD")
+        pythoncom.CoInitialize()
+        self.add_vendor_id(self.start_folder, self.sensor_type, self.device_type, self.yaml_folder)
+
+    def add_vendor_id(self, start_folder, sensor_type, device_type, yaml_folder=None):
+        if yaml_folder is None:
+            yaml_folder = os_path.join(start_folder, "devices_vendor_ids.yaml")
+        vid = None
+        pid = None
+
+        def add_vid_to_yaml():
+            # Read existing data from YAML file
+            with open(yaml_folder, "r") as file:
+                data = yaml_safe_load(file)
+            if data[sensor_type][device_type] is None:
+                # Add the VID to the list
+                data[sensor_type][device_type] = []
+            if vid not in data[sensor_type][device_type]:
+                # Add the VID to the list
+                data[sensor_type][device_type].append(vid)
+
+                # Write the updated data back to the YAML file
+                with open(yaml_folder, "w") as file:
+                    yaml_safe_dump(data, file)
+                    return True
+            else:
+                print("VID is already in yaml file")
+                return False
+
+        def on_device_event(event):
+            instance = event.TargetInstance
+            if instance is not None:
+                if "USB" in instance.PNPDeviceID:
+                    device_id = instance.PNPDeviceID
+                    print(f"New USB Device Connected with ID: {device_id}")
+                    nonlocal vid, pid
+                    # Extract VID and PID using regular expressions
+                    match = re_search(r"VID_([0-9A-Fa-f]{4})&PID_([0-9A-Fa-f]{4})", device_id)
+                    if match:
+                        vid, pid = match.groups()
+                        print(f"Vendor ID: {vid}, Product ID: {pid}")
+                        self.exit_flag = True
+
+        # Initialize WMI and set up event subscription
+        wmi = wmi_WMI()
+        watcher = wmi.ExecNotificationQuery(
+            "SELECT * FROM __InstanceCreationEvent WITHIN 2 WHERE TargetInstance ISA 'Win32_PnPEntity'")
+
+        # Event loop
+        while not self.exit_flag:
+            print("LOOP")
+            event = watcher.NextEvent()
+            on_device_event(event)
+            self.msleep(50)
+
+        if vid is not None:
+            res = add_vid_to_yaml()
+            self.update_label.emit(f"VID: {vid},PID: {pid}, OK!" + "\nDevice was added" if res else "Duplicate VID/PID")
+
+        print("CLOSE")
+
+
+class PopupWindow(QWidget):
+    def __init__(self, msg, w=200, h=50, parent=None):
+        super().__init__(parent, Qt.Popup | Qt.FramelessWindowHint)
+        self.setFixedSize(w, h)
+        layout = QVBoxLayout(self)
+        label = QLabel(msg, alignment=Qt.AlignCenter)
+        layout.addWidget(label)
+
+    def show_for_a_while(self, timeout=1000):
+        # Center the popup relative to its parent (the main window)
+        if self.parent():
+            parent_geometry = self.parent().frameGeometry()
+            self.move(
+                parent_geometry.x() + (parent_geometry.width() - self.width()) // 2,
+                parent_geometry.y() + (parent_geometry.height() - self.height()) // 2
+            )
+        self.show()
+        QTimer.singleShot(timeout, self.close)

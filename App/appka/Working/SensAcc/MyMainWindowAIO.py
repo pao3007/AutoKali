@@ -5,13 +5,13 @@ from numpy import abs as np_abs
 import win32api
 import win32con
 from PyQt5.QtGui import QFont, QIcon, QPixmap
-from PyQt5.QtWidgets import QMainWindow, QMessageBox, QApplication, QDesktopWidget, QDialog, QVBoxLayout, QLabel, \
+from PyQt5.QtWidgets import QMainWindow, QMessageBox, QApplication, QDialog, QVBoxLayout, QLabel, \
     QLineEdit, QDialogButtonBox, QComboBox
 from PyQt5.QtCore import QThread, QEvent, Qt, QTimer
 from os import chdir as os_chdir, path as os_path, remove as os_remove
 
 from matplotlib import pyplot as plt
-from SensAcc.ThreadCheckDevicesConnected import ThreadCheckDevicesConnected
+from ThreadCheckDevicesConnected import ThreadCheckDevicesConnected
 from definitions import (kill_sentinel, start_sentinel_modbus, start_sentinel_d, scale_app, center_on_screen,
                          load_all_config_files, set_wavelengths, get_params, copy_files, save_statistics_to_csv,
                          show_add_dialog, open_folder_in_explorer)
@@ -811,9 +811,7 @@ class AutoCalibMain:
         self.current_date = None
         self.time_string = None
         self.opt_sentinel_file_name = None
-        self.thread_check_opt_usb = ThreadCheckDevicesConnected(self.start_window.opt_dev_vendor,
-                                                                self.start_window.ref_dev_vendor,
-                                                                self.my_settings, True)
+        self.thread_check_opt_usb = ThreadCheckDevicesConnected(self.my_settings, self.start_window, True)
         self.thread_control_gen = self.ThreadControlFuncGen(self.my_settings.generator_id,
                                                             self.my_settings.generator_sweep_time,
                                                             self.my_settings.generator_sweep_start_freq,
@@ -1044,9 +1042,7 @@ class AutoCalibMain:
                 self.calib_window.ui.plot_graph_check.setEnabled(False)
                 self.calib_window.ui.menubar.setEnabled(False)
                 self.calib_window.ui.start_btn.setEnabled(False)
-                self.thread_check_opt_usb = ThreadCheckDevicesConnected(self.start_window.opt_dev_vendor,
-                                                                        self.start_window.ref_dev_vendor,
-                                                                        self.my_settings, True)
+                self.thread_check_opt_usb = ThreadCheckDevicesConnected(self.my_settings,self.start_window, True)
                 self.thread_check_opt_usb.opt_connected.connect(self.check_usb_opt)
 
                 self.thread_control_gen = self.ThreadControlFuncGen(self.my_settings.generator_id,

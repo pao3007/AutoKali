@@ -1,11 +1,11 @@
-from PyQt5.QtCore import QTimer
+from PyQt5.QtCore import QTimer, Qt
 from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QFileDialog, QDialog, QVBoxLayout, QLabel, QLineEdit, QPushButton, QMessageBox
 from yaml import safe_dump as yaml_dump, safe_load as yaml_safe_load
 from nidaqmx import system as nidaqmx_system
 from os import path as os_path, chdir as os_chdir
 from MyStartUpWindow import MyStartUpWindow
-from definitions import center_on_screen, scale_app, load_all_config_files, enable_ui_elements
+from definitions import center_on_screen, scale_app, load_all_config_files, enable_ui_elements, ThreadAddVendorIds
 from pyvisa import ResourceManager as pyvisa_ResourceManager
 from SensAcc.SettingsParams import MySettings
 from subprocess import run as subprocess_run
@@ -46,6 +46,10 @@ def slider_scale_get_real_value(value):
 class MySettingsWindow(QMainWindow):
     def __init__(self, start, window: MyStartUpWindow, my_settings: MySettings):
         super().__init__()
+        self.thread_add_vendor = None
+        self.label_vendor_id = None
+        self.setWindowFlags(
+            self.windowFlags() & ~Qt.WindowContextHelpButtonHint & ~Qt.WindowMaximizeButtonHint)
         self.logged_in = False
         from SensAcc.ThreadSettingsCheckNew import ThreadSettingsCheckNew
         self.my_settings = my_settings
@@ -81,7 +85,7 @@ class MySettingsWindow(QMainWindow):
         self.ui.calib_databse_export_btn.clicked.connect(self.calib_local_db_export_folder_path_select)
         self.ui.calib_statistics_btn.clicked.connect(self.stats_btn_clicked)
         self.ui.db_btn.clicked.connect(self.open_db_yaml)
-        self.ui.vendors_btn.clicked.connect(self.open_vendor_yaml)
+        self.ui.vendors_btn.clicked.connect(self.add_vendors)
 
         self.ui.btn_ref_tab.clicked.connect(self.clicked_btn_reference)
         self.ui.btn_opt_tab.clicked.connect(self.clicked_btn_optical)
@@ -131,16 +135,68 @@ class MySettingsWindow(QMainWindow):
         else:
             print(f"File {yaml_file_path} does not exist.")
 
-    def open_vendor_yaml(self):
-        yaml_file_path = self.my_starting_window.yaml_devices_vendor
-        self.open_file_using_notepad(yaml_file_path)
-
     def open_db_yaml(self):
         yaml_file_path = self.my_starting_window.yaml_database_com
         self.open_file_using_notepad(yaml_file_path)
 
+    def add_vendors(self):
+
+        def close_popup():
+            try:
+                self.thread_add_vendor.exit_flag = True
+            except Exception:
+                pass
+            popup.close()
+
+        popup = QDialog()
+        popup.setWindowFlags(Qt.FramelessWindowHint)
+        layout = QVBoxLayout()
+        label = QLabel("ADD DEVICE")
+        label.setAlignment(Qt.AlignCenter)
+        layout.addWidget(label)
+
+        # Add two buttons at the top
+        opt_btn = QPushButton("Optical")
+        ref_btn = QPushButton("Reference")
+        opt_btn.clicked.connect(self.opt_btn_pop)
+        ref_btn.clicked.connect(self.ref_btn_pop)
+        layout.addWidget(opt_btn)
+        layout.addWidget(ref_btn)
+
+        # Add a label under the buttons
+        self.label_vendor_id = QLabel("Select which device to add\nthen plug in the device")
+        self.label_vendor_id.setAlignment(Qt.AlignCenter)
+
+        layout.addWidget(self.label_vendor_id)
+
+        # Add an "OK" button at the bottom
+        ok_button = QPushButton("OK")
+        ok_button.clicked.connect(close_popup)
+        layout.addWidget(ok_button)
+
+        # Set the layout
+        popup.setLayout(layout)
+        popup.exec_()
+
+    def opt_btn_pop(self):
+        self.start_add_vendor("optical")
+
+    def ref_btn_pop(self):
+        self.start_add_vendor("reference")
+
+    def vendor_change_label(self, text):
+        self.label_vendor_id.setText(text)
+
+    def start_add_vendor(self, device):
+        print("BUILD THREAD ADD VENDOR")
+        self.label_vendor_id.setText(f"Now plug in the \n{device} device")
+        self.thread_add_vendor = ThreadAddVendorIds(self.my_settings.starting_folder, self.my_starting_window.sens_type, device)
+        self.thread_add_vendor.update_label.connect(self.vendor_change_label)
+        self.thread_add_vendor.start()
+
     def login_into_settings(self):
         pswd_dialog = QDialog(self)
+        pswd_dialog.setWindowFlags(pswd_dialog.windowFlags() & ~Qt.WindowContextHelpButtonHint & ~Qt.WindowMinMaxButtonsHint)
         layout = QVBoxLayout()
         lang = self.local_lang if self.local_lang is not None else self.my_starting_window.lang
 
@@ -170,6 +226,8 @@ class MySettingsWindow(QMainWindow):
                 self.ui.label_login_warning.setText(self.my_starting_window.translations[lang]["label_login_warning_ok"])
                 self.ui.login_btn.setEnabled(False)
                 self.logged_in = True
+            elif password == "":
+                pass
             else:
                 msg = QMessageBox()
                 msg.setIcon(QMessageBox.Warning)

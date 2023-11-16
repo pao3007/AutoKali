@@ -2811,7 +2811,7 @@ color: rgb(208, 208, 208);;</string>
          <enum>Qt::LeftToRight</enum>
         </property>
         <property name="styleSheet">
-         <string notr="true">background-color: rgba(0, 0, 0,0
+         <string notr="true">background-color: rgba(0, 0, 0,255
 );</string>
         </property>
         <widget class="QPushButton" name="default_btn">
@@ -2848,7 +2848,7 @@ background-color: rgb(44, 44, 44);</string>
          </property>
          <property name="geometry">
           <rect>
-           <x>270</x>
+           <x>240</x>
            <y>200</y>
            <width>81</width>
            <height>24</height>
@@ -2876,9 +2876,9 @@ background-color: rgb(44, 44, 44);</string>
          </property>
          <property name="geometry">
           <rect>
-           <x>370</x>
+           <x>330</x>
            <y>200</y>
-           <width>81</width>
+           <width>121</width>
            <height>24</height>
           </rect>
          </property>
@@ -2895,7 +2895,7 @@ color: rgb(208, 208, 208);
 background-color: rgb(44, 44, 44);</string>
          </property>
          <property name="text">
-          <string>Vednors IDs</string>
+          <string>Add vednors IDs</string>
          </property>
         </widget>
         <widget class="QLabel" name="settings_main_folder_label">
@@ -3283,8 +3283,8 @@ background-color: rgba(255, 255, 255, 0);</string>
        <zorder>settings_lang_label</zorder>
        <zorder>combo_box_lang</zorder>
        <zorder>widget_ref</zorder>
-       <zorder>widget_db_others</zorder>
        <zorder>widget_calib</zorder>
+       <zorder>widget_db_others</zorder>
       </widget>
      </widget>
     </item>

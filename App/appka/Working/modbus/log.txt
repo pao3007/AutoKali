@@ -63511,3 +63511,35 @@ INFO   2023-10-09 14:04:57 – IntegrationTime = 60, pwLineRate = 470
 INFO   2023-10-09 14:04:57 – DLL_Get_Optical_Switch_Status : SUCCESS
 INFO   2023-10-09 14:04:57 – pwChannelCount = 4, pbAutoChannelScan = True, pwChannelIndex = 1
 INFO   2023-10-09 14:04:58 – Start_Constantly_Grab_Spectra : Operation OK 
+INFO   2023-10-09 14:27:40 – Sylex Sentinel 2.0 : ModBus Dynamic Spectrum Client by Andis
+INFO   2023-10-09 14:27:40 –   ver. 1.0.7.0
+INFO   2023-10-09 14:27:40 – Loading settings.ini
+INFO   2023-10-09 14:27:40 – dirPath: C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\modbus
+INFO   2023-10-09 14:27:40 – fileName: settings.ini
+INFO   2023-10-09 14:27:40 – Initializeing...
+INFO   2023-10-09 14:27:44 – DLL version : 21922074
+INFO   2023-10-09 14:27:44 – Connecting to device S-line 800.
+INFO   2023-10-09 14:27:45 – Device Open : SUCCESS
+INFO   2023-10-09 14:27:45 – SN : F2234997
+INFO   2023-10-09 14:27:45 – Connecting to device serial port.
+INFO   2023-10-09 14:27:45 – Calibration : Operation completed
+INFO   2023-10-09 14:27:45 – Pixel Count : 512
+INFO   2023-10-09 14:27:45 – Sugested LineRate : 1560hz
+INFO   2023-10-09 14:27:45 – DLL_Set_Integration_Time_Line_Rate : SUCCESS
+INFO   2023-10-09 14:27:45 – IntegrationTime = 40, pwLineRate = 800
+INFO   2023-10-09 14:27:45 – Initialization done.
+INFO   2023-10-09 14:27:45 – Autostart
+INFO   2023-10-09 14:27:45 – Starting Dynamic Measurement Process.
+INFO   2023-10-09 14:27:45 – Initializing ModBus
+INFO   2023-10-09 14:27:45 – Acquiring background noise disabled.
+INFO   2023-10-09 14:27:45 – DLL_Set_Sensor_Mode : SUCCESS
+INFO   2023-10-09 14:27:45 – DLL_Get_Sensor_Mode_Status : High dynamic range mode
+INFO   2023-10-09 14:27:45 – DLL_Set_Optical_Switch : SUCCESS
+INFO   2023-10-09 14:27:45 – pwChannelCount = 4, pbAutoChannelScan = True, pwChannelIndex = 1
+INFO   2023-10-09 14:27:45 – DLL_Set_Integration_Time_Line_Rate : SUCCESS
+INFO   2023-10-09 14:27:45 – IntegrationTime = 40, pwLineRate = 800
+INFO   2023-10-09 14:27:45 – DLL_Get_Integration_Time_Line_Rate : SUCCESS
+INFO   2023-10-09 14:27:45 – IntegrationTime = 60, pwLineRate = 470
+INFO   2023-10-09 14:27:45 – DLL_Get_Optical_Switch_Status : SUCCESS
+INFO   2023-10-09 14:27:45 – pwChannelCount = 4, pbAutoChannelScan = True, pwChannelIndex = 1
+INFO   2023-10-09 14:27:45 – Start_Constantly_Grab_Spectra : Operation OK 

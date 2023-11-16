@@ -10,21 +10,21 @@ clr.AddReference("C:\\Program Files\\Thorlabs\\Kinesis\\Thorlabs.MotionControl.B
 from Thorlabs.MotionControl.DeviceManagerCLI import *
 from Thorlabs.MotionControl.GenericMotorCLI import *
 from Thorlabs.MotionControl.Benchtop.StepperMotorCLI import *
-from decimal import Decimal
+from System import Decimal
 
 
 def main():
     """The main entry point for the application"""
 
     # Uncomment this line if you are using
-    # SimulationManager.Instance.InitializeSimulations()
+
 
     try:
-
+        SimulationManager.Instance.InitializeSimulations()
         DeviceManagerCLI.BuildDeviceList()
 
         # create new device
-        serial_no = "40000001"  # Replace this line with your device's serial number
+        serial_no = "40847135"  # Replace this line with your device's serial number
 
         # Connect, begin polling, and enable
         device = BenchtopStepperMotor.CreateBenchtopStepperMotor(serial_no)
@@ -33,59 +33,67 @@ def main():
 
         # For benchtop devices, get the channel
         channel = device.GetChannel(1)
-
+        print("INIT DEV SETTINGS")
         # Ensure that the device settings have been initialized
         if not channel.IsSettingsInitialized():
             channel.WaitForSettingsInitialized(10000)  # 10 second timeout
             assert channel.IsSettingsInitialized() is True
 
         # Start polling and enable
-        channel.StartPolling(250)  #250ms polling rate
-        time.sleep(25)
+        channel.StartPolling(50)  #250ms polling rate
+        print("SLEEP")
+        time.sleep(1)
         channel.EnableDevice()
         time.sleep(0.25)  # Wait for device to enable
 
         # Get Device Information and display description
         device_info = channel.GetDeviceInfo()
-        print(device_info.Description)
 
         # Load any configuration settings needed by the controller/stage
         channel_config = channel.LoadMotorConfiguration(serial_no) # If using BSC203, change serial_no to channel.DeviceID.
         chan_settings = channel.MotorDeviceSettings
-
         channel.GetSettings(chan_settings)
-
-        channel_config.DeviceSettingsName = 'HS NRT150 Enc Stage 150mm'
-
+        channel_config.DeviceSettingsName = 'LNR50SE/M'
         channel_config.UpdateCurrentConfiguration()
+        channel.GetSettings(chan_settings)
+        print(channel_config)
 
-        channel.SetSettings(chan_settings, True, False)
+        # channel.SetSettings(chan_settings, True, False)
 
         # Get parameters related to homing/zeroing/other
 
         # Home or Zero the device (if a motor/piezo)
-        print("Homing Motor")
-        channel.Home(60000)
-        print("Done")
-        # Move the device to a new position
-        channel.SetMoveRelativeDistance(Decimal(5.0))
+        # print("Homing Motor")
+        # channel.Home(60000)
+        # print("Done")
+        # # Move the device to a new position
+        # print("MOVING")
+        channel.SetMoveRelativeDistance(Decimal(20.0))
+        # channel.MoveRelative(10000)
+        #
+        inc = 1/411648
 
-        print("Moving 10 times")
-        for i in range(10):
-            channel.MoveRelative(10000)
-            time.sleep(5)
+        # channel.MoveRelative(-1)
+
+        time.sleep(2)
         print("Done")
 
         # Stop Polling and Disconnect
-        channel.StopPolling()
-        device.Disconnect()
 
     except Exception as e:
         # this can be bad practice: It sometimes obscures the error source
         print("exception:",e)
+    try:
+        channel.StopPolling()
+    except:
+        pass
+    try:
+        device.Disconnect()
+    except:
+        pass
 
     # Uncomment this line if you are using Simulations
-    # SimulationManager.Instance.UninitializeSimulations()
+    SimulationManager.Instance.UninitializeSimulations()
     ...
 
 

@@ -142,7 +142,7 @@ class MySettings:
         self.config['ref_measurement']['number_of_samples_per_channel'] = self.ref_number_of_samples
         self.config['ref_measurement']['sample_rate'] = self.ref_sample_rate
 
-        self.config['opt_measurement']['sensor_type'] = self.opt_sensor_type
+        self.config['opt_measurement']['sensor_type'] = "Accelerometer"
         self.config['opt_measurement']['sampling_rate'] = self.opt_sampling_rate
         self.config['opt_measurement']['project'] = self.opt_project
         self.config['opt_measurement']['channels'] = self.opt_channels
@@ -228,7 +228,7 @@ class MySettings:
                 'measure_time': 25
             },
             'opt_measurement': {
-                'sensor_type': sensor_type,
+                'sensor_type': "Accelerometer",
                 'sampling_rate': 800,
                 'project': None,
                 'channels': 1,
@@ -293,7 +293,7 @@ class MySettings:
         print("No properties contain None")
         return False
 
-    def create_config_file(self, yaml_name='default_config.yaml'):
+    def create_config_file(self, yaml_name='default_config_acc.yaml'):
         config_file_path = os_path.join(self.subfolderConfig_path, yaml_name)
         new_conf = self.default_config(self.opt_sensor_type)
         with open(config_file_path, 'w') as file:
