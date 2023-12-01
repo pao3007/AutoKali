@@ -4,7 +4,7 @@ from PyQt5.QtCore import QThread, pyqtSignal
 from nidaqmx.constants import WAIT_INFINITELY
 from scipy.signal import resample
 
-from definitions import kill_sentinel, start_sentinel_modbus, save_error
+from definitions import kill_sentinel, start_sentinel_modbus, save_error, linear_regression
 from SensAcc.ThreadControlFuncGenStatements import ThreadControlFuncGenStatements
 from MyStartUpWindow import MyStartUpWindow
 from os import path as os_path, remove as os_remove, rename as os_rename, chdir as os_chdir
@@ -321,13 +321,6 @@ class ThreadRefSensDataCollection(QThread):
         os_rename(opt_sentinel_file_name, self.s_n + '.csv')
 
     def lin_reg(self):
-
-        def linear_regression(x, y):
-            n = len(x)
-            m = (n * np_sum(x * y) - np_sum(x) * np_sum(y)) / (n * np_sum(x ** 2) - (np_sum(x)) ** 2)
-            b = (np_sum(y) - m * np_sum(x)) / n
-            return m, b
-
         wl1 = np.array(self.extracted_column1[800:len(self.extracted_column1) - 250], dtype=float) - self.acc_calib[
             0]  # dtype=float
         index_values = np_array(range(len(wl1)), dtype=float)  # Convert range to NumPy array

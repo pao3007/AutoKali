@@ -25740,3 +25740,315 @@ ImportError: cannot import name 'MyStartUpWindow' from partially initialized mod
     from MyStartUpWindow import MyStartUpWindow
 ImportError: cannot import name 'MyStartUpWindow' from partially initialized module 'MyStartUpWindow' (most likely due to a circular import) (C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py)
 
+
+-- Nov-20-2023 10:26:49.449088Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 556, in open_settings_window
+    self.settings_window = self.my_settings_window_strain(True, self, self.my_settings)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\SensAcc\MySettingsWindow.py", line 66, in __init__
+    self.load_settings()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\SensAcc\MySettingsWindow.py", line 445, in load_settings
+    self.ui.ref_sampling_rate_line.setText(str(self.my_settings.ref_sample_rate))
+AttributeError: 'MySettings' object has no attribute 'ref_sample_rate'
+
+
+-- Nov-20-2023 10:29:58.233959Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\StartApp.py", line 105, in <module>
+    window = MyStartUpWindow(splash)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 114, in __init__
+    self.config_file_path = self.check_config_if_selected()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 505, in check_config_if_selected
+    yaml_files = self.return_all_configs()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 489, in return_all_configs
+    yaml_files = glob(os_path.join(self.my_settings.subfolderConfig_path, '*.yaml'))
+AttributeError: 'MyStartUpWindow' object has no attribute 'my_settings'
+
+
+-- Nov-20-2023 10:30:40.902002Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 557, in open_settings_window
+    self.settings_window = self.my_settings_window_strain(True, self, self.my_settings)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\SensAcc\MySettingsWindow.py", line 66, in __init__
+    self.load_settings()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\SensAcc\MySettingsWindow.py", line 445, in load_settings
+    self.ui.ref_sampling_rate_line.setText(str(self.my_settings.ref_sample_rate))
+AttributeError: 'MySettings' object has no attribute 'ref_sample_rate'
+
+
+-- Nov-20-2023 11:03:23.840684Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\StartApp.py", line 105, in <module>
+    window = MyStartUpWindow(splash)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 120, in __init__
+    self.statusBar.addPermanentWidget(version_label)
+AttributeError: 'builtin_function_or_method' object has no attribute 'addPermanentWidget'
+
+
+-- Nov-20-2023 11:06:31.450811Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 242, in all_dev_connected_signal_strain
+    def all_dev_connected_signal_strain(self, opt_connected=False, ref_connected=False, check_status=False):
+KeyboardInterrupt
+
+
+-- Nov-20-2023 11:12:50.627851Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 594, in start_strain_window
+    from SensStrain.MyMainWindow import MyMainWindow
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\SensStrain\MyMainWindow.py", line 27, in <module>
+    from SensStrain.ThreadMeasure import OptMeasure
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\SensStrain\ThreadMeasure.py", line 5, in <module>
+    from SensStrain.MyMainWindow import MyMainWindow
+ImportError: cannot import name 'MyMainWindow' from partially initialized module 'SensStrain.MyMainWindow' (most likely due to a circular import) (C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\SensStrain\MyMainWindow.py)
+
+
+-- Nov-20-2023 11:13:47.999502Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 594, in start_strain_window
+    from SensStrain.MyMainWindow import MyMainWindow
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\SensStrain\MyMainWindow.py", line 27, in <module>
+    from SensStrain.ThreadMeasure import OptMeasure
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\SensStrain\ThreadMeasure.py", line 5, in <module>
+    from SensStrain.MyMainWindow import MyMainWindow
+ImportError: cannot import name 'MyMainWindow' from partially initialized module 'SensStrain.MyMainWindow' (most likely due to a circular import) (C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\SensStrain\MyMainWindow.py)
+
+
+-- Nov-20-2023 11:17:38.550744Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 594, in start_strain_window
+    from SensStrain.MyMainWindow import MyMainWindow
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\SensStrain\MyMainWindow.py", line 27, in <module>
+    from SensStrain.ThreadMeasure import OptMeasure
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\SensStrain\ThreadMeasure.py", line 5, in <module>
+    from SensStrain.MyMainWindow import MyMainWindow
+ImportError: cannot import name 'MyMainWindow' from partially initialized module 'SensStrain.MyMainWindow' (most likely due to a circular import) (C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\SensStrain\MyMainWindow.py)
+
+
+-- Nov-20-2023 11:18:48.463671Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 594, in start_strain_window
+    from SensStrain.MyMainWindow import MyMainWindow
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\SensStrain\MyMainWindow.py", line 27, in <module>
+    from SensStrain.ThreadMeasure import OptMeasure
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\SensStrain\ThreadMeasure.py", line 5, in <module>
+    from SensStrain.MyMainWindow import MyMainWindow
+ImportError: cannot import name 'MyMainWindow' from partially initialized module 'SensStrain.MyMainWindow' (most likely due to a circular import) (C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\SensStrain\MyMainWindow.py)
+
+
+-- Nov-20-2023 11:20:20.626134Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 594, in start_strain_window
+    from SensStrain.MyMainWindow import MyMainWindow
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\SensStrain\MyMainWindow.py", line 27, in <module>
+    from SensStrain.ThreadMeasure import OptMeasure
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\SensStrain\ThreadMeasure.py", line 5, in <module>
+    from SensStrain.MyMainWindow import MyMainWindow
+ImportError: cannot import name 'MyMainWindow' from partially initialized module 'SensStrain.MyMainWindow' (most likely due to a circular import) (C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\SensStrain\MyMainWindow.py)
+
+
+-- Nov-20-2023 11:22:43.222239Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 594, in start_strain_window
+    from SensStrain.MyMainWindow import MyMainWindow
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\SensStrain\MyMainWindow.py", line 27, in <module>
+    from SensStrain.ThreadMeasure import OptMeasure
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\SensStrain\ThreadMeasure.py", line 5, in <module>
+    from SensStrain.MyMainWindow import MyMainWindow
+ImportError: cannot import name 'MyMainWindow' from partially initialized module 'SensStrain.MyMainWindow' (most likely due to a circular import) (C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\SensStrain\MyMainWindow.py)
+
+
+-- Nov-20-2023 11:23:12.652969Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 594, in start_strain_window
+    from SensStrain.MyMainWindow import MyMainWindow
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\SensStrain\MyMainWindow.py", line 27, in <module>
+    from SensStrain.ThreadMeasure import OptMeasure
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\SensStrain\ThreadMeasure.py", line 5, in <module>
+    from SensStrain.MyMainWindow import MyMainWindow
+ImportError: cannot import name 'MyMainWindow' from partially initialized module 'SensStrain.MyMainWindow' (most likely due to a circular import) (C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\SensStrain\MyMainWindow.py)
+
+
+-- Nov-20-2023 11:41:44.974032Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 656, in start_strain_window
+    from SensStrain.MyMainWindow import MyMainWindow
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\SensStrain\MyMainWindow.py", line 27, in <module>
+    from SensStrain.ThreadMeasure import OptMeasure
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\SensStrain\ThreadMeasure.py", line 5, in <module>
+    from SensStrain.MyMainWindow import MyMainWindow
+ImportError: cannot import name 'MyMainWindow' from partially initialized module 'SensStrain.MyMainWindow' (most likely due to a circular import) (C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\SensStrain\MyMainWindow.py)
+
+
+-- Nov-20-2023 12:02:55.707365Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 656, in start_strain_window
+    from SensStrain.MyMainWindow import MyMainWindow
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\SensStrain\MyMainWindow.py", line 27, in <module>
+    from SensStrain.ThreadMeasure import OptMeasure
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\SensStrain\ThreadMeasure.py", line 5, in <module>
+    from SensStrain.MyMainWindow import MyMainWindow
+ImportError: cannot import name 'MyMainWindow' from partially initialized module 'SensStrain.MyMainWindow' (most likely due to a circular import) (C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\SensStrain\MyMainWindow.py)
+
+
+-- Nov-20-2023 12:14:40.417795Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 656, in start_strain_window
+    from SensStrain.MyMainWindow import MyMainWindow
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\SensStrain\MyMainWindow.py", line 27, in <module>
+    from SensStrain.ThreadMeasure import OptMeasure
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\SensStrain\ThreadMeasure.py", line 5, in <module>
+    from SensStrain.MyMainWindow import MyMainWindow
+ImportError: cannot import name 'MyMainWindow' from partially initialized module 'SensStrain.MyMainWindow' (most likely due to a circular import) (C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\SensStrain\MyMainWindow.py)
+
+
+-- Nov-20-2023 12:15:36.035839Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 658, in start_strain_window
+    self.calib_window = MyMainWindow(self, self.my_settings)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\SensStrain\MyMainWindow.py", line 104, in __init__
+    self.autoCalib = AutoCalibMain(self, self.my_settings, self.tmcs)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\SensStrain\MyMainWindow.py", line 807, in __init__
+    self.thread_motor_control = ThreadMotorControl(my_settings, tmcs)
+NameError: name 'ThreadMotorControl' is not defined
+
+
+-- Nov-24-2023 08:52:30.186342Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\StartApp.py", line 105, in <module>
+    window = MyStartUpWindow(splash)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 128, in __init__
+    connect_set_buttons()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 33, in connect_set_buttons
+    self.ui.actionAccelerometer_ON.triggered.connect(self.enable_acc_triggered)
+AttributeError: 'MyStartUpWindow' object has no attribute 'enable_acc_triggered'
+
+
+-- Nov-24-2023 09:04:16.988629Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\StartApp.py", line 105, in <module>
+    window = MyStartUpWindow(splash)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 127, in __init__
+    self.set_language()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 808, in set_language
+    self.ui.menuEnable_Disable_functions.setTitle(self.translations[self.lang]["enable_disable_functions"])
+AttributeError: 'Ui_Setup' object has no attribute 'menuEnable_Disable_functions'
+
+
+-- Nov-24-2023 09:20:27.671044Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\StartApp.py", line 105, in <module>
+    window = MyStartUpWindow(splash)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 136, in __init__
+    self.load_usb_dev_vendors()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 297, in load_usb_dev_vendors
+    self.opt_dev_vendor = data[self.ui.sens_type_comboBox.currentText()]['optical']
+KeyError: ''
+
+
+-- Nov-24-2023 09:21:33.654796Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\StartApp.py", line 105, in <module>
+    window = MyStartUpWindow(splash)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 136, in __init__
+    self.load_usb_dev_vendors()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 297, in load_usb_dev_vendors
+    self.opt_dev_vendor = data[self.ui.sens_type_comboBox.currentText()]['optical']
+KeyError: ''
+
+
+-- Nov-24-2023 09:24:34.817790Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 660, in open_settings_window
+    self.thread_check_usb_devices.termination = True
+AttributeError: 'NoneType' object has no attribute 'termination'
+
+
+-- Nov-24-2023 09:25:34.477318Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 802, in closeEvent
+    self.thread_check_usb_devices.termination = True
+AttributeError: 'NoneType' object has no attribute 'termination'
+
+
+-- Nov-24-2023 09:30:37.836824Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\StartApp.py", line 105, in <module>
+    window = MyStartUpWindow(splash)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 135, in __init__
+    self.check_devices_load_comboboxes_load_config_file()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 650, in check_devices_load_comboboxes_load_config_file
+    self.config_contains_none = self.my_settings.load_config_file(self.config_file_path)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\SensAcc\SettingsParams.py", line 82, in load_config_file
+    self.ref_channel = self.config['ref_device']['channel']
+KeyError: 'ref_device'
+
+
+-- Nov-24-2023 09:31:34.395017Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\StartApp.py", line 105, in <module>
+    window = MyStartUpWindow(splash)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 135, in __init__
+    self.check_devices_load_comboboxes_load_config_file()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 650, in check_devices_load_comboboxes_load_config_file
+    self.config_contains_none = self.my_settings.load_config_file(self.config_file_path)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\SensAcc\SettingsParams.py", line 83, in load_config_file
+    self.ref_channel = self.config['ref_device']['channel']
+KeyError: 'ref_device'
+
+
+-- Nov-24-2023 09:36:14.078051Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\StartApp.py", line 105, in <module>
+    window = MyStartUpWindow(splash)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 117, in __init__
+    self.load_sens_types()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 622, in load_sens_types
+    self.ui.sens_type_comboBox.blockSignals(True)
+AttributeError: 'MyStartUpWindow' object has no attribute 'ui'
+
+
+-- Nov-24-2023 09:47:42.066268Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 781, in showEvent
+    self.settings_window = self.my_settings_window_acc(True, self, self.my_settings)
+TypeError: 'NoneType' object is not callable
+
+
+-- Nov-24-2023 09:48:35.547075Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 672, in open_settings_window
+    self.settings_window.show_back()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\SensAcc\MySettingsWindow.py", line 640, in show_back
+    self.load_settings()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\SensAcc\MySettingsWindow.py", line 442, in load_settings
+    self.ui.ref_sampling_rate_line.setText(str(self.my_settings.ref_sample_rate))
+AttributeError: 'MySettings' object has no attribute 'ref_sample_rate'
+
+
+-- Nov-24-2023 10:31:55.875736Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 713, in start_strain_window
+    self.calib_window.first_start(self.operator)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\SensStrain\MyMainWindow.py", line 423, in first_start
+    start_peaklogger(self.window.starting_folder)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\definitions.py", line 78, in start_peaklogger
+    minimize_window("PeakLogger")
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\definitions.py", line 69, in minimize_window
+    hwnd = wait_for_window_title(window_title)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\definitions.py", line 66, in wait_for_window_title
+    time.sleep(0.05)  # Sleep for 1 second before retrying
+KeyboardInterrupt
+
+
+-- Nov-24-2023 10:40:42.280321Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\StartApp.py", line 105, in <module>
+    window = MyStartUpWindow(splash)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 135, in __init__
+    self.config_file_path = self.check_config_if_selected()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 612, in check_config_if_selected
+    yaml_files = self.return_all_configs()
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 596, in return_all_configs
+    yaml_files = glob(os_path.join(self.my_settings.subfolderConfig_path, '*.yaml'))
+AttributeError: 'MyStartUpWindow' object has no attribute 'my_settings'
+
+
+-- Nov-24-2023 10:41:42.201470Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\StartApp.py", line 105, in <module>
+    window = MyStartUpWindow(splash)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 134, in __init__
+    if self.my_settings:
+AttributeError: 'MyStartUpWindow' object has no attribute 'my_settings'
+
+
+-- Nov-24-2023 11:33:34.459946Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\MyStartUpWindow.py", line 709, in start_strain_window
+    self.calib_window.first_start(self.operator)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\SensStrain\MyMainWindow.py", line 423, in first_start
+    start_peaklogger(self.window.starting_folder)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\definitions.py", line 78, in start_peaklogger
+    minimize_window("PeakLogger")
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\definitions.py", line 69, in minimize_window
+    hwnd = wait_for_window_title(window_title)
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\definitions.py", line 66, in wait_for_window_title
+    time.sleep(0.05)  # Sleep for 1 second before retrying
+KeyboardInterrupt
+
+
+-- Nov-30-2023 09:11:49.422845Traceback (most recent call last):
+  File "C:\Users\PC\Desktop\Sylex\AutoKali\App\appka\Working\SensStrain\MyMainWindow.py", line 838, in on_btn_start_clicked
+    self.plot1.hide()
+AttributeError: 'NoneType' object has no attribute 'hide'
+

@@ -28,7 +28,8 @@ class TMCStatements:
         self._move_by_direction = -1
         self._current_position = 0.0
         self._termination_pos = False
-        self._opt_wls = []
+        self._opt_wls_1 = []
+        self._opt_wls_2 = []
         self._ref_pos = []
         self._error = False
 
@@ -79,13 +80,24 @@ class TMCStatements:
             raise ValueError("disable_usb_check must be a boolean value")
 
     @property
-    def opt_wls(self):
-        return self._opt_wls
+    def opt_wls_1(self):
+        return self._opt_wls_1
 
-    @opt_wls.setter
-    def opt_wls(self, value):
+    @opt_wls_1.setter
+    def opt_wls_1(self, value):
         if isinstance(value, list):
-            self._opt_wls = value
+            self._opt_wls_1 = value
+        else:
+            raise ValueError("opt_wls must be a list")
+
+    @property
+    def opt_wls_2(self):
+        return self._opt_wls_2
+
+    @opt_wls_2.setter
+    def opt_wls_2(self, value):
+        if isinstance(value, list):
+            self._opt_wls_2 = value
         else:
             raise ValueError("opt_wls must be a list")
 

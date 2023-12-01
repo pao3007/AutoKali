@@ -10,6 +10,7 @@ from pyvisa import ResourceManager as pyvisa_ResourceManager
 from SensAcc.SettingsParams import MySettings
 from subprocess import run as subprocess_run
 from json import load as json_load
+from SensAcc.ThreadSettingsCheckNew import ThreadSettingsCheckNew
 
 
 def set_style_sheet_btn_clicked(btn, font_size, right_border):
@@ -51,19 +52,18 @@ class MySettingsWindow(QMainWindow):
         self.setWindowFlags(
             self.windowFlags() & ~Qt.WindowContextHelpButtonHint & ~Qt.WindowMaximizeButtonHint)
         self.logged_in = False
-        from SensAcc.ThreadSettingsCheckNew import ThreadSettingsCheckNew
+
         self.my_settings = my_settings
         self.all_configs = None
         self.resources = None
         self.my_starting_window = window
         self.slider_value = self.my_starting_window.window_scale
-        from gui.settings import Ui_Settings
+        from gui.settings import Ui_Settings as accSettingsGui
         self.config_file_path = None
         self.nidaq_devices = None
         self.start = start
-        self.ui = Ui_Settings()
+        self.ui = accSettingsGui()
         self.ui.setupUi(self)
-        self.load_settings()
         self.config_file = None
         self.local_lang = None
 
@@ -110,10 +110,6 @@ class MySettingsWindow(QMainWindow):
         self.btn_translate_dy = 8
         self.ui.btn_ref_tab.move(self.ui.btn_ref_tab.pos().x(), self.ui.btn_ref_tab.pos().y() + self.btn_translate_dy)
         self.ui.btn_ref_tab.setEnabled(False)
-        self.thread_check_new = ThreadSettingsCheckNew(self.nidaq_devices, self.resources, self.all_configs,
-                                                       self.my_settings)
-        self.thread_check_new.status.connect(self.new_setting_enabled)
-        self.thread_check_new.start()
         path = os_path.join(self.my_settings.starting_folder, "images/logo_icon.png")
         self.setWindowIcon(QIcon(path))
         self.setFixedSize(self.width(), int(self.height()*0.96))
@@ -122,7 +118,6 @@ class MySettingsWindow(QMainWindow):
         else:
             self.ui.label_recalib.setText(
                 f"{self.my_starting_window.translations[self.my_starting_window.lang]['label_recalib_ok']}{str(self.my_starting_window.last_ref_calib)}")
-        self.show_back()
 
     def lang_changed(self, text):
         self.set_language(lang=text)
@@ -195,45 +190,52 @@ class MySettingsWindow(QMainWindow):
         self.thread_add_vendor.start()
 
     def login_into_settings(self):
-        pswd_dialog = QDialog(self)
-        pswd_dialog.setWindowFlags(pswd_dialog.windowFlags() & ~Qt.WindowContextHelpButtonHint & ~Qt.WindowMinMaxButtonsHint)
-        layout = QVBoxLayout()
         lang = self.local_lang if self.local_lang is not None else self.my_starting_window.lang
+        if not self.logged_in:
+            pswd_dialog = QDialog(self)
+            pswd_dialog.setWindowFlags(pswd_dialog.windowFlags() & ~Qt.WindowContextHelpButtonHint & ~Qt.WindowMinMaxButtonsHint)
+            layout = QVBoxLayout()
 
-        password_label = QLabel(self.my_starting_window.translations[lang]["password_label"])
-        password_label.setStyleSheet("color: rgb(208, 208, 208);")
-        layout.addWidget(password_label)
 
-        password_input = QLineEdit()
-        password_input.setEchoMode(QLineEdit.Password)
-        password_input.setStyleSheet("color: rgb(208, 208, 208);")
-        layout.addWidget(password_input)
+            password_label = QLabel(self.my_starting_window.translations[lang]["password_label"])
+            password_label.setStyleSheet("color: rgb(208, 208, 208);")
+            layout.addWidget(password_label)
 
-        ok_button = QPushButton("OK")
-        ok_button.clicked.connect(pswd_dialog.accept)
-        ok_button.setStyleSheet("border: 1px solid gray; border-color:rgb(208,208,208); border-radius: 3px; color: "
-                                "rgb(208, 208, 208); background-color: rgb(44, 44, 44);")
-        layout.addWidget(ok_button)
+            password_input = QLineEdit()
+            password_input.setEchoMode(QLineEdit.Password)
+            password_input.setStyleSheet("color: rgb(208, 208, 208);")
+            layout.addWidget(password_input)
 
-        pswd_dialog.setLayout(layout)
-        result = pswd_dialog.exec_()
+            ok_button = QPushButton("OK")
+            ok_button.clicked.connect(pswd_dialog.accept)
+            ok_button.setStyleSheet("border: 1px solid gray; border-color:rgb(208,208,208); border-radius: 3px; color: "
+                                    "rgb(208, 208, 208); background-color: rgb(44, 44, 44);")
+            layout.addWidget(ok_button)
 
-        if result == QDialog.Accepted:
-            password = password_input.text()
-            if password == "sealseal":
-                enable_ui_elements(self.make_list_of_elements_to_enable())
-                enable_ui_elements(self.make_list_of_elements_to_enable())
-                self.ui.label_login_warning.setText(self.my_starting_window.translations[lang]["label_login_warning_ok"])
-                self.ui.login_btn.setEnabled(False)
-                self.logged_in = True
-            elif password == "":
-                pass
-            else:
-                msg = QMessageBox()
-                msg.setIcon(QMessageBox.Warning)
-                msg.setText(self.my_starting_window.translations[lang]["bad_psd"])
-                msg.setWindowTitle("Error")
-                msg.exec_()
+            pswd_dialog.setLayout(layout)
+            result = pswd_dialog.exec_()
+
+            if result == QDialog.Accepted:
+                password = password_input.text()
+                if password == "sealseal":
+                    enable_ui_elements(self.make_list_of_elements_to_enable())
+
+                    self.ui.label_login_warning.setText(self.my_starting_window.translations[lang]["label_login_warning_ok"])
+                    self.logged_in = True
+                    self.ui.login_btn.setText(self.my_starting_window.translations[lang]["change_login_btn"])
+                elif password == "":
+                    pass
+                else:
+                    msg = QMessageBox()
+                    msg.setIcon(QMessageBox.Warning)
+                    msg.setText(self.my_starting_window.translations[lang]["bad_psd"])
+                    msg.setWindowTitle("Error")
+                    msg.exec_()
+        else:
+            self.ui.login_btn.setText(self.my_starting_window.translations[lang]["login_btn"])
+            self.ui.label_login_warning.setText(self.my_starting_window.translations[lang]["label_login_warning"])
+            enable_ui_elements(self.make_list_of_elements_to_enable(), False)
+            self.logged_in = False
 
     def slider_scale_changed(self, value):
         self.slider_value, _ = slider_scale_get_real_value(value)
@@ -640,6 +642,11 @@ class MySettingsWindow(QMainWindow):
         return list_enable
 
     def show_back(self):
+        self.load_settings()
+        self.thread_check_new = ThreadSettingsCheckNew(self.nidaq_devices, self.resources, self.all_configs,
+                                                       self.my_settings)
+        self.thread_check_new.status.connect(self.new_setting_enabled)
+        self.thread_check_new.start()
         self.set_language()
         self.setFixedSize(int(self.width()*self.my_starting_window.window_scale),
                           int(self.height()*self.my_starting_window.window_scale))

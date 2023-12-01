@@ -1,0 +1,310 @@
+{
+  "ChannelCompensations": [
+    {
+      "Channel": "1.1",
+      "Compensation": 0.0
+    },
+    {
+      "Channel": "2.1",
+      "Compensation": 0.0
+    },
+    {
+      "Channel": "3.1",
+      "Compensation": 0.0
+    },
+    {
+      "Channel": "4.1",
+      "Compensation": 0.0
+    },
+    {
+      "Channel": "1.2",
+      "Compensation": 0.0
+    },
+    {
+      "Channel": "2.2",
+      "Compensation": 0.0
+    },
+    {
+      "Channel": "3.2",
+      "Compensation": 0.0
+    },
+    {
+      "Channel": "4.2",
+      "Compensation": 0.0
+    },
+    {
+      "Channel": "1.3",
+      "Compensation": 0.0
+    },
+    {
+      "Channel": "2.3",
+      "Compensation": 0.0
+    },
+    {
+      "Channel": "3.3",
+      "Compensation": 0.0
+    },
+    {
+      "Channel": "4.3",
+      "Compensation": 0.0
+    },
+    {
+      "Channel": "1.4",
+      "Compensation": 0.0
+    },
+    {
+      "Channel": "2.4",
+      "Compensation": 0.0
+    },
+    {
+      "Channel": "3.4",
+      "Compensation": 0.0
+    },
+    {
+      "Channel": "4.4",
+      "Compensation": 0.0
+    }
+  ],
+  "HelpEnabled": true,
+  "ActiveLanguage": "Auto",
+  "ChannelPeakDetectionThreshold": -20.0,
+  "SpectrumLogEnabled": false,
+  "PeaksLogEnabled": false,
+  "PeaksCalculateAverageWavelength": true,
+  "PeaksAverageSampleCount": 1,
+  "PeaksSelectedChannelsOnly": false,
+  "SmallPeakThreshold": -0.2,
+  "SidepeakThreshold": 0.2,
+  "CentralThreshold": 1.0,
+  "WindowSize": 20,
+  "PeakCount": 2,
+  "ActiveChannels": 4,
+  "DeviceIP": "",
+  "SetActiveChannelsOnConnect": true,
+  "SavedDevices": [
+    {
+      "DeviceIP": "10.88.1.50",
+      "DevicePlatform": 0,
+      "Description": "Kalibrácia",
+      "ActiveChannels": null
+    },
+    {
+      "DeviceIP": "10.88.1.51",
+      "DevicePlatform": 0,
+      "Description": "Výroba",
+      "ActiveChannels": null
+    },
+    {
+      "DeviceIP": "10.88.1.52",
+      "DevicePlatform": 0,
+      "Description": "Výroba, strain rig + ACC",
+      "ActiveChannels": null
+    },
+    {
+      "DeviceIP": "10.88.1.53",
+      "DevicePlatform": 1,
+      "Description": "Kalibrácia",
+      "ActiveChannels": null
+    },
+    {
+      "DeviceIP": "10.88.5.158",
+      "DevicePlatform": 2,
+      "Description": "S-Line Scan FOS4STRAIN",
+      "ActiveChannels": null
+    },
+    {
+      "DeviceIP": "10.88.5.163",
+      "DevicePlatform": 0,
+      "Description": "Virtuálny MOI 51 - Výroba",
+      "ActiveChannels": 16
+    }
+  ],
+  "EnableReturnLoss": false,
+  "TimelineMinimum": 1500.0,
+  "TimelineMaximum": 1550.0,
+  "TimelineCalculateAverageWavelength": true,
+  "TimelineAverageSampleCount": 1,
+  "SavedExportDirectories": [],
+  "ExportDirectory": "",
+  "ExportPrefix": "",
+  "ExportUser": "",
+  "ExportGraphFileName": "spectrum_image.png",
+  "ExportSpectrumFileName": "spectrum_data.txt",
+  "ExportPeaksFileName": "wavelength.txt",
+  "ExportSerialNumber": "",
+  "FOS4X_MoreStatistics": false,
+  "FOS4X_ReflectivityCoef": 0.1,
+  "FOS4X_DeviceCoef": 3000000000.0,
+  "DisableCalculations": false,
+  "IsIndicatorModeEnabled": false,
+  "IndicatorMinimum1": 1553.04,
+  "IndicatorMaximum1": 1553.06,
+  "IndicatorMinimum2": 1570.0,
+  "IndicatorMaximum2": 1570.5,
+  "DataLoggingSamplingRate": 30,
+  "DataLoggingPrefix": "",
+  "FbgsenseSettings": {
+    "1.1": {
+      "RelativeIntensity": 5,
+      "FilteringWindowSize": 15
+    },
+    "2.1": {
+      "RelativeIntensity": 5,
+      "FilteringWindowSize": 15
+    },
+    "3.1": {
+      "RelativeIntensity": 5,
+      "FilteringWindowSize": 15
+    },
+    "4.1": {
+      "RelativeIntensity": 5,
+      "FilteringWindowSize": 15
+    },
+    "1.2": {
+      "RelativeIntensity": 5,
+      "FilteringWindowSize": 15
+    },
+    "2.2": {
+      "RelativeIntensity": 5,
+      "FilteringWindowSize": 15
+    },
+    "3.2": {
+      "RelativeIntensity": 5,
+      "FilteringWindowSize": 15
+    },
+    "4.2": {
+      "RelativeIntensity": 5,
+      "FilteringWindowSize": 15
+    },
+    "1.3": {
+      "RelativeIntensity": 5,
+      "FilteringWindowSize": 15
+    },
+    "2.3": {
+      "RelativeIntensity": 5,
+      "FilteringWindowSize": 15
+    },
+    "3.3": {
+      "RelativeIntensity": 5,
+      "FilteringWindowSize": 15
+    },
+    "4.3": {
+      "RelativeIntensity": 5,
+      "FilteringWindowSize": 15
+    },
+    "1.4": {
+      "RelativeIntensity": 5,
+      "FilteringWindowSize": 15
+    },
+    "2.4": {
+      "RelativeIntensity": 5,
+      "FilteringWindowSize": 15
+    },
+    "3.4": {
+      "RelativeIntensity": 5,
+      "FilteringWindowSize": 15
+    },
+    "4.4": {
+      "RelativeIntensity": 5,
+      "FilteringWindowSize": 15
+    }
+  },
+  "LegacySettings": {
+    "1.1": {
+      "Threshold": -50.0,
+      "RelativeThreshold": -8.0,
+      "Width": 0.05,
+      "WidthLevel": 1.5
+    },
+    "2.1": {
+      "Threshold": -50.0,
+      "RelativeThreshold": -8.0,
+      "Width": 0.05,
+      "WidthLevel": 1.5
+    },
+    "3.1": {
+      "Threshold": -50.0,
+      "RelativeThreshold": -8.0,
+      "Width": 0.05,
+      "WidthLevel": 1.5
+    },
+    "4.1": {
+      "Threshold": -50.0,
+      "RelativeThreshold": -8.0,
+      "Width": 0.05,
+      "WidthLevel": 1.5
+    },
+    "1.2": {
+      "Threshold": -50.0,
+      "RelativeThreshold": -8.0,
+      "Width": 0.05,
+      "WidthLevel": 1.5
+    },
+    "2.2": {
+      "Threshold": -50.0,
+      "RelativeThreshold": -8.0,
+      "Width": 0.05,
+      "WidthLevel": 1.5
+    },
+    "3.2": {
+      "Threshold": -50.0,
+      "RelativeThreshold": -8.0,
+      "Width": 0.05,
+      "WidthLevel": 1.5
+    },
+    "4.2": {
+      "Threshold": -50.0,
+      "RelativeThreshold": -8.0,
+      "Width": 0.05,
+      "WidthLevel": 1.5
+    },
+    "1.3": {
+      "Threshold": -50.0,
+      "RelativeThreshold": -8.0,
+      "Width": 0.05,
+      "WidthLevel": 1.5
+    },
+    "2.3": {
+      "Threshold": -50.0,
+      "RelativeThreshold": -8.0,
+      "Width": 0.05,
+      "WidthLevel": 1.5
+    },
+    "3.3": {
+      "Threshold": -50.0,
+      "RelativeThreshold": -8.0,
+      "Width": 0.05,
+      "WidthLevel": 1.5
+    },
+    "4.3": {
+      "Threshold": -50.0,
+      "RelativeThreshold": -8.0,
+      "Width": 0.05,
+      "WidthLevel": 1.5
+    },
+    "1.4": {
+      "Threshold": -50.0,
+      "RelativeThreshold": -8.0,
+      "Width": 0.05,
+      "WidthLevel": 1.5
+    },
+    "2.4": {
+      "Threshold": -50.0,
+      "RelativeThreshold": -8.0,
+      "Width": 0.05,
+      "WidthLevel": 1.5
+    },
+    "3.4": {
+      "Threshold": -50.0,
+      "RelativeThreshold": -8.0,
+      "Width": 0.05,
+      "WidthLevel": 1.5
+    },
+    "4.4": {
+      "Threshold": -50.0,
+      "RelativeThreshold": -8.0,
+      "Width": 0.05,
+      "WidthLevel": 1.5
+    }
+  }
+}

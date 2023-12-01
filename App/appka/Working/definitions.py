@@ -14,6 +14,7 @@ from wmi import WMI as wmi_WMI
 from PyQt5.QtCore import QThread, QFileInfo, QSize, QTimer, pyqtSignal, Qt
 
 import numpy as np
+from numpy import sum as np_sum
 from PyQt5.QtWidgets import QApplication, QWidget, QDialog, QLineEdit, QVBoxLayout, QDialogButtonBox, QTextBrowser, \
     QPushButton, QLabel
 from os import (chdir as os_chdir, system as os_system, path as os_path, remove as os_remove, makedirs as os_makedirs,
@@ -29,9 +30,10 @@ from csv import writer as csv_writer
 from subprocess import run as subprocess_run
 from json import loads as json_loads
 from glob import glob
+from time import sleep
 
 
-def fetch_wavelengths_peak_logger(fetch_wl, timeout_short=0.5):
+def fetch_wavelengths_peak_logger(fetch_wl, timeout_short=1):
     try:
         api_url = "http://localhost:43122/swagger/index.html" if not fetch_wl else "http://localhost:43122/peaks"
         timeout = timeout_short
@@ -258,7 +260,9 @@ def check_usb(opt_vendor_ids, ref_vendor_ids):
     ref = False
 
     try:
+        print(len(c.Win32_USBControllerDevice()))
         for usb in c.Win32_USBControllerDevice():
+            # sleep(0.25)
             try:
                 device = usb.Dependent
                 device = device.DeviceID
@@ -312,7 +316,6 @@ def load_all_config_files(combobox, config_file_path: str, opt_sensor_type: str,
     if config_file_path is not None:
         combobox.setCurrentText(QFileInfo(config_file_path).fileName())
     combobox.blockSignals(False)
-    print("yaml files:",yaml_files)
     return yaml_files
 
 
@@ -429,12 +432,12 @@ def copy_files(serial_number, folder_id, source_folders, export_folder):
                 return_str.append(f"No file with serial number {serial_number} found in {folder_path}")
 
         if len(return_str) == 0:
-            return_str = (0, "Export to the local raw database was successful!")
+            return_str = (0, "Export to the local raw database was successful!", kalibracia_folder)
         else:
-            return_str = (-1, return_str)
+            return_str = (-1, return_str, None)
     except Exception as e:
         return -1, f"Unexpected error happened during export to the local raw DB: \n {e}"
-    return return_str, ""
+    return return_str, "", None
 
 
 def set_read_only(file_path):
@@ -456,9 +459,9 @@ def disable_ui_elements(ui_elements):
         element.setEnabled(False)
 
 
-def enable_ui_elements(ui_elements):
+def enable_ui_elements(ui_elements, set=True):
     for element in ui_elements:
-        element.setEnabled(True)
+        element.setEnabled(set)
 
 
 def save_statistics_to_csv(folder_path, file_name, time_stamp, serial_number, sensitivity, wl1, wl2=None):
@@ -558,6 +561,13 @@ def save_error(path, e):
         f.write("\n-- " + today)
         f.write(" " + current_time)
         f.write(e + "\n")  # Write the traceback to the file
+
+
+def linear_regression(x, y):
+    n = len(x)
+    m = (n * np_sum(x * y) - np_sum(x) * np_sum(y)) / (n * np_sum(x ** 2) - (np_sum(x)) ** 2)
+    b = (np_sum(y) - m * np_sum(x)) / n
+    return m, b
 
 
 class ThreadAddVendorIds(QThread):

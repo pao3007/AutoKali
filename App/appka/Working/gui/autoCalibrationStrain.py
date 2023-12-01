@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'autoCalibrationStrain.ui'
+# Form implementation generated from reading ui file 'autoCalibrationStrainRev2.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -52,7 +52,7 @@ class Ui_AutoCalibration(object):
         brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Shadow, brush)
-        brush = QtGui.QBrush(QtGui.QColor(0, 85, 127))
+        brush = QtGui.QBrush(QtGui.QColor(150, 190, 13))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Highlight, brush)
         brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
@@ -174,15 +174,23 @@ class Ui_AutoCalibration(object):
         self.centralwidget = QtWidgets.QWidget(AutoCalibration)
         self.centralwidget.setObjectName("centralwidget")
         self.S_N_label = QtWidgets.QLabel(self.centralwidget)
-        self.S_N_label.setGeometry(QtCore.QRect(80, 8, 51, 31))
+        self.S_N_label.setGeometry(QtCore.QRect(70, 8, 61, 31))
         font = QtGui.QFont()
         font.setPointSize(24)
+        font.setBold(True)
         self.S_N_label.setFont(font)
         self.S_N_label.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.S_N_label.setStyleSheet("color: rgb(150, 190, 13);")
         self.S_N_label.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.S_N_label.setObjectName("S_N_label")
         self.S_N_line = QtWidgets.QLineEdit(self.centralwidget)
         self.S_N_line.setGeometry(QtCore.QRect(140, 10, 381, 31))
+        self.S_N_line.setStyleSheet("border: 1px solid gray;\n"
+"border-color:rgb(208,208,208);\n"
+"border-radius: 3px;\n"
+"background-color: rgb(255, 255, 255);\n"
+"color: rgb(0, 0, 0);\n"
+"")
         self.S_N_line.setObjectName("S_N_line")
         self.start_btn = QtWidgets.QPushButton(self.centralwidget)
         self.start_btn.setGeometry(QtCore.QRect(80, 80, 131, 71))
@@ -191,10 +199,33 @@ class Ui_AutoCalibration(object):
         font.setPointSize(24)
         font.setBold(True)
         self.start_btn.setFont(font)
+        self.start_btn.setStyleSheet("QPushButton {border: 1px solid gray;\n"
+"border-color:rgb(208,208,208);\n"
+"border-radius: 3px;\n"
+"background-color: rgb(245, 245, 245);\n"
+"color: rgb(0, 0, 0);}\n"
+"QPushButton:hover {\n"
+"    background-color: rgba(150, 190, 13, 100);\n"
+"}\n"
+"QPushButton:disabled {\n"
+"    \n"
+"    background-color: rgb(220, 220, 220);\n"
+"}")
         self.start_btn.setObjectName("start_btn")
         self.progressBar = QtWidgets.QProgressBar(self.centralwidget)
         self.progressBar.setGeometry(QtCore.QRect(80, 155, 381, 21))
-        self.progressBar.setStyleSheet("")
+        self.progressBar.setStyleSheet("QProgressBar {\n"
+"border: 1px solid gray;\n"
+"border-color:rgb(208,208,208);\n"
+"border-radius: 3px;\n"
+"background-color: rgb(255, 255, 255);\n"
+"color: rgb(0, 0, 0);}\n"
+"\n"
+"                QProgressBar::chunk {\n"
+"                background-color: rgb(150, 190, 13);\n"
+"                width: 2px; \n"
+"                margin: 1px;\n"
+"            }")
         self.progressBar.setProperty("value", 24)
         self.progressBar.setTextVisible(False)
         self.progressBar.setObjectName("progressBar")
@@ -240,11 +271,52 @@ class Ui_AutoCalibration(object):
         self.plot_graph_check = QtWidgets.QCheckBox(self.centralwidget)
         self.plot_graph_check.setGeometry(QtCore.QRect(80, 40, 131, 41))
         self.plot_graph_check.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.plot_graph_check.setStyleSheet("QCheckBox{background-color: rgba(255, 255, 255, 0);\n"
+"color:rgb(0, 0, 0)}\n"
+"\n"
+"QCheckBox::indicator {\n"
+"        border: 1px solid rgb(208,208,208);\n"
+"        border-radius: 2px; \n"
+"    }\n"
+"    QCheckBox::indicator:checked {\n"
+"        \n"
+"    background-color: rgb(0,0,0);\n"
+"        border: 3px solid rgb(208,208,208);\n"
+"    }\n"
+"    QCheckBox::indicator:unchecked {\n"
+"        background-color: rgba(255, 255, 255, 0);\n"
+"        border: 1px solid rgb(208,208,208);\n"
+"    }\n"
+"")
         self.plot_graph_check.setObjectName("plot_graph_check")
         self.select_config = QtWidgets.QComboBox(self.centralwidget)
         self.select_config.setGeometry(QtCore.QRect(380, 50, 141, 21))
-        self.select_config.setStyleSheet("background-color: rgb(255, 255, 255);\n"
-"color: rgb(0, 0, 0);")
+        self.select_config.setStyleSheet("QComboBox{\n"
+"border: 1px solid gray;\n"
+"border-color:rgb(208,208,208);\n"
+"border-radius: 3px;\n"
+"background-color: rgb(245, 245, 245);\n"
+"color: rgb(0, 0, 0);\n"
+"}\n"
+"QComboBox:hover {\n"
+"    background-color: rgba(150, 190, 13, 100);\n"
+"}\n"
+"    QComboBox::down-arrow {\n"
+"        image: none;\n"
+"    }\n"
+"    QComboBox::drop-down {\n"
+"        border: 0;\n"
+"        width: 0px;\n"
+"    }\n"
+"    QComboBox QAbstractItemView::item:selected {\n"
+"        color: white;\n"
+"        background-color: rgba(150, 190, 13, 100);\n"
+"    }\n"
+"    QComboBox QAbstractItemView::item:hover {\n"
+"        color: white;\n"
+"        background-color: rgba(150, 190, 13, 100);\n"
+"    }\n"
+"")
         self.select_config.setObjectName("select_config")
         self.stop_btn = QtWidgets.QPushButton(self.centralwidget)
         self.stop_btn.setGeometry(QtCore.QRect(80, 80, 131, 71))
@@ -253,8 +325,20 @@ class Ui_AutoCalibration(object):
         font.setPointSize(24)
         font.setBold(True)
         self.stop_btn.setFont(font)
-        self.stop_btn.setStyleSheet("background-color: rgb(171, 0, 0);\n"
-"color: rgba(255, 255, 255, 200);")
+        self.stop_btn.setStyleSheet("QPushButton {border: 1px solid gray;\n"
+"border-color:rgb(208,208,208);\n"
+"border-radius: 3px;\n"
+"background-color:  #EE1918;\n"
+"color: rgba(255, 255, 255, 200);\n"
+"}\n"
+"QPushButton:hover {\n"
+"    background-color:  #EE1918;\n"
+"    color: rgb(0, 0, 0);\n"
+"}\n"
+"QPushButton:disabled {\n"
+"    background-color: #EE1918;\n"
+"}\n"
+"")
         self.stop_btn.setObjectName("stop_btn")
         self.label_opt_sens_type_label = QtWidgets.QLabel(self.centralwidget)
         self.label_opt_sens_type_label.setGeometry(QtCore.QRect(170, 50, 201, 21))
@@ -273,7 +357,10 @@ class Ui_AutoCalibration(object):
         self.output_browser_2.setObjectName("output_browser_2")
         self.output_browser_3 = QtWidgets.QTextBrowser(self.centralwidget)
         self.output_browser_3.setGeometry(QtCore.QRect(80, 180, 441, 221))
-        self.output_browser_3.setStyleSheet("background-color: rgba(255, 255, 255, 0);")
+        self.output_browser_3.setStyleSheet("QTextBrowser { \n"
+"background-color: rgba(255, 255, 255, 0);\n"
+"border: 1px solid rgb(208,208,208); \n"
+"}")
         self.output_browser_3.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.output_browser_3.setFrameShadow(QtWidgets.QFrame.Plain)
         self.output_browser_3.setLineWidth(1)
@@ -295,19 +382,31 @@ class Ui_AutoCalibration(object):
         self.just_box_3.setGeometry(QtCore.QRect(80, 400, 221, 49))
         self.just_box_3.setMouseTracking(False)
         self.just_box_3.setFocusPolicy(QtCore.Qt.NoFocus)
-        self.just_box_3.setStyleSheet("background-color: rgba(255, 255, 255, 0);")
+        self.just_box_3.setStyleSheet("QTextBrowser { \n"
+"background-color: rgba(255, 255, 255, 0);\n"
+"border: 1px solid rgb(208,208,208); \n"
+"\n"
+"}")
         self.just_box_3.setObjectName("just_box_3")
         self.just_box_4 = QtWidgets.QTextBrowser(self.centralwidget)
         self.just_box_4.setGeometry(QtCore.QRect(220, 80, 301, 71))
         self.just_box_4.setMouseTracking(False)
         self.just_box_4.setFocusPolicy(QtCore.Qt.NoFocus)
-        self.just_box_4.setStyleSheet("background-color: rgba(255, 255, 255, 0);")
+        self.just_box_4.setStyleSheet("QTextBrowser { \n"
+"background-color: rgba(255, 255, 255, 0);\n"
+"border: 1px solid rgb(208,208,208); \n"
+"\n"
+"}")
         self.just_box_4.setObjectName("just_box_4")
         self.just_box_5 = QtWidgets.QTextBrowser(self.centralwidget)
         self.just_box_5.setGeometry(QtCore.QRect(300, 400, 221, 49))
         self.just_box_5.setMouseTracking(False)
         self.just_box_5.setFocusPolicy(QtCore.Qt.NoFocus)
-        self.just_box_5.setStyleSheet("background-color: rgba(255, 255, 255, 0);")
+        self.just_box_5.setStyleSheet("QTextBrowser { \n"
+"background-color: rgba(255, 255, 255, 0);\n"
+"border: 1px solid rgb(208,208,208); \n"
+"\n"
+"}")
         self.just_box_5.setObjectName("just_box_5")
         self.export_fail_btn = QtWidgets.QPushButton(self.centralwidget)
         self.export_fail_btn.setEnabled(False)
@@ -328,8 +427,12 @@ class Ui_AutoCalibration(object):
         self.help_text_browser.setGeometry(QtCore.QRect(10, 10, 321, 441))
         self.help_text_browser.setMouseTracking(False)
         self.help_text_browser.setFocusPolicy(QtCore.Qt.NoFocus)
-        self.help_text_browser.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"color: black;")
+        self.help_text_browser.setStyleSheet("QTextBrowser { \n"
+"color: black;\n"
+"background-color: rgba(255, 255, 255, 0);\n"
+"border: 1px solid rgb(208,208,208); \n"
+"\n"
+"}")
         self.help_text_browser.setObjectName("help_text_browser")
         self.widget_gen = QtWidgets.QWidget(self.centralwidget)
         self.widget_gen.setGeometry(QtCore.QRect(505, 70, 101, 371))
@@ -346,7 +449,11 @@ class Ui_AutoCalibration(object):
         self.just_box_6.setGeometry(QtCore.QRect(20, 10, 71, 101))
         self.just_box_6.setMouseTracking(False)
         self.just_box_6.setFocusPolicy(QtCore.Qt.NoFocus)
-        self.just_box_6.setStyleSheet("background-color: rgba(255, 255, 255, 0);")
+        self.just_box_6.setStyleSheet("QTextBrowser { \n"
+"background-color: rgba(255, 255, 255, 0);\n"
+"border: 1px solid rgb(208,208,208); \n"
+"\n"
+"}")
         self.just_box_6.setObjectName("just_box_6")
         self.ref_value_max_g_label = QtWidgets.QLabel(self.widget_gen)
         self.ref_value_max_g_label.setGeometry(QtCore.QRect(20, 25, 71, 20))
@@ -382,7 +489,11 @@ class Ui_AutoCalibration(object):
         self.just_box_7.setGeometry(QtCore.QRect(20, 130, 71, 201))
         self.just_box_7.setMouseTracking(False)
         self.just_box_7.setFocusPolicy(QtCore.Qt.NoFocus)
-        self.just_box_7.setStyleSheet("background-color: rgba(255, 255, 255, 0);")
+        self.just_box_7.setStyleSheet("QTextBrowser { \n"
+"background-color: rgba(255, 255, 255, 0);\n"
+"border: 1px solid rgb(208,208,208); \n"
+"\n"
+"}")
         self.just_box_7.setObjectName("just_box_7")
         self.label_name_move_to = QtWidgets.QLabel(self.widget_gen)
         self.label_name_move_to.setGeometry(QtCore.QRect(20, 130, 71, 31))
@@ -394,10 +505,21 @@ class Ui_AutoCalibration(object):
         self.label_name_move_to.setObjectName("label_name_move_to")
         self.move_to_line = QtWidgets.QLineEdit(self.widget_gen)
         self.move_to_line.setGeometry(QtCore.QRect(23, 160, 65, 16))
+        self.move_to_line.setStyleSheet("background-color: rgba(255, 255, 255, 255);\n"
+"border: 1px solid rgb(208,208,208); \n"
+"")
         self.move_to_line.setAlignment(QtCore.Qt.AlignCenter)
         self.move_to_line.setObjectName("move_to_line")
         self.move_to_start = QtWidgets.QPushButton(self.widget_gen)
         self.move_to_start.setGeometry(QtCore.QRect(30, 180, 51, 21))
+        self.move_to_start.setStyleSheet("QPushButton {border: 1px solid gray;\n"
+"border-color:rgb(208,208,208);\n"
+"border-radius: 3px;\n"
+"background-color: rgb(245, 245, 245);\n"
+"color: rgb(0, 0, 0);}\n"
+"QPushButton:hover {\n"
+"    background-color: rgba(150, 190, 13, 100);\n"
+"}")
         self.move_to_start.setObjectName("move_to_start")
         self.label_name_move_by = QtWidgets.QLabel(self.widget_gen)
         self.label_name_move_by.setGeometry(QtCore.QRect(20, 210, 71, 21))
@@ -409,19 +531,47 @@ class Ui_AutoCalibration(object):
         self.label_name_move_by.setObjectName("label_name_move_by")
         self.move_by_line = QtWidgets.QLineEdit(self.widget_gen)
         self.move_by_line.setGeometry(QtCore.QRect(23, 230, 65, 16))
+        self.move_by_line.setStyleSheet("\n"
+"background-color: rgba(255, 255, 255, 255);\n"
+"border: 1px solid rgb(208,208,208); \n"
+"")
         self.move_by_line.setAlignment(QtCore.Qt.AlignCenter)
         self.move_by_line.setObjectName("move_by_line")
         self.move_by_left = QtWidgets.QPushButton(self.widget_gen)
         self.move_by_left.setGeometry(QtCore.QRect(23, 250, 16, 25))
+        self.move_by_left.setStyleSheet("QPushButton {border: 1px solid gray;\n"
+"border-color:rgb(208,208,208);\n"
+"border-radius: 3px;\n"
+"background-color: rgb(245, 245, 245);\n"
+"color: rgb(0, 0, 0);}\n"
+"QPushButton:hover {\n"
+"    background-color: rgba(150, 190, 13, 100);\n"
+"}")
         self.move_by_left.setObjectName("move_by_left")
         self.move_by_right = QtWidgets.QPushButton(self.widget_gen)
         self.move_by_right.setGeometry(QtCore.QRect(72, 250, 16, 25))
+        self.move_by_right.setStyleSheet("QPushButton {border: 1px solid gray;\n"
+"border-color:rgb(208,208,208);\n"
+"border-radius: 3px;\n"
+"background-color: rgb(245, 245, 245);\n"
+"color: rgb(0, 0, 0);}\n"
+"QPushButton:hover {\n"
+"    background-color: rgba(150, 190, 13, 100);\n"
+"}")
         self.move_by_right.setObjectName("move_by_right")
         self.move_by_unit = QtWidgets.QPushButton(self.widget_gen)
         self.move_by_unit.setGeometry(QtCore.QRect(43, 250, 25, 25))
         font = QtGui.QFont()
         font.setPointSize(7)
         self.move_by_unit.setFont(font)
+        self.move_by_unit.setStyleSheet("QPushButton {border: 1px solid gray;\n"
+"border-color:rgb(208,208,208);\n"
+"border-radius: 3px;\n"
+"background-color: rgb(245, 245, 245);\n"
+"color: rgb(0, 0, 0);}\n"
+"QPushButton:hover {\n"
+"    background-color: rgba(150, 190, 13, 100);\n"
+"}")
         self.move_by_unit.setObjectName("move_by_unit")
         self.btn_lock_unlock_range_placeholder_2 = QtWidgets.QPushButton(self.widget_gen)
         self.btn_lock_unlock_range_placeholder_2.setGeometry(QtCore.QRect(43, 300, 25, 25))
@@ -474,16 +624,22 @@ class Ui_AutoCalibration(object):
         self.just_box_steps_graph.setGeometry(QtCore.QRect(465, 155, 26, 26))
         self.just_box_steps_graph.setMouseTracking(False)
         self.just_box_steps_graph.setFocusPolicy(QtCore.Qt.NoFocus)
-        self.just_box_steps_graph.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"border-bottom: 2px solid white;\n"
+        self.just_box_steps_graph.setStyleSheet("QTextBrowser { \n"
+"background-color: rgba(255, 255, 255, 0);\n"
+"border: 1px solid rgb(208,208,208); \n"
+"border-radius: 3px;\n"
+"}\n"
 "")
         self.just_box_steps_graph.setObjectName("just_box_steps_graph")
         self.just_box_linear_graph = QtWidgets.QTextBrowser(self.centralwidget)
         self.just_box_linear_graph.setGeometry(QtCore.QRect(495, 155, 26, 26))
         self.just_box_linear_graph.setMouseTracking(False)
         self.just_box_linear_graph.setFocusPolicy(QtCore.Qt.NoFocus)
-        self.just_box_linear_graph.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
-"border-bottom: 2px solid white;")
+        self.just_box_linear_graph.setStyleSheet("QTextBrowser { \n"
+"background-color: rgba(255, 255, 255, 0);\n"
+"border: 1px solid rgb(208,208,208); \n"
+"border-radius: 3px;\n"
+"}")
         self.just_box_linear_graph.setObjectName("just_box_linear_graph")
         self.widget_graph_step = QtWidgets.QWidget(self.centralwidget)
         self.widget_graph_step.setGeometry(QtCore.QRect(65, 225, 471, 181))

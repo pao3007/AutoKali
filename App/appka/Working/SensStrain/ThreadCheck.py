@@ -15,6 +15,8 @@ class ThreadCheck(QThread):
         self.vendor = my_start_window.ref_dev_vendor
         self.tmcs = tmcs
         self._termination = False
+        self.thread_check_usb_bench = ThreadCheckBench(self)
+        self.thread_check_usb_bench.start()
 
     def run(self):
         i = 0
@@ -22,18 +24,18 @@ class ThreadCheck(QThread):
         while not self._termination:
             i += 1
             res, wl = fetch_wavelengths_peak_logger(True)
-            if res == 200:
-                self.opt_check.emit(True, wl)
-            elif res == 404:
-                self.opt_check.emit(True, [-1])
-            elif res == -1:
-                self.opt_check.emit(False, [-1])
-            if self.tmcs.disable_usb_check:
-                self.msleep(50)
-            else:
-                benchtop, _ = check_usb(self.vendor, self.vendor)
-                self.benchtop_check.emit(benchtop)
-            self.update_check.emit(True)
+            # if res == 200:
+            #     self.opt_check.emit(True, wl)
+            # elif res == 404:
+            #     self.opt_check.emit(True, [-1])
+            # elif res == -1:
+            #     self.opt_check.emit(False, [-1])
+
+            self.opt_check.emit(False if res == -1 else True, wl if res == 200 else [-1])
+            self.msleep(250 if self.tmcs.disable_usb_check else 500)
+            if i >= (4 if self.tmcs.disable_usb_check else 2):
+                i = 0
+                self.update_check.emit(True)
 
     @property
     def termination(self):
@@ -45,3 +47,18 @@ class ThreadCheck(QThread):
             self._termination = value
         else:
             raise ValueError("termination must be a boolean value")
+
+
+class ThreadCheckBench(QThread):
+
+    def __init__(self, parent: ThreadCheck):
+        super().__init__()
+        self.parent = parent
+        self.vendor = self.parent.vendor
+
+    def run(self):
+        while not self.parent.termination:
+            if not self.parent.tmcs.disable_usb_check:
+                benchtop, _ = check_usb(self.vendor, self.vendor)
+                self.parent.benchtop_check.emit(benchtop)
+            self.msleep(1000)

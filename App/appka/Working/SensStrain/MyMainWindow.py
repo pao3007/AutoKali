@@ -9,23 +9,23 @@ from PyQt5.QtWidgets import QMainWindow, QMessageBox, QApplication, QDialog, QVB
     QLineEdit, QDialogButtonBox, QComboBox
 from PyQt5.QtCore import QEvent, Qt, QTimer
 from os import path as os_path
+
+from DatabaseCom import DatabaseCom
 from definitions import (scale_app, center_on_screen,
                          load_all_config_files,
                          show_add_dialog, open_folder_in_explorer, start_peaklogger,
-                         fetch_wavelengths_peak_logger, kill_peaklogger, PopupWindow)
+                         fetch_wavelengths_peak_logger, kill_peaklogger, PopupWindow, get_params, save_error,
+                         copy_files, save_statistics_to_csv)
 from matplotlib import pyplot as plt
 import ctypes
 from ctypes import wintypes, byref as ctypes_byref
 from SensStrain.SettingsParams import MySettings
 from re import search as re_search
 from SensStrain.TMCStatements import TMCStatements
-from SensStrain.MySettingsWindow import MySettingsWindow
+from SensStrain.MySettingsWindow import MySettingsWindow as MySettingsWindowStrain
 from numpy import abs as np_abs
 from MyStartUpWindow import MyStartUpWindow
 from gui.autoCalibrationStrain import Ui_AutoCalibration
-from SensStrain.ThreadMotorControl import ThreadMotorControl
-from SensStrain.ThreadMeasure import OptMeasure
-from SensStrain.ThreadCheck import ThreadCheck
 
 
 class MyMainWindow(QMainWindow):
@@ -173,7 +173,6 @@ class MyMainWindow(QMainWindow):
             "background: transparent; border: none; text-align: center;")
         self.ui.just_box_steps_graph.setHidden(False)
         self.ui.btn_show_steps_graph.clicked.connect(self.show_stairs_graph)
-        self.ui.just_box_steps_graph.setStyleSheet("QTextBrowser { border-bottom: 2px solid red; }")
 
         path = os_path.join(self.my_settings.starting_folder, "images/linear.png")
         icon = QIcon(QPixmap(path))
@@ -183,8 +182,6 @@ class MyMainWindow(QMainWindow):
             "background: transparent; border: none; text-align: center;")
         self.ui.just_box_linear_graph.setHidden(True)
         self.ui.btn_show_linear_graph.clicked.connect(self.show_linear_graph)
-        self.ui.just_box_linear_graph.setStyleSheet("QTextBrowser { border-bottom: 2px solid red; }")
-
         if my_settings is None or my_settings.check_if_none():
             self.ui.output_browser_3.setText(self.window.translations[self.window.lang]["load_error"])
         self.ui.widget_help.setHidden(True)
@@ -537,9 +534,9 @@ class MyMainWindow(QMainWindow):
             if self.sensor_opt_check and self.benchtop_check and not self.measure:
                 self.ui.start_btn.setEnabled(True)
             else:
-                self.ui.start_btn.setEnabled(False)
+                self.ui.start_btn.setEnabled(True)  # False
         else:
-            self.ui.start_btn.setEnabled(False)
+            self.ui.start_btn.setEnabled(True)  # False
 
         if check:
             if self.tmcs.error:
@@ -626,7 +623,7 @@ class MyMainWindow(QMainWindow):
         self.ui.S_N_line.blockSignals(False)
 
     def open_settings_window(self):
-        self.settings_window = MySettingsWindow(False, self.window, self.my_settings)
+        self.settings_window = MySettingsWindowStrain(False, self.window, self.my_settings)
         self.hide()
         self.settings_window.show_back()
 
@@ -782,6 +779,9 @@ class MyMainWindow(QMainWindow):
 
 #  meranie + kalibrácia
 class AutoCalibMain:
+    from SensStrain.ThreadMotorControl import ThreadMotorControl
+    from SensStrain.ThreadMeasure import OptMeasure
+    from SensStrain.ThreadCheck import ThreadCheck
 
     def __init__(self, calib_window: MyMainWindow, my_settings: MySettings, tmcs: TMCStatements):
         self.plot1 = None
@@ -793,24 +793,26 @@ class AutoCalibMain:
         self.calib_result = True
         self.export_status = True
         self.my_settings = my_settings
+        self.database = DatabaseCom(self.my_settings.starting_folder)
         self.tmcs = tmcs
         self.time_stamp = None
         self.calibration_profile = None
         self.calib_output = None
         self.calib_window = calib_window
         self.start_window = calib_window.window
-        self.acc_calib = None
+        self.strain_calib = None
         self.current_date = None
         self.time_string = None
         self.opt_sentinel_file_name = None
+        self.calibration_result = None
 
-        self.thread_motor_control = ThreadMotorControl(my_settings, tmcs)
+        self.thread_motor_control = self.ThreadMotorControl(my_settings, tmcs)
         self.thread_motor_control.update_position.connect(self.calib_window.update_ref_value)
         self.thread_motor_control.start()
         self.tmcs.init_home = True
-        self.thread_calibration = OptMeasure(self.my_settings, self.tmcs, self.calib_window)
+        self.thread_calibration = self.OptMeasure(self.my_settings, self.tmcs, self.calib_window)
 
-        self.thread_check = ThreadCheck(self.start_window, self.tmcs)
+        self.thread_check = self.ThreadCheck(self.start_window, self.tmcs)
         self.thread_check.benchtop_check.connect(self.calib_window.benchtop_emit)
         self.thread_check.opt_check.connect(self.calib_window.opt_emit)
         self.thread_check.update_check.connect(self.calib_window.check_sensors_ready)
@@ -827,15 +829,115 @@ class AutoCalibMain:
 
         # NIECO
         self.calib_window.enable_disable_gui_elements(True)
-        self.thread_calibration = OptMeasure(self.my_settings, self.tmcs, self.calib_window)
+        self.thread_calibration = self.OptMeasure(self.my_settings, self.tmcs, self.calib_window)
         self.thread_calibration.update.connect(self.calib_window.update_progress_bar)
         self.thread_calibration.finished.connect(self.calibration_finished)
+        self.calib_window.ui.progressBar.setValue(50)
 
     def on_btn_start_clicked(self):  # start merania
-        self.plot1.hide()
-        self.tmcs.emergency_stop = False
-        self.calib_window.enable_disable_gui_elements(False)
-        self.thread_calibration.start()
+        # self.plot1.hide()
+        # self.tmcs.emergency_stop = False
+        # self.calib_window.enable_disable_gui_elements(False)
+        # self.thread_calibration.start()
+        self.tmcs.disable_usb_check = True if not self.tmcs.disable_usb_check else False
+        self.calib_window.ui.progressBar.setValue(0)
+        self.test()
+
+    def test(self):
+        value = self.calib_window.ui.progressBar.value() + 1
+        self.calib_window.ui.progressBar.setValue(value)
+        if self.calib_window.ui.progressBar.value() < 100:
+            QTimer.singleShot(100, lambda: self.test())
 
     def calibration_finished(self):
         self.start()
+        self.calibration_result = self.thread_calibration.calibration_results
+
+    def check_if_calib_is_valid(self, strain_calib):
+        if strain_calib <= 1:
+            self.calib_window.ui.pass_status_label.setStyleSheet("color: green;")
+            if self.my_settings.auto_export:
+                self.calib_window.ui.fail_status_label.setText("NOTE")
+            else:
+                self.calib_window.ui.fail_status_label.setText("EXPORT")
+            self.calib_window.ui.fail_status_label.setStyleSheet("color: grey;")
+            self.calib_window.ui.export_pass_btn.setEnabled(True)
+            self.calib_window.ui.export_fail_btn.setEnabled(False)
+            self.export_status = False
+            self.calib_result = True
+        else:
+            self.calib_window.ui.fail_status_label.setStyleSheet("color: red;")
+            self.calib_window.ui.pass_status_label.setText("EXPORT")
+            self.calib_window.ui.pass_status_label.setStyleSheet("color: grey;")
+            self.calib_window.ui.export_fail_btn.setEnabled(True)
+            self.calib_window.ui.export_pass_btn.setEnabled(False)
+            self.export_status = False
+            self.calib_result = False
+
+    def export_to_database(self, notes="", btn=False):
+        if self.calib_result or btn:
+            params, params2 = get_params(self.last_s_n, self.my_settings.starting_folder)
+            if not self.export_status:
+                self.calib_window.ui.output_browser_3.clear()
+                if self.my_settings.export_local_server:
+                    export_folder = self.export_to_local_db(str(params[0]))
+                else:
+                    self.calib_window.ui.output_browser_3.setText(f"{self.start_window.translations[self.start_window.lang]['export_to_local_server']}")
+                    export_folder = "EXPORT VYPNUTÝ/OFF"
+                add = [self.last_s_n_export, None, None, True, self.calibration_result[0], self.calibration_result[1],
+                       self.calibration_result[2], self.calibration_result[3], self.calibration_result[4],
+                       export_folder,
+                       self.calibration_profile, self.calibration_result[5], self.calibration_result[6],
+                       self.calibration_result[7], notes, self.time_stamp, self.start_window.operator]
+                params.extend(add)
+                params.extend(params2)
+                params.append("PASS" if self.calib_result else "FAIL")
+                res, e = self.database.export_to_database_acc_strain(params=params, sensor="STRAIN")
+            else:
+                res, e = self.database.update_export_note(self.last_s_n_export, notes, sensor="STRAIN")
+            if res == 0:
+                self.calib_window.ui.output_browser_3.append(f"{self.start_window.translations[self.start_window.lang]['out_export']}\n")
+                self.export_status = True
+            elif res == 1:
+                self.calib_window.ui.output_browser_3.setText(f"{self.start_window.translations[self.start_window.lang]['out_note_succ']}\n")
+            elif res == -1:
+                save_error(self.my_settings.starting_folder, e)
+                self.calib_window.ui.output_browser_3.setText(self.start_window.translations[self.start_window.lang]['load_wl_error_2'])
+            else:
+                save_error(self.my_settings.starting_folder, e)
+                self.calib_window.ui.output_browser_3.setText("Unexpected error!")
+
+    def export_to_local_db(self, idcko):
+        source_folders = {'calibration': self.my_settings.folder_calibration_export}
+        if os_path.exists(self.my_settings.folder_db_export_folder):
+            res, text, export_folder = copy_files(self.last_s_n, idcko, source_folders, self.my_settings.folder_db_export_folder)
+            if res == 0:
+                self.calib_window.ui.output_browser_3.setText(self.start_window.translations[self.start_window.lang]["export_to_local_server_success"])
+            elif res == -1:
+                export_folder = "Súbor so zakázkou nenájdený/Folder with order not found"
+                save_error(self.my_settings.starting_folder, text)
+                self.calib_window.ui.output_browser_3.setText(text)
+                self.calib_window.ui.output_browser.clear()
+                self.calib_window.ui.output_browser_2.clear()
+        else:
+            self.calib_window.ui.output_browser_3.setText(self.start_window.translations[self.start_window.lang]["db_file_path_not_found"])
+            export_folder = "Cielova cesta nenájdena/Path not found"
+        if os_path.exists(self.my_settings.folder_statistics):
+            file_name_with_extension = os_path.basename(self.start_window.config_file_path)
+            file_name = os_path.splitext(file_name_with_extension)[0]
+            # if self.my_settings.opt_channels >= 2:
+            res = save_statistics_to_csv(self.my_settings.folder_statistics, file_name, self.time_stamp,
+                                         self.last_s_n_export, self.calibration_result[2], self.calibration_result[0],
+                                         self.calibration_result[1])
+            # else:
+            #     res = save_statistics_to_csv(self.my_settings.folder_statistics, file_name, self.time_stamp,
+            #                                  self.last_s_n_export, self.acc_calib[1], self.acc_calib[0])
+            if res != 0:
+                save_error(self.my_settings.starting_folder, res)
+                self.calib_window.ui.output_browser_3.setText(res)
+                self.calib_window.ui.output_browser.clear()
+                self.calib_window.ui.output_browser_2.clear()
+        else:
+            self.calib_window.ui.output_browser_3.append(self.start_window.translations[self.start_window.lang]["statistics_file_path_not_found"])
+        return export_folder
+

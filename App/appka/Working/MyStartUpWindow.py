@@ -3,12 +3,12 @@ from PyQt5.QtGui import QPixmap
 from codecs import open as codecs_open
 from configparser import ConfigParser
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QMainWindow, QMessageBox, QSplashScreen
+from PyQt5.QtWidgets import QMainWindow, QMessageBox, QSplashScreen, QLabel, QStatusBar, QMenu
 from yaml import safe_load as yaml_safe_load, safe_dump as yaml_safe_dump
 from os import path as os_path, getcwd as os_getcwd
 from gui.start_up import Ui_Setup
 from definitions import scale_app, center_on_screen, load_all_config_files, kill_sentinel
-from SensAcc.SettingsParams import MySettings
+from SensAcc.SettingsParams import MySettings as MySettings_acc
 from SensStrain.SettingsParams import MySettings as MySettings_strain
 from json import load as json_load
 from definitions import start_sentinel_d
@@ -20,6 +20,7 @@ class MyStartUpWindow(QMainWindow):
     EN: A class that creates the initial window, checks the status of connected settings,
     selects the type of sensor and the configuration file for the sensor, offers the option to open settings,
     and the selection/editing of operators"""
+
     def __init__(self, splash: QSplashScreen):
         super().__init__()
 
@@ -28,6 +29,8 @@ class MyStartUpWindow(QMainWindow):
             self.ui.open_settings_btn.clicked.connect(self.open_settings_window)
             self.ui.start_app.clicked.connect(self.start_calib_app)
             self.ui.btn_add_operator.clicked.connect(self.add_remove_operator)
+            self.ui.actionStrain_ON.triggered.connect(self.enable_strain_triggered)
+            self.ui.actionAccelerometer_ON.triggered.connect(self.enable_accelerometer_triggered)
 
         def connect_combo_boxes():
             self.ui.sens_type_comboBox.currentTextChanged.connect(self.sens_type_combobox_changed)
@@ -39,7 +42,14 @@ class MyStartUpWindow(QMainWindow):
             icon = QIcon(QPixmap("images/setting_btn.png"))
             self.ui.open_settings_btn.setIcon(icon)
             self.ui.open_settings_btn.setIconSize(self.ui.open_settings_btn.sizeHint())
-            self.ui.open_settings_btn.setStyleSheet("text-align: center;")
+            self.ui.open_settings_btn.setStyleSheet("QPushButton {border: 1px solid gray;"
+                                                    "text-align: center;"
+                                                    "border-color:rgb(208,208,208);"
+                                                    "border-radius: 3px;"
+                                                    "background-color: rgb(245, 245, 245);"
+                                                    "color: rgb(0, 0, 0);}"
+                                                    "QPushButton:hover {"
+                                                    "background-color: rgba(150, 190, 13, 100);}")
             self.setWindowIcon(QIcon('images/logo_icon.png'))
 
         def setup_window():
@@ -56,7 +66,17 @@ class MyStartUpWindow(QMainWindow):
             self.ui.status_opt_label.setStyleSheet("color: black;")
             self.ui.status_ref_label.setStyleSheet("color: black;")
             self.ui.status_gen_label.setStyleSheet("color: black;")
-            self.ui.open_settings_btn.setStyleSheet("color: black;")
+            self.ui.open_settings_btn.setStyleSheet("QPushButton {border: 1px solid gray;"
+                                                    "text-align: center;"
+                                                    "border-color:rgb(208,208,208);"
+                                                    "border-radius: 3px;"
+                                                    "background-color: rgb(245, 245, 245);"
+                                                    "color: rgb(0, 0, 0);}"
+                                                    "QPushButton:hover {"
+                                                    "background-color: rgba(150, 190, 13, 100);}")
+
+        self.is_accelerometer_enabled = True
+        self.is_strain_enabled = True
 
         self.block_status_update = False
         self.my_main_window_strain = None
@@ -86,22 +106,26 @@ class MyStartUpWindow(QMainWindow):
         self.opt_first_start = True
         self.check_usbs_first_start = True
         self.calib_window = None
-        self.settings_window = None
+        self.settings_window_acc = None
+        self.settings_window_strain = None
         self.S_N = None
         self.operator = None
         self.current_conf = None
         self.ref_connected = False
         self.sens_type = None
         self.starting_folder = os_getcwd()
-        self.my_settings = MySettings(self.starting_folder)
-
         self.load_global_settings()
-
-        self.config = None
-        self.config_contains_none = True
-
         self.ui = Ui_Setup()
         self.ui.setupUi(self)
+        self.load_sens_types()
+        if self.sens_type == "Accelerometer":
+            self.my_settings = MySettings_acc(self.starting_folder)
+        elif self.sens_type == "Strain":
+            self.my_settings = MySettings_strain(self.starting_folder)
+        else:
+            self.my_settings = None
+        self.config = None
+        self.config_contains_none = True
 
         self.set_language()
         connect_set_buttons()
@@ -109,19 +133,60 @@ class MyStartUpWindow(QMainWindow):
         self.load_operators()
         set_labels()
         load_images_icons()
-
-        self.config_file_path = self.check_config_if_selected()
-        self.check_devices_load_comboboxes_load_config_file()
-        self.load_usb_dev_vendors()
+        if self.my_settings:
+            self.config_file_path = self.check_config_if_selected()
+            self.check_devices_load_comboboxes_load_config_file()
+            self.load_usb_dev_vendors()
         setup_window()
         kill_sentinel(True, True)
+        version_label = QLabel(f"ver. {self.version}")
+        # self.statusBar = QStatusBar()
+        # self.setStatusBar(self.statusBar)
+        self.statusBar().addWidget(version_label)
         self.show_back()
+
+    def enable_strain_triggered(self):
+        """SK: Povolenie/zakazanie funkcionality accelerometer kalibracie.
+        EN: Enabling/disabling the functionality of the accelerometer calibration."""
+        self.is_strain_enabled = False if self.is_strain_enabled else True
+        with open("global_settings.yaml", 'r') as file:
+            config = yaml_safe_load(file)
+        config['enabled_functionalities']['strain'] = self.is_strain_enabled
+        with open("global_settings.yaml", 'w') as file:
+            yaml_safe_dump(config, file)
+
+    def enable_accelerometer_triggered(self):
+        """SK: Povolenie/zakazanie funkcionality strain kalibracie.
+        EN: Enabling/disabling the functionality of the strain calibration."""
+        self.is_accelerometer_enabled = False if self.is_accelerometer_enabled else True
+        with open("global_settings.yaml", 'r') as file:
+            config = yaml_safe_load(file)
+        config['enabled_functionalities']['accelerometer'] = self.is_accelerometer_enabled
+        with open("global_settings.yaml", 'w') as file:
+            yaml_safe_dump(config, file)
+
+    def contextMenuEvent(self, event):
+        """SK: Override pre contex menu, ktore sa otvori pravym klikom mysi,
+        v tomto menu vieme zapnut vypnut funkcionality aplikacie.
+        EN: Override the context menu that opens with a right-click of the mouse,
+        in this menu, we can turn on or off the functionalities of the application."""
+        cmenu = QMenu(self)
+
+        acc = cmenu.addAction("Accelerometer - ON" if self.is_accelerometer_enabled else "Accelerometer - OFF")
+        strain = cmenu.addAction("Strain - ON" if self.is_strain_enabled else "Strain - OFF")
+        action = cmenu.exec_(self.mapToGlobal(event.pos()))
+
+        if action == acc:
+            self.enable_accelerometer_triggered()
+        elif action == strain:
+            self.enable_strain_triggered()
 
     def add_remove_operator(self):
         """SK: Funkcia na prídavanie/vymazanie operátora do/z listu operátorov, vytvorenie pop-up okna na
         interakciu s uživateľom.
         EN:Function for adding/deleting an operator to/from the list of operators, creating a pop-up window for
         interaction with the user"""
+
         def show_remove_dialog():
             def load_and_delete_operator(operator_to_delete, yaml_file_path="operators.yaml"):
                 try:
@@ -143,6 +208,7 @@ class MyStartUpWindow(QMainWindow):
                     from definitions import save_error
                     save_error(self.my_settings.starting_folder, e)
                     return f"An error occurred: {e}"
+
             op_to_remv = self.ui.combobox_sel_operator.currentText()
             box = QMessageBox(self)
             box.setWindowTitle("Operator")
@@ -196,8 +262,8 @@ class MyStartUpWindow(QMainWindow):
         else:
             self.ui.btn_add_operator.setText("+")
         if (self.ref_connected and self.opt_connected and self.gen_connected and self.ui.start_app.text() ==
-            self.translations[self.lang]["start_app_a"] and not self.gen_error and
-            self.ui.combobox_sel_operator.currentIndex() != 0 and self.my_settings.opt_channels != 0 and not self.config_contains_none and not self.bad_ref):
+                self.translations[self.lang]["start_app_a"] and not self.gen_error and
+                self.ui.combobox_sel_operator.currentIndex() != 0 and self.my_settings.opt_channels != 0 and not self.config_contains_none and not self.bad_ref):
             self.ui.start_app.setEnabled(True)
         else:
             self.ui.start_app.setEnabled(False)
@@ -230,9 +296,9 @@ class MyStartUpWindow(QMainWindow):
         config_file_path = os_path.join(self.starting_folder, self.yaml_devices_vendor)
         with open(config_file_path, 'r') as file:
             data = yaml_safe_load(file)
-
-        self.opt_dev_vendor = data[self.ui.sens_type_comboBox.currentText()]['optical']
-        self.ref_dev_vendor = data[self.ui.sens_type_comboBox.currentText()]['reference']
+        if self.ui.sens_type_comboBox.currentText() != "":
+            self.opt_dev_vendor = data[self.ui.sens_type_comboBox.currentText()]['optical']
+            self.ref_dev_vendor = data[self.ui.sens_type_comboBox.currentText()]['reference']
 
     def all_dev_connected_signal_strain(self, opt_connected=False, ref_connected=False, check_status=False):
         """SK: Funkcia kontroluje pripojené zariadenia pre strain kalibráciu a upravuje status pre dané zariadenie pre
@@ -245,8 +311,9 @@ class MyStartUpWindow(QMainWindow):
 
         if not self.block_status_update:
             ow = True
-            if (ref_connected and opt_connected and self.ui.start_app.text() == self.translations[self.lang]["start_app_a"] and
-                    self.ui.combobox_sel_operator.currentIndex() != 0 and self.my_settings.opt_channels != 0 and not self.config_contains_none) or ow:
+            if (ref_connected and opt_connected and self.ui.start_app.text() == self.translations[self.lang][
+                "start_app_a"] and
+                self.ui.combobox_sel_operator.currentIndex() != 0 and self.my_settings.opt_channels != 0 and not self.config_contains_none) or ow:
                 self.ui.start_app.setEnabled(True)
             else:
                 self.ui.start_app.setEnabled(False)
@@ -256,34 +323,57 @@ class MyStartUpWindow(QMainWindow):
                 # print(self.config_contains_none)
                 if not self.config_contains_none:
                     self.ui.open_settings_btn.setText(self.translations[self.lang]["open_settings_btn"])
-                    self.ui.open_settings_btn.setStyleSheet("color: black;")
+                    self.ui.open_settings_btn.setStyleSheet("QPushButton {border: 1px solid gray;"
+                                                            "text-align: center;"
+                                                            "border-color:rgb(208,208,208);"
+                                                            "border-radius: 3px;"
+                                                            "background-color: rgb(245, 245, 245);"
+                                                            "color: rgb(0, 0, 0);}"
+                                                            "QPushButton:hover {"
+                                                            "background-color: rgba(150, 190, 13, 100);}")
                 if self.config_contains_none:
                     if self.ui.null_detect_label.isEnabled():
 
                         self.ui.null_detect_label.setEnabled(False)
 
                         self.ui.open_settings_btn.setText(self.translations[self.lang]["open_settings_btn"])
-                        self.ui.open_settings_btn.setStyleSheet("color: red;")
+                        self.ui.open_settings_btn.setStyleSheet("QPushButton {border: 1px solid gray;"
+                                                                "text-align: center;"
+                                                                "border-color:rgb(208,208,208);"
+                                                                "border-radius: 3px;"
+                                                                "background-color: rgb(245, 245, 245);"
+                                                                "color: #EE1918;}"
+                                                                "QPushButton:hover {"
+                                                                "background-color: rgba(150, 190, 13, 100);}")
                     else:
 
                         self.ui.null_detect_label.setEnabled(True)
 
                         self.ui.open_settings_btn.setText(self.translations[self.lang]["open_settings_btn"])
-                        self.ui.open_settings_btn.setStyleSheet("color: black;")
+                        self.ui.open_settings_btn.setStyleSheet("QPushButton {border: 1px solid gray;"
+                                                                "text-align: center;"
+                                                                "border-color:rgb(208,208,208);"
+                                                                "border-radius: 3px;"
+                                                                "background-color: rgb(245, 245, 245);"
+                                                                "color: rgb(0, 0, 0);}"
+                                                                "QPushButton:hover {"
+                                                                "background-color: rgba(150, 190, 13, 100);}")
                 if not ref_connected:
-                    self.ui.status_gen_label.setText(self.translations[self.lang]["status_ref_label_benchtop"]["disconnect"])
+                    self.ui.status_gen_label.setText(
+                        self.translations[self.lang]["status_ref_label_benchtop"]["disconnect"])
                     if self.ui.status_gen_label.isEnabled():
                         self.ui.status_gen_label.setEnabled(False)
                         self.ui.status_gen_label.setStyleSheet("color: black;")
                     else:
                         self.ui.status_gen_label.setEnabled(True)
-                        self.ui.status_gen_label.setStyleSheet("color: red;")
+                        self.ui.status_gen_label.setStyleSheet("color: #EE1918;")
                     if self.ref_connected:
                         self.check_devices_load_comboboxes_load_config_file()
                         self.ref_connected = False
                 else:
-                    self.ui.status_gen_label.setText(self.translations[self.lang]["status_ref_label_benchtop"]["connected"])
-                    self.ui.status_gen_label.setStyleSheet("color: green;")
+                    self.ui.status_gen_label.setText(
+                        self.translations[self.lang]["status_ref_label_benchtop"]["connected"])
+                    self.ui.status_gen_label.setStyleSheet("color: #96be0d;")
                     if not self.ref_connected:
                         self.ref_connected = True
                         self.check_devices_load_comboboxes_load_config_file()
@@ -295,10 +385,10 @@ class MyStartUpWindow(QMainWindow):
                         self.ui.status_opt_label.setStyleSheet("color: black;")
                     else:
                         self.ui.status_opt_label.setEnabled(True)
-                        self.ui.status_opt_label.setStyleSheet("color: red;")
+                        self.ui.status_opt_label.setStyleSheet("color: #EE1918;")
                 else:
                     self.ui.status_opt_label.setText(self.translations[self.lang]["status_opt_label"]["connected"])
-                    self.ui.status_opt_label.setStyleSheet("color: green;")
+                    self.ui.status_opt_label.setStyleSheet("color: #96be0d;")
 
     # def all_dev_connected_signal(self, opt_connected=False, ref_connected=False, gen_connected=False, gen_error=False,
     #                              check_status=False, bad_ref=False):
@@ -327,7 +417,7 @@ class MyStartUpWindow(QMainWindow):
     #                     self.ui.null_detect_label.setEnabled(False)
     #
     #                     self.ui.open_settings_btn.setText(self.translations[self.lang]["open_settings_btn"])
-    #                     self.ui.open_settings_btn.setStyleSheet("color: red;")
+    #                     self.ui.open_settings_btn.setStyleSheet("color: #EE1918;")
     #                 else:
     #
     #                     self.ui.null_detect_label.setEnabled(True)
@@ -345,12 +435,12 @@ class MyStartUpWindow(QMainWindow):
     #                 translations = self.translations[self.lang][label]
     #                 if connected:
     #                     label_widget.setText(translations["connected"])
-    #                     label_widget.setStyleSheet("color: green;")
+    #                     label_widget.setStyleSheet("color: #96be0d;")
     #                 else:
     #                     label_widget.setText(translations["disconnect"])
     #                     enabled = label_widget.isEnabled()
     #                     label_widget.setEnabled(not enabled)
-    #                     label_widget.setStyleSheet("color: black;" if enabled else "color: red;")
+    #                     label_widget.setStyleSheet("color: black;" if enabled else "color: #EE1918;")
     #
     #                 if label == "status_ref_label" and not connected:
     #                     # self.check_devices_load_comboboxes()
@@ -383,20 +473,41 @@ class MyStartUpWindow(QMainWindow):
         if check_status:
             if not self.config_contains_none:
                 self.ui.open_settings_btn.setText(self.translations[self.lang]["open_settings_btn"])
-                self.ui.open_settings_btn.setStyleSheet("color: black;")
+                self.ui.open_settings_btn.setStyleSheet("QPushButton {border: 1px solid gray;"
+                                                        "text-align: center;"
+                                                        "border-color:rgb(208,208,208);"
+                                                        "border-radius: 3px;"
+                                                        "background-color: rgb(245, 245, 245);"
+                                                        "color: rgb(0, 0, 0);}"
+                                                        "QPushButton:hover {"
+                                                        "background-color: rgba(150, 190, 13, 100);}")
             if self.config_contains_none and not ow:
                 if self.ui.null_detect_label.isEnabled():
 
                     self.ui.null_detect_label.setEnabled(False)
 
                     self.ui.open_settings_btn.setText(self.translations[self.lang]["open_settings_btn"])
-                    self.ui.open_settings_btn.setStyleSheet("color: red;")
+                    self.ui.open_settings_btn.setStyleSheet("QPushButton {border: 1px solid gray;"
+                                                            "text-align: center;"
+                                                            "border-color:rgb(208,208,208);"
+                                                            "border-radius: 3px;"
+                                                            "background-color: rgb(245, 245, 245);"
+                                                            "color: #EE1918;}"
+                                                            "QPushButton:hover {"
+                                                            "background-color: rgba(150, 190, 13, 100);}")
                 else:
 
                     self.ui.null_detect_label.setEnabled(True)
 
                     self.ui.open_settings_btn.setText(self.translations[self.lang]["open_settings_btn_err"])
-                    self.ui.open_settings_btn.setStyleSheet("color: red;")
+                    self.ui.open_settings_btn.setStyleSheet("QPushButton {border: 1px solid gray;"
+                                                            "text-align: center;"
+                                                            "border-color:rgb(208,208,208);"
+                                                            "border-radius: 3px;"
+                                                            "background-color: rgb(245, 245, 245);"
+                                                            "color: #EE1918;}"
+                                                            "QPushButton:hover {"
+                                                            "background-color: rgba(150, 190, 13, 100);}")
                 self.ui.start_app.setEnabled(False)
 
             if not ref_connected and not bad_ref:
@@ -406,7 +517,7 @@ class MyStartUpWindow(QMainWindow):
                     self.ui.status_ref_label.setStyleSheet("color: black;")
                 else:
                     self.ui.status_ref_label.setEnabled(True)
-                    self.ui.status_ref_label.setStyleSheet("color: red;")
+                    self.ui.status_ref_label.setStyleSheet("color: #EE1918;")
                 if self.ref_connected:
                     self.check_devices_load_comboboxes_load_config_file()
                     self.ref_connected = False
@@ -417,13 +528,13 @@ class MyStartUpWindow(QMainWindow):
                     self.ui.status_ref_label.setStyleSheet("color: black;")
                 else:
                     self.ui.status_ref_label.setEnabled(True)
-                    self.ui.status_ref_label.setStyleSheet("color: red;")
+                    self.ui.status_ref_label.setStyleSheet("color: #EE1918;")
                 if self.ref_connected:
                     self.check_devices_load_comboboxes_load_config_file()
                     self.ref_connected = False
             else:
                 self.ui.status_ref_label.setText(self.translations[self.lang]["status_ref_label"]["connected"])
-                self.ui.status_ref_label.setStyleSheet("color: green;")
+                self.ui.status_ref_label.setStyleSheet("color: #96be0d;")
                 if not self.ref_connected:
                     self.ref_connected = True
                     self.check_devices_load_comboboxes_load_config_file()
@@ -435,10 +546,10 @@ class MyStartUpWindow(QMainWindow):
                     self.ui.status_opt_label.setStyleSheet("color: black;")
                 else:
                     self.ui.status_opt_label.setEnabled(True)
-                    self.ui.status_opt_label.setStyleSheet("color: red;")
+                    self.ui.status_opt_label.setStyleSheet("color: #EE1918;")
             else:
                 self.ui.status_opt_label.setText(self.translations[self.lang]["status_opt_label"]["connected"])
-                self.ui.status_opt_label.setStyleSheet("color: green;")
+                self.ui.status_opt_label.setStyleSheet("color: #96be0d;")
 
             if not gen_connected:
                 self.ui.status_gen_label.setText(self.translations[self.lang]["status_gen_label"]["disconnect"])
@@ -447,20 +558,20 @@ class MyStartUpWindow(QMainWindow):
                     self.ui.status_gen_label.setStyleSheet("color: black;")
                 else:
                     self.ui.status_gen_label.setEnabled(True)
-                    self.ui.status_gen_label.setStyleSheet("color: red;")
+                    self.ui.status_gen_label.setStyleSheet("color: #EE1918;")
             else:
                 if gen_error:
                     if self.ui.status_gen_label.isEnabled():
                         self.ui.status_gen_label.setEnabled(False)
                         self.ui.status_gen_label.setText(self.translations[self.lang]["status_gen_label"]["error_a"])
-                        self.ui.status_gen_label.setStyleSheet("color: red;")
+                        self.ui.status_gen_label.setStyleSheet("color: #EE1918;")
                     else:
                         self.ui.status_gen_label.setEnabled(True)
                         self.ui.status_gen_label.setText(self.translations[self.lang]["status_gen_label"]["error_b"])
                         self.ui.status_gen_label.setStyleSheet("color: black;")
                 else:
                     self.ui.status_gen_label.setText(self.translations[self.lang]["status_gen_label"]["connected"])
-                    self.ui.status_gen_label.setStyleSheet("color: green;")
+                    self.ui.status_gen_label.setStyleSheet("color: #96be0d;")
 
     def sens_type_combobox_changed(self, text):
         """SK: Funkcia načíta všetky konfiguračné súbory, VID a PID pre daný/zvolený typ senzora a načíta posledne použitý
@@ -475,7 +586,6 @@ class MyStartUpWindow(QMainWindow):
         self.my_settings.opt_sensor_type = text
         self.sens_type = text
         self.config_file_path = self.check_config_if_selected()
-        print(self.config_file_path)
         load_all_config_files(self.ui.opt_config_combobox, self.config_file_path, self.sens_type,
                               self.my_settings.subfolderConfig_path)
 
@@ -510,52 +620,59 @@ class MyStartUpWindow(QMainWindow):
                     return config_file_path
         return None
 
+    def load_sens_types(self):
+        self.ui.sens_type_comboBox.blockSignals(True)
+        self.ui.sens_type_comboBox.clear()
+        if self.is_accelerometer_enabled:
+            self.ui.sens_type_comboBox.addItem('Accelerometer')
+        if self.is_strain_enabled:
+            self.ui.sens_type_comboBox.addItem('Strain')
+        self.ui.sens_type_comboBox.setCurrentText(self.sens_type if self.sens_type is not None else None)
+        self.sens_type = self.ui.sens_type_comboBox.currentText()
+        self.ui.sens_type_comboBox.blockSignals(False)
+
     def check_devices_load_comboboxes_load_config_file(self):
         """SK: Funkcia ktorá nám načíta comboboxi a class 'my_settings' pre daný typ senzora
         EN: A function that loads comboboxes and class 'my_settings' for a given type of sensor."""
-        self.ui.sens_type_comboBox.blockSignals(True)
+
         self.ui.opt_config_combobox.blockSignals(True)
-
-        self.ui.sens_type_comboBox.clear()
-
         # load optical sensor types
-        self.ui.sens_type_comboBox.addItem('Accelerometer')
-        self.ui.sens_type_comboBox.addItem('Strain')
-        self.ui.sens_type_comboBox.addItem('Test')
-        self.ui.sens_type_comboBox.setCurrentText(self.sens_type)
+        self.load_sens_types()
+        if self.ui.sens_type_comboBox.currentText() != "":
+            if self.sens_type == "Accelerometer":
+                self.my_settings = MySettings_acc(self.starting_folder)
+            elif self.sens_type == "Strain":
+                self.my_settings = MySettings_strain(self.starting_folder)
+            try:
+                if self.thread_check_usb_devices is not None:
+                    self.thread_check_usb_devices.my_settings = self.my_settings
+            except Exception:
+                pass
 
-        if self.sens_type == "Accelerometer":
-            self.my_settings = MySettings(self.starting_folder)
-        elif self.sens_type == "Strain":
-            self.my_settings = MySettings_strain(self.starting_folder)
-        try:
-            if self.thread_check_usb_devices is not None:
-                self.thread_check_usb_devices.my_settings = self.my_settings
-        except Exception:
-            pass
+            load_all_config_files(self.ui.opt_config_combobox, self.config_file_path, self.sens_type,
+                                  self.my_settings.subfolderConfig_path)
 
-        load_all_config_files(self.ui.opt_config_combobox, self.config_file_path, self.sens_type,
-                              self.my_settings.subfolderConfig_path)
+            if self.config_file_path is not None and os_path.exists(self.config_file_path):
+                self.config_contains_none = self.my_settings.load_config_file(self.config_file_path)
+            else:
+                self.config_contains_none, self.config_file_path = self.my_settings.create_config_file()
 
-        if self.config_file_path is not None and os_path.exists(self.config_file_path):
-            self.config_contains_none = self.my_settings.load_config_file(self.config_file_path)
-        else:
-            self.config_contains_none, self.config_file_path = self.my_settings.create_config_file()
-
-        self.ui.sens_type_comboBox.blockSignals(False)
         self.ui.opt_config_combobox.blockSignals(False)
 
     def open_settings_window(self):
         """SK: Funckia ktorá nám otvorí okno s nastaveniami.
         EN: A function that opens a window with settings."""
         text = self.ui.sens_type_comboBox.currentText()
-        self.thread_check_usb_devices.termination = True
+        if self.thread_check_usb_devices:
+            self.thread_check_usb_devices.termination = True
         if text == "Accelerometer":
-            self.settings_window = self.my_settings_window_acc(True, self, self.my_settings)
+            self.settings_window_acc.my_settings = self.my_settings
+            self.settings_window_acc.show_back()
+            self.hide()
         elif text == "Strain":
-            self.settings_window = self.my_settings_window_strain(True, self, self.my_settings)
-
-        self.hide()
+            self.settings_window_strain.my_settings = self.my_settings
+            self.settings_window_strain.show_back()
+            self.hide()
 
     def start_calib_app(self):
         """SK: Funckia ktorá na základne aký typ senzora zavolá funckiu na spustenie okna na
@@ -618,7 +735,8 @@ class MyStartUpWindow(QMainWindow):
         config.set('general', 'export_folder_path', self.my_settings.folder_opt_export)
         with open(path_config, 'w') as configfile:
             config.write(configfile)
-        start_sentinel_d(self.my_settings.opt_project, self.my_settings.folder_sentinel_D_folder, self.my_settings.subfolder_sentinel_project)
+        start_sentinel_d(self.my_settings.opt_project, self.my_settings.folder_sentinel_D_folder,
+                         self.my_settings.subfolder_sentinel_project)
         self.operator = self.ui.combobox_sel_operator.currentText()
 
         self.calib_window = MyMainWindow(self, self.my_settings)
@@ -633,14 +751,15 @@ class MyStartUpWindow(QMainWindow):
         and executes the first run of the thread for checking device connections."""
         from ThreadCheckDevicesConnected import ThreadCheckDevicesConnected
         self.set_language()
-        if self.thread_check_usb_devices is None or not self.thread_check_usb_devices.isRunning():
+        if ((self.thread_check_usb_devices is None or not self.thread_check_usb_devices.isRunning()) and
+                self.ui.sens_type_comboBox.currentText() != ""):
             self.thread_check_usb_devices = ThreadCheckDevicesConnected(self.my_settings, self)
             self.thread_check_usb_devices.all_connected.connect(self.all_dev_connected_signal)
             self.thread_check_usb_devices.all_connected_strain.connect(self.all_dev_connected_signal_strain)
             self.thread_check_usb_devices.start()
 
-        self.setFixedSize(int(self.width()*self.window_scale_delta),
-                          int(self.height()*self.window_scale_delta))
+        self.setFixedSize(int(self.width() * self.window_scale_delta),
+                          int(self.height() * self.window_scale_delta))
         scale_app(self, self.window_scale_delta)
         self.window_scale_delta = 1
         self.check_devices_load_comboboxes_load_config_file()
@@ -654,12 +773,18 @@ class MyStartUpWindow(QMainWindow):
     def showEvent(self, a0):
         """SK: Override pre funkciu showEvent, načíta nám class ktorá nám drží nastavenia pre daný typ senzora.
         EN: Override for the showEvent function, loads a class that holds settings for a specific type of sensor."""
-        from SensAcc.MySettingsWindow import MySettingsWindow as MySettingsWindowStrain
-        from SensStrain.MySettingsWindow import MySettingsWindow as MySettingsWindowAcc
-        if self.my_settings_window_acc is None:
-            self.my_settings_window_acc = MySettingsWindowAcc
-            self.my_settings_window_strain = MySettingsWindowStrain
-            self.splash.hide()
+        if self.is_strain_enabled:
+            from SensStrain.MySettingsWindow import MySettingsWindow as MySettingsWindowStrain
+            if self.my_settings_window_strain is None:
+                self.my_settings_window_strain = MySettingsWindowStrain
+                self.settings_window_strain = self.my_settings_window_strain(True, self, self.my_settings)
+
+        if self.is_accelerometer_enabled:
+            from SensAcc.MySettingsWindow import MySettingsWindow as MySettingsWindowAcc
+            if self.my_settings_window_acc is None:
+                self.my_settings_window_acc = MySettingsWindowAcc
+                self.settings_window_acc = self.my_settings_window_acc(True, self, self.my_settings)
+        self.splash.hide()
 
     def closeEvent(self, event):
         """SK. Override pre funkciu closeEvent, vytvorí pop-up window ktorý sa spýta či naozaj chceme ukončiť aplikáciu,
@@ -683,8 +808,9 @@ class MyStartUpWindow(QMainWindow):
 
         if box.clickedButton() == yes_button:
             self.hide()
-            self.thread_check_usb_devices.termination = True
-            self.thread_check_usb_devices.wait()
+            if self.thread_check_usb_devices:
+                self.thread_check_usb_devices.termination = True
+                self.thread_check_usb_devices.wait()
             event.accept()
         else:
             event.ignore()
@@ -716,6 +842,8 @@ class MyStartUpWindow(QMainWindow):
         self.last_ref_calib = config["last_ref_calib_acc"]
         self.calib_treshold = int(config["treshold"])
         self.sens_type = config['last_sens_type']
+        self.is_accelerometer_enabled = config['enabled_functionalities']['accelerometer']
+        self.is_strain_enabled = config['enabled_functionalities']['strain']
 
     def save_sens_type(self):
         """SK: Funkcia na uloženie posledne použitého typu senzora pri spustení konfiguračného súboru.
@@ -732,6 +860,7 @@ class MyStartUpWindow(QMainWindow):
     def check_last_calib(self, get_bool=False):
         """SK: Funkcia ktorá nám skontroluje poslednú kalibráciu referenčného senzora, otvorí pop-up.
         EN: A function that checks the last calibration of the reference sensor and opens a pop-up."""
+
         def show_warning(last_date):
             msg = QMessageBox(self)
             msg.setIcon(QMessageBox.Warning)
@@ -739,6 +868,7 @@ class MyStartUpWindow(QMainWindow):
             msg.setText(f"{self.translations[self.lang]['last_calib_warn_text']}{last_date}.")
             msg.addButton('OK', QMessageBox.AcceptRole)
             msg.exec_()
+
         if self.last_ref_calib:
             import datetime
             last_calib = None

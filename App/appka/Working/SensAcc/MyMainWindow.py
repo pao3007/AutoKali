@@ -15,7 +15,7 @@ from ThreadCheckDevicesConnected import ThreadCheckDevicesConnected
 from definitions import (kill_sentinel, start_sentinel_modbus, start_sentinel_d, scale_app, center_on_screen,
                          load_all_config_files, set_wavelengths, get_params, copy_files, save_statistics_to_csv,
                          show_add_dialog, open_folder_in_explorer, save_error)
-from SensAcc.MySettingsWindow import MySettingsWindow
+from SensAcc.MySettingsWindow import MySettingsWindow as MySettingsWindowAcc
 from matplotlib.pyplot import close as pyplot_close
 import ctypes
 from ctypes import wintypes, byref as ctypes_byref
@@ -641,7 +641,7 @@ class MyMainWindow(QMainWindow):
                     break
 
     def open_settings_window(self):
-        self.settings_window = MySettingsWindow(False, self.window, self.my_settings)
+        self.settings_window = MySettingsWindowAcc(False, self.window, self.my_settings)
         self.hide()
         self.settings_window.show_back()
 
@@ -1260,26 +1260,25 @@ class AutoCalibMain:
 
     def export_to_database(self, notes="", btn=False):
         if self.calib_result or btn:
-            # try:
-            print(f"time stamp: {self.time_stamp}")
-            params, params2 = get_params(self.last_s_n, self.my_settings.starting_folder)
-            add = [self.last_s_n_export, None, None, True, self.acc_calib[1],   self.acc_calib[0],
-                   self.acc_calib[9] if (len(self.acc_calib) >= 10) else None, self.acc_calib[4],
-                   self.acc_calib[10] if (len(self.acc_calib) >= 10) else None,
-                   self.acc_calib[7], self.export_folder,
-                   self.calibration_profile, None, None, notes, self.time_stamp, self.start_window.operator, ]
-            params.extend(add)
-            params.extend(params2)
-            params.append("PASS" if self.calib_result else "FAIL")
             if not self.export_status:
+                params, params2 = get_params(self.last_s_n, self.my_settings.starting_folder)
                 self.calib_window.ui.output_browser_3.clear()
-                res, e = self.database.export_to_database(params=params)
                 if self.my_settings.export_local_server:
-                    self.export_to_local_db(str(params[0]))
+                    export_folder = self.export_to_local_db(str(params[0]))
                 else:
                     self.calib_window.ui.output_browser_3.setText(f"{self.start_window.translations[self.start_window.lang]['export_to_local_server']}")
+                    export_folder = "VYPNUTE/OFF"
+                add = [self.last_s_n_export, None, None, True, self.acc_calib[1], self.acc_calib[0],
+                       self.acc_calib[9] if (len(self.acc_calib) >= 10) else None, self.acc_calib[4],
+                       self.acc_calib[10] if (len(self.acc_calib) >= 10) else None,
+                       self.acc_calib[7], export_folder,
+                       self.calibration_profile, None, None, notes, self.time_stamp, self.start_window.operator, ]
+                params.extend(add)
+                params.extend(params2)
+                params.append("PASS" if self.calib_result else "FAIL")
+                res, e = self.database.export_to_database_acc_strain(params=params, sensor="ACC")
             else:
-                res, e = self.database.update_export_note(self.last_s_n_export, notes)
+                res, e = self.database.update_export_note(self.last_s_n_export, notes, sensor="ACC")
             if res == 0:
                 self.calib_window.ui.output_browser_3.append(f"{self.start_window.translations[self.start_window.lang]['out_export']}\n")
                 self.export_status = True
@@ -1297,15 +1296,17 @@ class AutoCalibMain:
                           'reference': self.my_settings.folder_ref_export,
                           'calibration': self.my_settings.folder_calibration_export}
         if os_path.exists(self.my_settings.folder_db_export_folder):
-            res, text = copy_files(self.last_s_n, idcko, source_folders, self.my_settings.folder_db_export_folder)
+            res, text, export_folder = copy_files(self.last_s_n, idcko, source_folders, self.my_settings.folder_db_export_folder)
             if res == 0:
                 self.calib_window.ui.output_browser_3.setText(self.start_window.translations[self.start_window.lang]["export_to_local_server_success"])
             elif res == -1:
+                export_folder = "Súbor so zakázkou nenájdený/Folder with order not found"
                 save_error(self.my_settings.starting_folder, text)
                 self.calib_window.ui.output_browser_3.setText(text)
                 self.calib_window.ui.output_browser.clear()
                 self.calib_window.ui.output_browser_2.clear()
         else:
+            export_folder = "Cielova cesta nenájdena/Path not found"
             self.calib_window.ui.output_browser_3.setText(self.start_window.translations[self.start_window.lang]["db_file_path_not_found"])
         if os_path.exists(self.my_settings.folder_statistics):
             file_name_with_extension = os_path.basename(self.start_window.config_file_path)
@@ -1323,4 +1324,5 @@ class AutoCalibMain:
                 self.calib_window.ui.output_browser_2.clear()
         else:
             self.calib_window.ui.output_browser_3.append(self.start_window.translations[self.start_window.lang]["statistics_file_path_not_found"])
+        return export_folder
 

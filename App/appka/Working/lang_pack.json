@@ -7,14 +7,14 @@
     "sens_type_label": "Type of optical sensor",
     "status_opt_label": {
       "init": "initialization",
-      "disconnect": "Optical USB device DISCONNECTED",
-      "connected": "Optical USB device CONNECTED"
+      "disconnect": "Opt. USB device DISCONNECTED",
+      "connected": "Opt. USB device CONNECTED"
     },
     "status_ref_label": {
       "init": "initialization",
-      "disconnect": "Reference USB device DISCONNECTED",
-      "connected": "Reference USB device CONNECTED",
-      "wrong_name": "Reference device WRONG name"
+      "disconnect": "Ref. USB device DISCONNECTED",
+      "connected": "Ref. USB device CONNECTED",
+      "wrong_name": "Ref. device WRONG name"
     },
     "status_ref_label_benchtop": {
       "init": "initialization",
@@ -26,9 +26,9 @@
     },
     "status_gen_label": {
       "init": "initialization",
-      "disconnect": "Function generator DISCONNECTED",
-      "connected": "Function generator CONNECTED",
-      "error_a": "Function generator ERROR",
+      "disconnect": "Function gen. DISCONNECTED",
+      "connected": "Function gen. CONNECTED",
+      "error_a": "Function gen. ERROR",
       "error_b": "RESTART generator"
     },
     "opt_channel_label": "Select config",
@@ -49,8 +49,8 @@
     "save_as_btn": "SAVE AS",
     "close_btn": "CLOSE",
     "cancel_btn": "UNDO",
-    "login_btn": "LOGIN",
-    "change_login_btn": "CHANGE PASSWORD",
+    "login_btn": "LOG IN",
+    "change_login_btn": "LOG OUT",
 
     "S_N_label": "S/N",
     "ref_sens_status_label": {
@@ -185,6 +185,7 @@
     "range_locked": "Range",
     "range_locked_msg": "Range is locked",
     "range_unlocked_msg": "Range is unlocked",
+    "enable_disable_functions": "Enable / Disable functions of application",
 
 
     "help_browser": {
@@ -211,14 +212,14 @@
     "sens_type_label": "Typ optického senzora",
     "status_opt_label": {
       "init": "inicializácia",
-      "disconnect": "Optické USB zariadenie ODPOJENÉ",
-      "connected": "Optické USB zariadenie PRIPOJENÉ"
+      "disconnect": "Opt. USB zariadenie ODPOJENÉ",
+      "connected": "Opt. USB zariadenie PRIPOJENÉ"
     },
     "status_ref_label": {
       "init": "inicializácia",
-      "disconnect": "Referenčné USB zariadenie ODPOJENÉ",
-      "connected": "Referenčné USB zariadenie PRIPOJENÉ",
-      "wrong_name": "Referenčné zariadenie, zlý názov"
+      "disconnect": "Ref. USB zariadenie ODPOJENÉ",
+      "connected": "Ref. USB zariadenie PRIPOJENÉ",
+      "wrong_name": "Ref. zariadenie, zlý názov"
     },
     "status_ref_label_benchtop": {
       "init": "inicializácia",
@@ -230,9 +231,9 @@
     },
     "status_gen_label": {
       "init": "inicializácia",
-      "disconnect": "Generátor funkcií ODPOJENÝ",
-      "connected": "Generátor funkcií PRIPOJENÝ",
-      "error_a": "Funkčný generátor ERROR",
+      "disconnect": "Gen. funkcií ODPOJENÝ",
+      "connected": "Gen. funkcií PRIPOJENÝ",
+      "error_a": "Funkčný gen. ERROR",
       "error_b": "REŠTARTUJTE generátor"
     },
     "opt_channel_label": "Vyberte konfiguráciu",
@@ -254,7 +255,7 @@
     "close_btn": "ZATVOR",
     "cancel_btn": "VRÁTIŤ",
     "login_btn": "PRIHLÁSIŤ",
-    "change_login_btn": "ZMENIŤ HESLO",
+    "change_login_btn": "ODHLÁSIŤ",
 
     "S_N_label": "S/N",
     "ref_sens_status_label": {
@@ -388,7 +389,7 @@
     "range_locked": "Rozsah",
     "range_locked_msg": "Rozsah je zamknutý",
     "range_unlocked_msg": "Rozsah je odomkuntý",
-
+    "enable_disable_functions": "Zapnutie / Vypnutie funkcionality aplikácie",
 
     "help_browser": {
       "0": " AKO ZAČAŤ S KALIBRÁCIOU<br><br>",

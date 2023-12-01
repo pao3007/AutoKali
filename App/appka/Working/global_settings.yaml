@@ -1,3 +1,6 @@
+enabled_functionalities:
+  accelerometer: true
+  strain: true
 language: sk
 last_ref_calib_acc: 2023-09-25
 last_sens_type: Strain

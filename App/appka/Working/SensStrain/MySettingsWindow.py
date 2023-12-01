@@ -1,6 +1,7 @@
 from PyQt5.QtCore import QTimer, Qt
 from PyQt5.QtGui import QPixmap, QIcon
-from PyQt5.QtWidgets import QMainWindow, QFileDialog, QDialog, QVBoxLayout, QLabel, QLineEdit, QPushButton, QMessageBox
+from PyQt5.QtWidgets import QMainWindow, QFileDialog, QDialog, QVBoxLayout, QLabel, QLineEdit, QPushButton, QMessageBox, \
+    QScrollArea
 from yaml import safe_dump as yaml_dump, safe_load as yaml_safe_load
 from os import path as os_path, chdir as os_chdir
 from MyStartUpWindow import MyStartUpWindow
@@ -12,16 +13,16 @@ from json import load as json_load
 
 
 def set_style_sheet_btn_clicked(btn, font_size, right_border):
-    btn.setStyleSheet("border: 2px solid gray;border-color:rgb(208,208,208);border-bottom-color: rgb(60, 60, 60); "
+    btn.setStyleSheet("border: 2px solid gray;border-color:rgb(220,220,220);"
                       "border-radius: 8px;font: 700 " + font_size +
-                      " \"Segoe UI\";padding: 0 8px;background: rgb(60, 60, 60);"
-                      "color: rgb(208,208,208);" + right_border)
+                      " \"Segoe UI\";padding: 0 8px;background: #D7E6A1;"
+                      "color: rgb(60,60,60);" + right_border)
 
 
 def set_style_sheet_btn_unclicked(btn, font_size):
-    btn.setStyleSheet("border: 2px solid gray;border-color:rgb(208,208,208);border-radius: 8px;font: 600 " +
+    btn.setStyleSheet("border: 2px solid gray;border-color:rgb(220,220,220);border-radius: 8px;font: 600 " +
                       font_size + "\"Segoe UI\";padding: 0 8px;"
-                                  "background: rgb(60, 60, 60);color: rgb(208,208,208);")
+                                  "background: rgb(245, 245, 245);color: rgb(0,0,0);")
 
 
 def slider_scale_get_real_value(value):
@@ -56,15 +57,16 @@ class MySettingsWindow(QMainWindow):
         self.resources = None
         self.my_starting_window = window
         self.slider_value = self.my_starting_window.window_scale
-        from gui.settingsStrain import Ui_Settings
+        from gui.settingsStrain import Ui_Settings as strainSettingsGui
         self.config_file_path = None
         self.nidaq_devices = None
         self.start = start
-        self.ui = Ui_Settings()
+        self.ui = strainSettingsGui()
         self.ui.setupUi(self)
         self.load_settings()
         self.config_file = None
         self.local_lang = None
+        self.ui.scrollArea.setFrameStyle(QScrollArea.NoFrame)
 
         # btns
         self.ui.save_btn.clicked.connect(self.save_settings)
@@ -98,14 +100,13 @@ class MySettingsWindow(QMainWindow):
         self.ui.widget_benchtop.show()
 
         self.btn_translate_dy = 8
-        self.ui.btn_bench_tab.move(self.ui.btn_bench_tab.pos().x(), self.ui.btn_bench_tab.pos().y() + self.btn_translate_dy)
+        self.ui.btn_bench_tab.move(self.ui.btn_bench_tab.pos().x(),
+                                   self.ui.btn_bench_tab.pos().y() + self.btn_translate_dy)
         self.ui.btn_bench_tab.setEnabled(False)
 
         path = os_path.join(self.my_settings.starting_folder, "images/logo_icon.png")
         self.setWindowIcon(QIcon(path))
-        self.setFixedSize(self.width(), int(self.height()*0.96))
-
-        self.show_back()
+        self.setFixedSize(self.width(), int(self.height() * 0.96))
 
     def show_prestrain(self):
         if self.ui.pre_strain_check.isChecked():
@@ -164,7 +165,8 @@ class MySettingsWindow(QMainWindow):
     def start_add_vendor(self, device):
         print("BUILD THREAD ADD VENDOR")
         self.label_vendor_id.setText(f"Now plug in the \n{device} device")
-        self.thread_add_vendor = ThreadAddVendorIds(self.my_settings.starting_folder, self.my_starting_window.sens_type, device)
+        self.thread_add_vendor = ThreadAddVendorIds(self.my_settings.starting_folder, self.my_starting_window.sens_type,
+                                                    device)
         self.thread_add_vendor.update_label.connect(self.vendor_change_label)
         self.thread_add_vendor.start()
 
@@ -188,50 +190,59 @@ class MySettingsWindow(QMainWindow):
         self.open_file_using_notepad(yaml_file_path)
 
     def login_into_settings(self):
-        pswd_dialog = QDialog(self)
-        pswd_dialog.setWindowFlags(pswd_dialog.windowFlags() & ~Qt.WindowContextHelpButtonHint & ~Qt.WindowMinMaxButtonsHint)
-        layout = QVBoxLayout()
         lang = self.local_lang if self.local_lang is not None else self.my_starting_window.lang
+        if not self.logged_in:
+            pswd_dialog = QDialog(self)
+            pswd_dialog.setWindowFlags(
+                pswd_dialog.windowFlags() & ~Qt.WindowContextHelpButtonHint & ~Qt.WindowMinMaxButtonsHint)
+            layout = QVBoxLayout()
 
-        password_label = QLabel(self.my_starting_window.translations[lang]["password_label"])
-        password_label.setStyleSheet("color: rgb(208, 208, 208);")
-        layout.addWidget(password_label)
+            password_label = QLabel(self.my_starting_window.translations[lang]["password_label"])
+            password_label.setStyleSheet("color: rgb(208, 208, 208);")
+            layout.addWidget(password_label)
 
-        password_input = QLineEdit()
-        password_input.setEchoMode(QLineEdit.Password)
-        password_input.setStyleSheet("color: rgb(208, 208, 208);")
-        layout.addWidget(password_input)
+            password_input = QLineEdit()
+            password_input.setEchoMode(QLineEdit.Password)
+            password_input.setStyleSheet("color: rgb(208, 208, 208);")
+            layout.addWidget(password_input)
 
-        ok_button = QPushButton("OK")
-        ok_button.clicked.connect(pswd_dialog.accept)
-        ok_button.setStyleSheet("border: 1px solid gray; border-color:rgb(208,208,208); border-radius: 3px; color: "
-                                "rgb(208, 208, 208); background-color: rgb(44, 44, 44);")
-        layout.addWidget(ok_button)
+            ok_button = QPushButton("OK")
+            ok_button.clicked.connect(pswd_dialog.accept)
+            ok_button.setStyleSheet("border: 1px solid gray; border-color:rgb(208,208,208); border-radius: 3px; color: "
+                                    "rgb(208, 208, 208); background-color: rgb(44, 44, 44);")
+            layout.addWidget(ok_button)
 
-        pswd_dialog.setLayout(layout)
-        result = pswd_dialog.exec_()
+            pswd_dialog.setLayout(layout)
+            result = pswd_dialog.exec_()
 
-        if result == QDialog.Accepted:
-            password = password_input.text()
-            if password == "sealseal":
-                enable_ui_elements(self.make_list_of_elements_to_enable())
-                self.ui.label_login_warning.setText(self.my_starting_window.translations[lang]["label_login_warning_ok"])
-                self.ui.login_btn.setEnabled(False)
-                self.logged_in = True
-            elif password == "":
-                pass
-            else:
-                # msg = QMessageBox()
-                # msg.setIcon(QMessageBox.Warning)
-                # msg.setText(self.my_starting_window.translations[lang]["bad_psd"])
-                # msg.setWindowFlags(Qt.FramelessWindowHint)
-                # msg.exec_()
+            if result == QDialog.Accepted:
+                password = password_input.text()
+                if password == "sealseal":
+                    enable_ui_elements(self.make_list_of_elements_to_enable())
+                    self.ui.label_login_warning.setText(
+                        self.my_starting_window.translations[lang]["label_login_warning_ok"])
+                    self.logged_in = True
+                    self.ui.login_btn.setText(self.my_starting_window.translations[lang]["change_login_btn"])
+                elif password == "":
+                    pass
+                else:
+                    # msg = QMessageBox()
+                    # msg.setIcon(QMessageBox.Warning)
+                    # msg.setText(self.my_starting_window.translations[lang]["bad_psd"])
+                    # msg.setWindowFlags(Qt.FramelessWindowHint)
+                    # msg.exec_()
 
-                QTimer.singleShot(150, self.bad_login_pop)
-                self.login_into_settings()
+                    QTimer.singleShot(150, self.bad_login_pop)
+                    self.login_into_settings()
+        else:
+            self.ui.login_btn.setText(self.my_starting_window.translations[lang]["login_btn"])
+            self.ui.label_login_warning.setText(self.my_starting_window.translations[lang]["label_login_warning"])
+            enable_ui_elements(self.make_list_of_elements_to_enable(), False)
+            self.logged_in = False
 
     def bad_login_pop(self):
-        self.pop = PopupWindow(self.my_starting_window.translations[self.my_starting_window.lang]["bad_psd"], w=120, h=40, parent=self)
+        self.pop = PopupWindow(self.my_starting_window.translations[self.my_starting_window.lang]["bad_psd"], w=120,
+                               h=40, parent=self)
         self.pop.show_for_a_while()
 
     def slider_scale_changed(self, value):
@@ -262,8 +273,9 @@ class MySettingsWindow(QMainWindow):
     def clicked_btn_bench(self):
         self.move_btns_back()
 
-        self.ui.btn_bench_tab.move(self.ui.btn_bench_tab.pos().x(), self.ui.btn_bench_tab.pos().y() + self.btn_translate_dy)
-        set_style_sheet_btn_clicked(self.ui.btn_bench_tab, "10pt", "border-right-color: rgb(60, 60, 60)")
+        self.ui.btn_bench_tab.move(self.ui.btn_bench_tab.pos().x(),
+                                   self.ui.btn_bench_tab.pos().y() + self.btn_translate_dy)
+        set_style_sheet_btn_clicked(self.ui.btn_bench_tab, "10pt", "border-right-color: rgb(220, 220, 220)")
 
         self.ui.btn_bench_tab.setEnabled(False)
         self.ui.btn_opt_tab.setEnabled(True)
@@ -279,7 +291,7 @@ class MySettingsWindow(QMainWindow):
         self.move_btns_back()
 
         self.ui.btn_opt_tab.move(self.ui.btn_opt_tab.pos().x(), self.ui.btn_opt_tab.pos().y() + self.btn_translate_dy)
-        set_style_sheet_btn_clicked(self.ui.btn_opt_tab, "10pt", "border-right-color: rgb(60, 60, 60);")
+        set_style_sheet_btn_clicked(self.ui.btn_opt_tab, "10pt", "border-right-color: rgb(220, 220, 220)")
 
         self.ui.btn_opt_tab.setEnabled(False)
         self.ui.btn_bench_tab.setEnabled(True)
@@ -296,7 +308,7 @@ class MySettingsWindow(QMainWindow):
 
         self.ui.btn_calib_tab.move(self.ui.btn_calib_tab.pos().x(),
                                    self.ui.btn_calib_tab.pos().y() + self.btn_translate_dy)
-        set_style_sheet_btn_clicked(self.ui.btn_calib_tab, "8pt", "border-right-color: rgb(60, 60, 60);")
+        set_style_sheet_btn_clicked(self.ui.btn_calib_tab, "8pt", "border-right-color: rgb(220, 220, 220)")
 
         self.ui.btn_calib_tab.setEnabled(False)
         self.ui.btn_bench_tab.setEnabled(True)
@@ -311,7 +323,8 @@ class MySettingsWindow(QMainWindow):
     def clicked_btn_db_others(self):
         self.move_btns_back()
 
-        self.ui.btn_db_others_tab.move(self.ui.btn_db_others_tab.pos().x(), self.ui.btn_db_others_tab.pos().y() + self.btn_translate_dy)
+        self.ui.btn_db_others_tab.move(self.ui.btn_db_others_tab.pos().x(),
+                                       self.ui.btn_db_others_tab.pos().y() + self.btn_translate_dy)
         set_style_sheet_btn_clicked(self.ui.btn_db_others_tab, "8pt", "")
 
         self.ui.btn_db_others_tab.setEnabled(False)
@@ -332,7 +345,8 @@ class MySettingsWindow(QMainWindow):
         print(file_path)
         if file_path:
             self.my_starting_window.current_conf = False
-            self.my_starting_window.none = self.my_settings.save_config_file(False, self.my_starting_window.config_file_path)
+            self.my_starting_window.none = self.my_settings.save_config_file(False,
+                                                                             self.my_starting_window.config_file_path)
             with open(file_path, 'w') as file:
                 yaml_dump(self.my_settings.default_config(self.my_settings.opt_sensor_type), file)
             with open(file_path, 'r') as file:
@@ -377,7 +391,8 @@ class MySettingsWindow(QMainWindow):
         self.my_settings.calib_plot = self.ui.calib_plot_graphs_check.isChecked()
         self.my_settings.slope_check = float(self.ui.calib_opt_slope_line.text())
 
-        self.my_starting_window.config_contains_none = self.my_settings.save_config_file(True, self.my_starting_window.config_file_path)
+        self.my_starting_window.config_contains_none = self.my_settings.save_config_file(True,
+                                                                                         self.my_starting_window.config_file_path)
         self.my_starting_window.lang = self.ui.combo_box_lang.currentText()
         self.save_global_settings()
 
@@ -426,7 +441,8 @@ class MySettingsWindow(QMainWindow):
         # filter
         # configs
         self.all_configs = load_all_config_files(self.ui.select_config_file, self.my_starting_window.config_file_path,
-                                                 self.my_settings.opt_sensor_type, self.my_settings.subfolderConfig_path)
+                                                 self.my_settings.opt_sensor_type,
+                                                 self.my_settings.subfolderConfig_path)
         self.ui.combo_box_lang.addItem("sk")
         self.ui.combo_box_lang.addItem("en")
         self.ui.combo_box_lang.setCurrentText(self.my_starting_window.lang)
@@ -437,7 +453,8 @@ class MySettingsWindow(QMainWindow):
 
     def select_config_file_combobox_changed(self, text):
         self.my_starting_window.current_conf = False
-        self.my_starting_window.none = self.my_settings.save_config_file(False, self.my_starting_window.config_file_path)
+        self.my_starting_window.none = self.my_settings.save_config_file(False,
+                                                                         self.my_starting_window.config_file_path)
 
         self.config_file = text
         self.config_file_path = os_path.join(self.my_settings.subfolderConfig_path, self.config_file)
@@ -497,13 +514,17 @@ class MySettingsWindow(QMainWindow):
                        self.ui.calib_max_stretch,
                        self.ui.pre_strain_check,
                        self.ui.pre_strain_widget,
-                       self.ui.calib_strain_length]
+                       self.ui.calib_strain_length,
+                       self.ui.widget_opt,
+                       self.ui.widget_benchtop,
+                       self.ui.widget_calib,
+                       self.ui.widget_db_others]
         return list_enable
 
     def show_back(self):
         self.set_language()
-        self.setFixedSize(int(self.width()*self.my_starting_window.window_scale),
-                          int(self.height()*self.my_starting_window.window_scale))
+        self.setFixedSize(int(self.width() * self.my_starting_window.window_scale),
+                          int(self.height() * self.my_starting_window.window_scale))
         scale_app(self, self.my_starting_window.window_scale)
         QTimer.singleShot(0, lambda: center_on_screen(self))
 
@@ -561,7 +582,8 @@ class MySettingsWindow(QMainWindow):
         # self.ui.settings_main_folder_label.setText()
         # self.ui.settings_calib_export_label_2.setText()
         # self.ui.settings_calib_export_label_3.setText()
-        self.ui.label_login_warning.setText(trans[lang]["label_login_warning" if not self.logged_in else "label_login_warning_ok"])
+        self.ui.label_login_warning.setText(
+            trans[lang]["label_login_warning" if not self.logged_in else "label_login_warning_ok"])
         self.ui.settings_lang_label.setText(trans[lang]["settings_lang_label"])
 
         self.ui.save_btn.setText(trans[lang]["save_btn"])
@@ -578,5 +600,3 @@ class MySettingsWindow(QMainWindow):
 
         with open('global_settings.yaml', 'w') as f:
             yaml_dump(config, f)
-
-

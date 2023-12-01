@@ -1,101 +1,86 @@
-import os
-import time
-import sys
-import clr
-import pythonnet
+import numpy as np
+from matplotlib import pyplot as plt
+from scipy.stats import linregress
 
-clr.AddReference("C:\\Program Files\\Thorlabs\\Kinesis\\Thorlabs.MotionControl.DeviceManagerCLI.dll")
-clr.AddReference("C:\\Program Files\\Thorlabs\\Kinesis\\Thorlabs.MotionControl.GenericMotorCLI.dll")
-clr.AddReference("C:\\Program Files\\Thorlabs\\Kinesis\\Thorlabs.MotionControl.Benchtop.StepperMotorCLI.dll")
-from Thorlabs.MotionControl.DeviceManagerCLI import *
-from Thorlabs.MotionControl.GenericMotorCLI import *
-from Thorlabs.MotionControl.Benchtop.StepperMotorCLI import *
-from System import Decimal
+from definitions import linear_regression
 
 
-def main():
-    """The main entry point for the application"""
+def lin_regresion(x, y):
+    # index_values = np_array(range(len(arr_sens)), dtype=float)  # Convert range to NumPy array
+    slope, intercept = linear_regression(x, y)
+    return slope
 
-    # Uncomment this line if you are using
-
-
-    try:
-        SimulationManager.Instance.InitializeSimulations()
-        DeviceManagerCLI.BuildDeviceList()
-
-        # create new device
-        serial_no = "40847135"  # Replace this line with your device's serial number
-
-        # Connect, begin polling, and enable
-        device = BenchtopStepperMotor.CreateBenchtopStepperMotor(serial_no)
-        device.Connect(serial_no)
-        time.sleep(0.25)  # wait statements are important to allow settings to be sent to the device
-
-        # For benchtop devices, get the channel
-        channel = device.GetChannel(1)
-        print("INIT DEV SETTINGS")
-        # Ensure that the device settings have been initialized
-        if not channel.IsSettingsInitialized():
-            channel.WaitForSettingsInitialized(10000)  # 10 second timeout
-            assert channel.IsSettingsInitialized() is True
-
-        # Start polling and enable
-        channel.StartPolling(50)  #250ms polling rate
-        print("SLEEP")
-        time.sleep(1)
-        channel.EnableDevice()
-        time.sleep(0.25)  # Wait for device to enable
-
-        # Get Device Information and display description
-        device_info = channel.GetDeviceInfo()
-
-        # Load any configuration settings needed by the controller/stage
-        channel_config = channel.LoadMotorConfiguration(serial_no) # If using BSC203, change serial_no to channel.DeviceID.
-        chan_settings = channel.MotorDeviceSettings
-        channel.GetSettings(chan_settings)
-        channel_config.DeviceSettingsName = 'LNR50SE/M'
-        channel_config.UpdateCurrentConfiguration()
-        channel.GetSettings(chan_settings)
-        print(channel_config)
-
-        # channel.SetSettings(chan_settings, True, False)
-
-        # Get parameters related to homing/zeroing/other
-
-        # Home or Zero the device (if a motor/piezo)
-        # print("Homing Motor")
-        # channel.Home(60000)
-        # print("Done")
-        # # Move the device to a new position
-        # print("MOVING")
-        channel.SetMoveRelativeDistance(Decimal(20.0))
-        # channel.MoveRelative(10000)
-        #
-        inc = 1/411648
-
-        # channel.MoveRelative(-1)
-
-        time.sleep(2)
-        print("Done")
-
-        # Stop Polling and Disconnect
-
-    except Exception as e:
-        # this can be bad practice: It sometimes obscures the error source
-        print("exception:",e)
-    try:
-        channel.StopPolling()
-    except:
-        pass
-    try:
-        device.Disconnect()
-    except:
-        pass
-
-    # Uncomment this line if you are using Simulations
-    SimulationManager.Instance.UninitializeSimulations()
-    ...
+arr_ref = [0,
+           -49.3,
+           -98.6,
+           -147.9,
+           -197.4,
+           -246.9,
+           -296.2,
+           -345.6,
+           -394.8,
+           -444.4,
+           -395.7,
+           -346.4,
+           -297.2,
+           -248.1,
+           -198.8,
+           -149.6,
+           -100.3,
+           -51.1]
 
 
-if __name__ == "__main__":
-    main()
+values = """
+1535,529175
+1536,062012
+1536,594971
+1537,131226
+1537,661133
+1538,199951
+1538,733765
+1539,268799
+1539,802979
+1540,341187
+1539,806885
+1539,269043
+1538,731201
+1538,197754
+1537,660156
+1537,126709
+1536,587646
+1536,055176
+"""
+MAXIMUM_STRAIN = 10000
+FFL = 0.11
+# Replace commas with dots and split the string into a list
+values_list = values.strip().replace(',', '.').split('\n')
+
+# Convert each value to float and store it in a new list
+opt_wls_1 = [float(value) for value in values_list]
+cw_opt_strain = opt_wls_1[0]
+arr_opt = np.array(opt_wls_1) - cw_opt_strain
+arr_ref = np.array(arr_ref)/1000
+micro_strain = (arr_ref / FFL) * 1000
+relative_wl_change = arr_opt / cw_opt_strain
+slope, intercept, r_value, p_value, std_err = linregress(micro_strain, relative_wl_change)
+strain_coeff_A = slope
+calc_strain_change = relative_wl_change / strain_coeff_A
+abs_error = np.abs(micro_strain - calc_strain_change)
+perc_error = (abs_error / MAXIMUM_STRAIN) * 100
+max_error = np.max(perc_error)
+
+print(r_value*r_value)
+
+slope_samp1 = [slope * x + intercept for x in micro_strain]
+
+plt.figure(figsize=(12, 6))
+
+plt.scatter(micro_strain, relative_wl_change, label='Kĺzavý priemer', color='blue')
+plt.plot(micro_strain,slope_samp1, label='Kĺzavý priemer', color='red')
+print(slope_samp1)
+plt.title('Priebeh tepovej frekvencie, kĺzavý priemer a filtrované dáta')
+plt.xlabel('Čas (s)')
+plt.ylabel('Tepová frekvencia (údery/min)')
+plt.legend()
+plt.grid(True)
+plt.show()

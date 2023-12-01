@@ -1,0 +1,30 @@
+benchtop:
+  optical_sensor_mount_position: 45.0
+  polling_rate: 100
+  serial_no_motor_control: '40847135'
+  stage_max_limit: 50.0
+  stage_name: LNR50SE/M
+calibration:
+  number_of_steps: 10
+  optical_sens_tolerance: 0.0
+  optical_sensitivity: 0.0
+  plot: false
+  slope_check: 1.0
+current: true
+opt_measurement:
+  channels: 1
+  max_stretch: 5.0
+  max_stretch_unit: mm
+  pre_strain: true
+  pre_strain_length: 10.0
+  pre_strain_unit: nm
+  sampling_rate: 800
+  sensor_type: Strain
+save_data:
+  S_N: measured_data.csv
+  auto_export: true
+  calibration_export: C:\Users\PC/Documents\Sylex_sensors_export\calibration
+  db_folder: None
+  export_local_server: true
+  main_folder: C:\Users\PC/Documents\Sylex_sensors_export
+  stats_folder: C:\Users\PC/Documents\Sylex_sensors_export
